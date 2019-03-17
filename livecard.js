@@ -1,27 +1,88 @@
+/**
+ * @file See {@link LiveCard} for library properties and methods
+ * @author LiveCard LLC
+ */
+
+/** @namespace */
 var LiveCardError = {
+  /**
+   * This browser does not support recording videos
+   */
   RECORDING_NOT_SUPPORTED: 0,
+
+  /**
+   * The user did not record or select a video
+   */
   NO_VIDEO_SELECTED: 1,
+
+  /**
+   * The user did not snap or select a still image
+   */
   NO_IMAGE_SELECTED: 2,
+
+  /**
+   * The video recording failed
+   */
   RECORDING_FAILED: 3,
+
+  /**
+   * Attempting to save the card record server side failed
+   */
   CREATE_CARD_ERROR: 4,
+
+  /**
+   * If `requireRecipientPhone` was enabled, this indicates a phone was not collected prior to attempting to save
+   */
   MISSING_PHONE: 5,
+
+  /**
+   * No video was provided prior to attempting to save
+   */
   MISSING_VIDEO: 6,
+
+  /**
+   * No text gift message was provided prior to attempting to save
+   */
   MISSING_TEXT: 7,
+
+  /**
+   * No static image was provided prior to attempting to save
+   */
   MISSING_IMAGE: 8,
+
+  /**
+   * The attempt to confirm this card (after checkout) failed
+   */
   CONFIRM_CARD_ERROR: 9
 };
 
+/** @namespace */
 var LiveCard = {
+  /**
+   * You must provide a valid LiveCard license key to use this library.
+   *
+   * **Required**
+   * @type{string}
+   */
+  licenseKey: null,
+
+  /**
+   * Controls whether the SDK requires a recipient phone to create a card. Set to `false` if you do not plan to collect recipient phone for SMS delivery during the checkout process.
+   *
+   * _Optional_
+   * @type{boolean}
+   * @default true
+   */
+  requireRecipientPhone: true,
+
   isMobile: false,
   usingFileInput: false,
-  licenseKey: null,
   liveCardId: "",
   recordedBlobs: [],
   snapshotDataUrl: null,
   mediaRecorder: null,
   giftMessage: "",
   recipientPhone: "",
-  requireRecipientPhone: true,
   messageType: "text",
   videoRecordSuccessCallback: null,
   videoRecordFailureCallback: null,
@@ -32,6 +93,280 @@ var LiveCard = {
   phoneInputCallback: null,
   giftTextInputCallback: null,
   debug: false,
+
+  /**
+   * Indicates capture of video, image, or text message completed successfully
+   *
+   * @callback captureSuccess
+   */
+
+   /**
+   * Indicates capture of video, image, or text message failed
+   *
+   * @callback captureFailure
+   * @param {LiveCardError} errorCode
+   */
+
+
+  /**
+   * Begin the video capture flow (display in modal)
+   * @param {Object}  params
+   * @param {boolean} params.showIntro        Controls whether the introductory modal describing the video recording process is shown
+   * @param {captureSuccess} params.onSuccess  Callback for successful recording
+   * @param {captureFailure} params.onFailure  Callback for failed recording
+   */
+  startVideoRecording: function(params) {
+    this.videoRecordSuccessCallback = params.onSuccess;
+    this.videoRecordFailureCallback = params.onFailure;
+
+    this.messageType = "video";
+
+    if (params.showIntro) {
+      document.querySelector("#create_video_instructions").style.display =
+        "block";
+      this.showModal("#video_gift_msg_modal");
+
+    } else {
+      document.querySelector("#create_video_instructions").style.display =
+        "none";
+
+      if (!this.isMobile) {
+        setTimeout(function() {
+          document
+            .querySelector("#video_gift_msg_modal")
+            .classList.add("showing-video-container");
+
+          document
+              .querySelector("#video-container")
+              .classList.add("livecard-fade-show-start");
+            document
+              .querySelector("#video-container")
+              .classList.add("livecard-fade-show");
+            setTimeout(function() {
+              document.querySelector("#video-container").style.display =
+                "block";
+            }, 400);
+          }, 400);
+
+        this.showModal("#video_gift_msg_modal");
+      }
+
+      this.showRecordingUI();
+
+      
+    }
+  },
+
+  /**
+   * Begin text gift message capture flow (displays in modal)
+   * @param {Object}  params
+   * @param {boolean} params.showIntro        Controls whether the introductory modal describing the text gift message process is shown
+   * @param {captureSuccess} params.callback  Callback after user has entered a text gift message
+   */
+  showGiftTextInput: function(params) {
+    this.giftTextInputCallback = params.callback;
+
+    this.messageType = "text";
+
+    if (params.showIntro) {
+      document.querySelector("#create_text_instructions").style.display =
+        "flex";
+      this.showModal("#gift_msg_modal");
+    } else {
+      document.querySelector("#create_text_instructions").style.display =
+        "none";
+      this.showModal("#gift_msg_modal");
+      document.querySelector("#text-container").style.display = "flex";
+    }
+  },
+
+  /**
+   * Begin the static image capture flow (displays in modal)
+   * @param {Object}  params
+   * @param {captureSuccess} params.onSuccess  Callback for successful image capture
+   * @param {captureFailure} params.onFailure  Callback for failed image capture
+   */
+  showImageInput: function(params) {
+    this.imageChooseSuccessCallback = params.onSuccess;
+    this.imageChooseFailureCallback = params.onFailure;
+
+    this.messageType = "image";
+
+    if (this.isMobile) {
+      this.selectImageFile();
+    } else {
+      this.showModal("#choose_image_modal");
+    }
+  },
+
+  /**
+   * Show modal informing user that video recording is not supported
+   */
+  showRecordingNotSupported: function() {
+    this.showModal("#capture_not_supported_modal");
+  },
+
+  /**
+   * Begin the phone capture flow (displays in modal)
+   * @param {Object}  params
+   * @param {captureSuccess} params.callback  Callback for successful phone capture
+   */
+  showPhoneInput: function(params) {
+    this.phoneInputCallback = params.callback;
+
+    this.showModal("#card_created_modal");
+  },
+
+   /**
+   * Indicates successful request to create gift message
+   *
+   * @param {string} liveCardId   The unique identifier assigned to this gift message by LiveCard
+   * @param {string} imageUrl     The direct URL to the image or video associated with this gift message
+   * @callback createSuccess
+   */
+
+   /**
+   * Indicates successful request to confirm gift message
+   *
+   * @callback confirmSuccess
+   */
+
+  /**
+   * Attempt to save gift message record
+   * @param {Object}  params
+   * @param {createSuccess} params.callback  Callback after successful save of gift message record
+   * @param {serverFailure} params.callback  Callback after failure to save gift message record
+   */
+  createCard: function(params) {
+    this.debugLog("Creating card with params", params);
+
+    this.createCardSuccessCallback = params.onSuccess;
+    this.createCardFailureCallback = params.onFailure;
+
+    if (this.requireRecipientPhone && this.recipientPhone === "") {
+      this.debugLog('recipientPhone === ""');
+      this.createCardFailureCallback(LiveCardError.MISSING_PHONE);
+      return;
+    }
+
+    if (
+      this.messageType === "video" &&
+      ((!this.usingFileInput && this.recordedBlobs.length === 0) ||
+        (this.usingFileInput &&
+          document.querySelector("#inputVideo").files.length === 0))
+    ) {
+      this.createCardFailureCallback(LiveCardError.MISSING_VIDEO);
+      return;
+    }
+
+    if (
+      this.messageType === "image" &&
+      ((!this.usingFileInput && this.snapshotDataUrl === null) ||
+        (this.usingFileInput &&
+          document.querySelector("#inputImage").files.length === 0))
+    ) {
+      this.createCardFailureCallback(LiveCardError.MISSING_IMAGE);
+      return;
+    }
+
+    if (this.messageType === "text" && this.giftMessage.length === 0) {
+      this.debugLog("error here");
+      this.createCardFailureCallback(LiveCardError.MISSING_TEXT);
+      return;
+    }
+
+    var postData = new FormData();
+    postData.append("card[livecard_id]", this.liveCardId);
+
+    if (this.recipientPhone !== "") {
+      postData.append("card[recipient_phone_number]", this.recipientPhone);
+    }
+
+    if (this.messageType === "text") {
+      postData.append("card[gift_message]", this.giftMessage);
+    } else if (this.messageType === "image") {
+      if (this.usingFileInput) {
+        postData.append(
+          "card[file]",
+          document.querySelector("#inputImage").files[0]
+        );
+      } else {
+        postData.append("card[file]", this.dataURLtoBlob(this.snapshotDataUrl));
+      }
+    }
+
+    var request = new XMLHttpRequest();
+    request.open("POST", "https://api.livecard.cards/api/cards", true);
+    request.setRequestHeader(
+      "Accept",
+      "application/vnd.LiveCard+json;version=1"
+    );
+    request.setRequestHeader("License-Key", this.licenseKey);
+    request.responseType = "json";
+    request.send(postData);
+
+    request.addEventListener("load", () => {
+      this.debugLog("Success! Server card id: ", request.response.card.id);
+
+      if (this.messageType === "video") {
+        this.uploadVideo(request.response.card.id);
+      } else {
+        var imageUrl = request.response.card.image_url;
+
+        this.createCardSuccessCallback(this.liveCardId, imageUrl);
+      }
+    });
+
+    request.addEventListener("error", error => {
+      this.debugLog("createCard failure: ", error);
+
+      this.createCardFailureCallback(LiveCardError.CREATE_CARD_ERROR);
+    });
+  },
+
+   /**
+   * Indicates failed request to create or confirm gift message
+   *
+   * @callback serverFailure
+   * @param {LiveCardError} errorCode
+   */
+
+  /**
+   * Attempt to confirm gift message record when user completes checkout
+   * @param {Object}  params
+   * @param {confirmSuccess} params.callback  Callback after successful confirmation of gift message record
+   * @param {serverFailure} params.callback  Callback after failure to confirm gift message record
+   */
+  confirmCard: function(params) {
+    this.debugLog("confirmCard");
+
+    var formData = new FormData();
+    formData.append("card[livecard_id]", this.liveCardId);
+    formData.append("card[order_confirmed]", true);
+
+    var request = new XMLHttpRequest();
+    request.open(
+      "PUT",
+      "https://api.livecard.cards/api/cards/update_order",
+      true
+    );
+    request.setRequestHeader(
+      "Accept",
+      "application/vnd.LiveCard+json;version=1"
+    );
+    request.setRequestHeader("License-Key", this.licenseKey);
+    request.send(formData);
+
+    request.addEventListener("load", () => {
+      this.debugLog("Order confirmed for LiveCard id " + this.liveCardId);
+      params.onSuccess();
+    });
+
+    request.addEventListener("error", error => {
+      this.debugLog("confirmCard failure:", error);
+      params.onFailure(LiveCardError.CONFIRM_CARD_ERROR);
+    });
+  },
 
   init: function() {
     this.isMobile = LiveCard.detectMobile();
@@ -623,48 +958,6 @@ var LiveCard = {
       */
   },
 
-  startVideoRecording: function(params) {
-    this.videoRecordSuccessCallback = params.onSuccess;
-    this.videoRecordFailureCallback = params.onFailure;
-
-    this.messageType = "video";
-
-    if (params.showIntro) {
-      document.querySelector("#create_video_instructions").style.display =
-        "block";
-      this.showModal("#video_gift_msg_modal");
-
-    } else {
-      document.querySelector("#create_video_instructions").style.display =
-        "none";
-
-      if (!this.isMobile) {
-        setTimeout(function() {
-          document
-            .querySelector("#video_gift_msg_modal")
-            .classList.add("showing-video-container");
-
-          document
-              .querySelector("#video-container")
-              .classList.add("livecard-fade-show-start");
-            document
-              .querySelector("#video-container")
-              .classList.add("livecard-fade-show");
-            setTimeout(function() {
-              document.querySelector("#video-container").style.display =
-                "block";
-            }, 400);
-          }, 400);
-
-        this.showModal("#video_gift_msg_modal");
-      }
-
-      this.showRecordingUI();
-
-      
-    }
-  },
-
   showRecordingUI: function() {
     if (this.isMobile) {
       document.querySelector("#inputVideo").click();
@@ -696,16 +989,6 @@ var LiveCard = {
     }
   },
 
-  showRecordingNotSupported: function() {
-    this.showModal("#capture_not_supported_modal");
-  },
-
-  showPhoneInput: function(params) {
-    this.phoneInputCallback = params.callback;
-
-    this.showModal("#card_created_modal");
-  },
-
   selectVideoFile: function() {
     this.usingFileInput = true;
     document.querySelector("#inputVideo").click();
@@ -714,36 +997,6 @@ var LiveCard = {
   selectImageFile: function() {
     this.usingFileInput = true;
     document.querySelector("#inputImage").click();
-  },
-
-  showGiftTextInput: function(params) {
-    this.giftTextInputCallback = params.callback;
-
-    this.messageType = "text";
-
-    if (params.showIntro) {
-      document.querySelector("#create_text_instructions").style.display =
-        "flex";
-      this.showModal("#gift_msg_modal");
-    } else {
-      document.querySelector("#create_text_instructions").style.display =
-        "none";
-      this.showModal("#gift_msg_modal");
-      document.querySelector("#text-container").style.display = "flex";
-    }
-  },
-
-  showImageInput: function(params) {
-    this.imageChooseSuccessCallback = params.onSuccess;
-    this.imageChooseFailureCallback = params.onFailure;
-
-    this.messageType = "image";
-
-    if (this.isMobile) {
-      this.selectImageFile();
-    } else {
-      this.showModal("#choose_image_modal");
-    }
   },
 
   getImageFromDisk: function(params) {
@@ -840,93 +1093,6 @@ var LiveCard = {
     this.videoRecordFailureCallback(LiveCardError.RECORDING_NOT_SUPPORTED);
   },
 
-  createCard: function(params) {
-    this.debugLog("Creating card with params", params);
-
-    this.createCardSuccessCallback = params.onSuccess;
-    this.createCardFailureCallback = params.onFailure;
-
-    if (this.requireRecipientPhone && this.recipientPhone === "") {
-      this.debugLog('recipientPhone === ""');
-      this.createCardFailureCallback(LiveCardError.MISSING_PHONE);
-      return;
-    }
-
-    if (
-      this.messageType === "video" &&
-      ((!this.usingFileInput && this.recordedBlobs.length === 0) ||
-        (this.usingFileInput &&
-          document.querySelector("#inputVideo").files.length === 0))
-    ) {
-      this.createCardFailureCallback(LiveCardError.MISSING_VIDEO);
-      return;
-    }
-
-    if (
-      this.messageType === "image" &&
-      ((!this.usingFileInput && this.snapshotDataUrl === null) ||
-        (this.usingFileInput &&
-          document.querySelector("#inputImage").files.length === 0))
-    ) {
-      this.createCardFailureCallback(LiveCardError.MISSING_IMAGE);
-      return;
-    }
-
-    if (this.messageType === "text" && this.giftMessage.length === 0) {
-      this.debugLog("error here");
-      this.createCardFailureCallback(LiveCardError.MISSING_TEXT);
-      return;
-    }
-
-    var postData = new FormData();
-    postData.append("card[livecard_id]", this.liveCardId);
-
-    if (this.recipientPhone !== "") {
-      postData.append("card[recipient_phone_number]", this.recipientPhone);
-    }
-
-    if (this.messageType === "text") {
-      postData.append("card[gift_message]", this.giftMessage);
-    } else if (this.messageType === "image") {
-      if (this.usingFileInput) {
-        postData.append(
-          "card[file]",
-          document.querySelector("#inputImage").files[0]
-        );
-      } else {
-        postData.append("card[file]", this.dataURLtoBlob(this.snapshotDataUrl));
-      }
-    }
-
-    var request = new XMLHttpRequest();
-    request.open("POST", "https://api.livecard.cards/api/cards", true);
-    request.setRequestHeader(
-      "Accept",
-      "application/vnd.LiveCard+json;version=1"
-    );
-    request.setRequestHeader("License-Key", this.licenseKey);
-    request.responseType = "json";
-    request.send(postData);
-
-    request.addEventListener("load", () => {
-      this.debugLog("Success! Server card id: ", request.response.card.id);
-
-      if (this.messageType === "video") {
-        this.uploadVideo(request.response.card.id);
-      } else {
-        var imageUrl = request.response.card.image_url;
-
-        this.createCardSuccessCallback(this.liveCardId, imageUrl);
-      }
-    });
-
-    request.addEventListener("error", error => {
-      this.debugLog("createCard failure: ", error);
-
-      this.createCardFailureCallback(LiveCardError.CREATE_CARD_ERROR);
-    });
-  },
-
   uploadVideo: function(serverCardId) {
     var data = new FormData();
 
@@ -971,37 +1137,6 @@ var LiveCard = {
       this.debugLog("uploadVideo failure: ", error);
 
       this.createCardFailureCallback(LiveCardError.CREATE_CARD_ERROR);
-    });
-  },
-
-  confirmCard: function(params) {
-    this.debugLog("confirmCard");
-
-    var formData = new FormData();
-    formData.append("card[livecard_id]", this.liveCardId);
-    formData.append("card[order_confirmed]", true);
-
-    var request = new XMLHttpRequest();
-    request.open(
-      "PUT",
-      "https://api.livecard.cards/api/cards/update_order",
-      true
-    );
-    request.setRequestHeader(
-      "Accept",
-      "application/vnd.LiveCard+json;version=1"
-    );
-    request.setRequestHeader("License-Key", this.licenseKey);
-    request.send(formData);
-
-    request.addEventListener("load", () => {
-      this.debugLog("Order confirmed for LiveCard id " + this.liveCardId);
-      params.onSuccess();
-    });
-
-    request.addEventListener("error", error => {
-      this.debugLog("confirmCard failure:", error);
-      params.onFailure(LiveCardError.CONFIRM_CARD_ERROR);
     });
   },
 
