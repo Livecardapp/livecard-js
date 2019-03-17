@@ -13,6 +13,7 @@ var LiveCardError = {
 
 var LiveCard = {
   isMobile: false,
+  supportsWebRtc: false,
   usingFileInput: false,
   licenseKey: null,
   liveCardId: "",
@@ -37,6 +38,8 @@ var LiveCard = {
     this.isMobile = LiveCard.detectMobile();
     this.usingFileInput = this.isMobile;
     this.liveCardId = this.new_guid();
+    this.supportsWebRtc = (typeof navigator.getUserMedia !== 'undefined' && typeof window.MediaRecorder !== 'undefined');
+    //console.log("supports web rtc: " + this.supportsWebRtc);
 
     this.createUI();
     this.addEventHandlers();
@@ -70,6 +73,24 @@ var LiveCard = {
   },
 
   createUI: function() {
+    var videoCaptureComponent;
+
+    if (!this.isMobile && !this.supportsWebRtc) {
+      videoCaptureComponent = `<div id="flashContent">
+            <p>
+                To view this page ensure that Adobe Flash Player version 
+                16.0.0 or greater is installed. 
+            </p>
+            <script type="text/javascript"> 
+                var pageHost = ((document.location.protocol == "https:") ? "https://" : "http://"); 
+                document.write("<a href='http://www.adobe.com/go/getflashplayer'><img src='" 
+                                + pageHost + "www.adobe.com/images/shared/download_buttons/get_flash_player.gif' alt='Get Adobe Flash player' /></a>" ); 
+            </script> 
+        </div>`;
+    } else {
+      videoCaptureComponent = `<video id="capture" autoplay muted playsinline></video>`;
+    }
+
     var modalVideoGiftMsg = `<div class="livecard-modal fade" id="video_gift_msg_modal" tabindex="-1" role="dialog" aria-labelledby="video_gift_msg_modal_label" aria-hidden="true">
         <div class="livecard-modal-dialog livecard-modal-dialog-centered" role="document">
           <div class="livecard-modal-content">
@@ -111,11 +132,11 @@ var LiveCard = {
 
                 <input type="file" accept="video/mp4,video/x-m4v,video/webm,video/quicktime,video/*" capture="user" id="inputVideo" style="display: none;">
 
-                <input type="file" accept="image/*" id="inputImage" style="display: none;">
+                <input type="file" accept="image/*" id="inputImage" style="display: none;">`
 
-                <video id="capture" autoplay muted playsinline></video>
+                + videoCaptureComponent +
 
-                <video id="recorded" style="display: none"></video>
+                `<video id="recorded" style="display: none"></video>
 
                 <canvas id="imgCanvas" style="display: none;"></canvas>
 
@@ -293,9 +314,11 @@ var LiveCard = {
       this.videoRecordSuccessCallback();
     };
 
-    document.querySelector("#capture").onloadedmetadata = () => {
-      this.hideSpinner();
-    };
+    if (this.supportsWebRtc) {
+      document.querySelector("#capture").onloadedmetadata = () => {
+        this.hideSpinner();
+      };
+    }
 
     document
       .querySelector("#btnRecord")
@@ -453,7 +476,7 @@ var LiveCard = {
         mimeType: "video/webm;codecs=vp9"
       };
 
-      if (window.MediaRecorder != undefined) {
+      if (this.supportsWebRtc) {
 
         try {
           if (!MediaRecorder.isTypeSupported(options.mimeType)) {
@@ -484,19 +507,22 @@ var LiveCard = {
 
           return;
         }
+      
+        this.debugLog(
+          "Created MediaRecorder",
+          this.mediaRecorder,
+          "with options",
+          options
+        );
+
+        this.mediaRecorder.ondataavailable = this.handleDataAvailable.bind(this);
+        this.mediaRecorder.start(10); // collect 10ms of data
+
+        this.debugLog("MediaRecorder started", this.mediaRecorder);
+      
+      } else {
+        document.getElementById("LCCapture").startRecording();
       }
-
-      this.debugLog(
-        "Created MediaRecorder",
-        this.mediaRecorder,
-        "with options",
-        options
-      );
-
-      this.mediaRecorder.ondataavailable = this.handleDataAvailable.bind(this);
-      this.mediaRecorder.start(10); // collect 10ms of data
-
-      this.debugLog("MediaRecorder started", this.mediaRecorder);
 
       document.querySelector("#btnRecord").style.display = "none";
 
@@ -514,7 +540,12 @@ var LiveCard = {
   },
 
   btnStopClick: function() {
-    this.mediaRecorder.stop();
+    if (this.supportsWebRtc) {
+      this.mediaRecorder.stop();
+    } else {
+      document.getElementById("LCCapture").stopRecording();
+    }
+
     this.debugLog("Recorded Blobs: ", this.recordedBlobs.length);
 
     document.querySelector("#btnStop").style.display = "none";
@@ -523,10 +554,12 @@ var LiveCard = {
     document.querySelector("#btnRetake").style.display = "inline";
     document.querySelector("#btnUse").style.display = "inline";
 
-    this.showStaticVideo();
+    if (this.supportsWebRtc) {
+      this.showStaticVideo();
 
-    document.querySelector("#capture").style.display = "none";
-    document.querySelector("#recorded").style.display = "block";
+      document.querySelector("#capture").style.display = "none";
+      document.querySelector("#recorded").style.display = "block";
+    }
   },
 
   btnRetakeClick: function() {
@@ -557,7 +590,11 @@ var LiveCard = {
   },
 
   btnPlayClick: function() {
-    document.getElementById("recorded").play();
+    if (this.supportsWebRtc) {
+      document.getElementById("recorded").play();
+    } else {
+      document.getElementById("LCCapture").playBack();
+    }
   },
 
   btnUseClick: function() {
@@ -665,11 +702,54 @@ var LiveCard = {
     }
   },
 
+  generateFlash: function() {
+    // For version detection, set to min. required Flash Player version, or 0 (or 0.0.0), for no version detection. 
+      var swfVersionStr = "16.0.0";
+      // To use express install, set to playerProductInstall.swf, otherwise the empty string. 
+      var xiSwfUrlStr = "livecard-sdk/flash/expressInstall.swf";
+
+      var flashvars = {
+        lc_debug: true,
+        rtmp_host: "retailer.live.cards", 
+        video_width: 320, 
+        video_height: 240, 
+        video_quality: 95, 
+        stream_name: this.uuidv4()};
+        
+      var params = {};
+      params.quality = "high";
+      params.bgcolor = "#ffffff";
+      params.allowscriptaccess = "sameDomain";
+      params.allowfullscreen = "true";
+      var attributes = {};
+      attributes.id = "LCCapture";
+      attributes.name = "LCCapture";
+      //attributes.align = "middle";
+      swfobject.embedSWF(
+          "livecard-sdk/flash/LCCapture.swf", "flashContent", 
+          "100%", "100%", 
+          swfVersionStr, xiSwfUrlStr, 
+          flashvars, params, attributes);
+      // JavaScript enabled so display the flashContent div in case it is not replaced with a swf object.
+      swfobject.createCSS("#flashContent", "display:block;text-align:left;");
+
+      document.getElementById("LCCapture").style.position = 'absolute';
+      document.getElementById("LCCapture").style.top = '0px';
+      document.getElementById("LCCapture").style.left = '0px';
+  },
+
+  uuidv4: function() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+  },
+
   showRecordingUI: function() {
     if (this.isMobile) {
       document.querySelector("#inputVideo").click();
     } else {
-      if (navigator.mediaDevices) {
+      if (this.supportsWebRtc) {
         this.showSpinner();
 
         var constraints = {
@@ -690,8 +770,9 @@ var LiveCard = {
           .then(this.showVideoCaptureUI.bind(this))
           .catch(this.videoCaptureNotSupported.bind(this));
       } else {
-        this.hideAllModals();
-        this.videoRecordFailureCallback(LiveCardError.RECORDING_NOT_SUPPORTED);
+        this.showVideoCaptureUI();
+        //this.hideAllModals();
+        //this.videoRecordFailureCallback(LiveCardError.RECORDING_NOT_SUPPORTED);
       }
     }
   },
@@ -823,8 +904,13 @@ var LiveCard = {
 
   showVideoCaptureUI: function(stream) {
     //this.debugLog('getUserMedia() got stream: ', stream);
-    window.stream = stream;
-    document.querySelector("#capture").srcObject = stream;
+    
+    if (this.supportsWebRtc) {
+      window.stream = stream;
+      document.querySelector("#capture").srcObject = stream;
+    } else {
+      this.generateFlash();
+    }
 
     document
       .querySelector("#video-container")
@@ -4303,4 +4389,7 @@ document.addEventListener("DOMContentLoaded", function() {
     It
   );
 });
-//# sourceMappingURL=imask.min.js.map
+
+function flashLog(msg) {
+  console.log(msg);
+}
