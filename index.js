@@ -1,3 +1,5 @@
+import AppView from './index-view';
+
 window.onerror = (event, source, lineno, colno, error) => {
   console.log(`post error to server: 
     { 
@@ -9,11 +11,7 @@ window.onerror = (event, source, lineno, colno, error) => {
     }`);
 };
 
-document.querySelector("#btn-success").addEventListener('click', event => {
-  console.log('hello world');
-});
+const appView = new AppView('#btn-success', '#btn-error');
 
-document.querySelector("#btn-error").addEventListener('click', event => {
-  throw new Error('Uh-oh, something went wrong');
-});
-
+appView.setButtonSuccess();
+appView.setButtonError();
