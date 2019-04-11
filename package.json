@@ -1,0 +1,26 @@
+{
+  "name": "livecard-js",
+  "version": "1.0.0",
+  "description": "A desktop and mobile web library for capturing video, image, and text gift messages during checkout on e-commerce websites.",
+  "main": "livecard.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Livecardapp/livecard-js.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Livecardapp/livecard-js/issues"
+  },
+  "homepage": "https://github.com/Livecardapp/livecard-js#readme",
+  "devDependencies": {
+    "sass": "^1.18.0"
+  }
+}
