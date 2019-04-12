@@ -21,6 +21,11 @@ class LCMessage {
     return this._setContentAsBlobFromFiles(LCMessageType.VIDEO, files);
   }
 
+  setContentAsVideoFromBlobs(recordedBlobs) {
+    this.content = new Blob(recordedBlobs, { type: "video/webm" });
+    this.type = LCMessageType.VIDEO;
+  }
+
   setContentAsImageFromFiles(files) {
     return this._setContentAsBlobFromFiles(LCMessageType.IMAGE, files);
   }
