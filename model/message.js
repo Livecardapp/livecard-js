@@ -24,6 +24,7 @@ class LCMessage {
   setContentAsVideoFromBlobs(recordedBlobs) {
     this.content = new Blob(recordedBlobs, { type: "video/webm" });
     this.type = LCMessageType.VIDEO;
+    return true;
   }
 
   setContentAsImageFromFiles(files) {
@@ -177,7 +178,6 @@ export {
 
 //   request.addEventListener("error", error => {
 //     this.debugLog("createCard failure: ", error);
-
 //     this.createCardFailureCallback(LiveCardError.CREATE_CARD_ERROR);
 //   });
 // },
