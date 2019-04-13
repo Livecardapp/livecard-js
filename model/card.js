@@ -68,7 +68,7 @@ class LCCard {
         const videoRequest = new LCRequest(baseUrl);
         const videoBody = {};
 
-        videoBody['video[file]'] = this.content;
+        videoBody['video[file]'] = this.message.content;
         videoBody['video[card_id]'] = data.card.id;
 
         videoData = await videoRequest.post('videos/upload', headers, videoBody);
