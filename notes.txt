@@ -1,0 +1,12 @@
+1. Development build
+
+parcel index.html
+
+This will run the development server.
+
+2. Production build
+
+parcel build index.html
+npx http-server dist
+
+This will run the production server.
