@@ -37,7 +37,7 @@ const ErrorType = {
 
 const Context = {
   licenseKey: null,
-  
+
   // (Optional) Controls whether the SDK requires a recipient phone to create a card. Set to `false` 
   // if you do not plan to collect recipient phone for SMS delivery during the checkout process.
   requireRecipientPhone: true,
@@ -62,7 +62,45 @@ const Context = {
   debug: false,
 };
 
+const Resources = {};
+
 export {
   ErrorType,
   Context,
+  Resources,
 };
+
+// =======================
+// INITIALIZE LIVECARD APP
+// =======================
+
+document.addEventListener("DOMContentLoaded", function () {
+  // detect mobile
+  if (
+    navigator.userAgent.match(/Android/i) ||
+    navigator.userAgent.match(/webOS/i) ||
+    navigator.userAgent.match(/iPhone/i) ||
+    navigator.userAgent.match(/iPad/i) ||
+    navigator.userAgent.match(/iPod/i) ||
+    navigator.userAgent.match(/BlackBerry/i) ||
+    navigator.userAgent.match(/Windows Phone/i)
+  ) {
+    Context.isMobile = true;
+  } else {
+    Context.isMobile = false;
+  }
+
+  // init file input flag
+  Context.usingFileInput = Context.isMobile;
+
+  // init live card id
+  let guid = "";
+  const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+  for (var i = 0; i < 6; i++)
+    guid += possible.charAt(Math.floor(Math.random() * possible.length));
+
+  Context.liveCardId = guid;
+
+  console.log('Done init: ', Context.isMobile, Context.usingFileInput, Context.liveCardId);
+});
