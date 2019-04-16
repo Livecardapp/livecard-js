@@ -1,4 +1,6 @@
 import dq from './view/dquery';
+import MessageModal from './view/message-modal';
+import CardModal from './view/card-modal';
 
 /**
  * @file See {@link LiveCard} for library properties and methods
@@ -37,8 +39,6 @@ const ErrorType = {
   CONFIRM_CARD_ERROR: 9
 };
 
-let licenseKey = null;
-
 const Context = {
   // (Optional) Controls whether the SDK requires a recipient phone to create a card. Set to `false` 
   // if you do not plan to collect recipient phone for SMS delivery during the checkout process.
@@ -70,6 +70,8 @@ const ModalType = {
   TEXT: 2,
 };
 
+let licenseKey = null;
+
 /**
  * Begin text gift message capture flow (displays in modal)
  * @param {Object}  params
@@ -80,28 +82,47 @@ const showGiftTextInput = (params) => {
   Context.giftTextInputCallback = params.callback;
   Context.messageType = "text";
 
+  // if (Context.modal === null) {
+  //   Context.modal = 
+  // }
+
   if (params.showIntro) {
-    dq.css("#create_text_instructions", 'display', 'flex');
-    this.showModal("#gift_msg_modal");
+    // dq.css("#create_text_instructions", 'display', 'flex');
+    //this.showModal("#gift_msg_modal");
+    console.log('show intro');
     return;
   }
-  
-  dq.css("#create_text_instructions", "none");
-  this.showModal("#gift_msg_modal");
-  dq.css("#text-container", "flex");
+
+  // dq.css("#create_text_instructions", "none");
+  // this.showModal("#gift_msg_modal");
+  console.log('skip intro');
+  // dq.css("#text-container", "flex");
 };
+
+/**
+ * Begin the phone capture flow (displays in modal)
+ * @param {Object}  params
+ * @param {captureSuccess} params.callback  Callback for successful phone capture
+ */
+const showPhoneInput = (params) => {
+  Context.phoneInputCallback = params.callback;
+  // this.showModal("#card_created_modal");
+  console.log('#card_created_modal');
+};
+
 
 export {
   licenseKey,
   ErrorType,
   showGiftTextInput,
+  showPhoneInput,
 };
 
 // =======================
 // INITIALIZE LIVECARD APP
 // =======================
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
   // detect mobile
   if (
     navigator.userAgent.match(/Android/i) ||

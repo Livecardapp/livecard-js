@@ -1,4 +1,4 @@
-import dq from './view/dquery';
+import dq from './dquery';
 
 class MessageModal {
   constructor(modalTag, listener) {

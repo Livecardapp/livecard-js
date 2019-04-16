@@ -1,4 +1,4 @@
-import dq from './view/dquery';
+import dq from './dquery';
 
 class CardModal {
   constructor(modalTag) {
@@ -3335,4 +3335,3 @@ export default CardModal;
     It
   );
 });
-//# sourceMappingURL=imask.min.js.map
