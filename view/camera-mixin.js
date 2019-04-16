@@ -56,9 +56,17 @@ const CameraMixin = {
   },
 
   resetContainer: function() {
-    console.log("reset video container");
-    document.getElementById("video-container").classList.remove("livecard-fade-show", "livecard-fade-show-start");
-    document.getElementById("video-container").style.display = "";
+    console.log('reset video container');
+    document.getElementById('video-container').classList.remove('livecard-fade-show', 'livecard-fade-show-start');
+    document.getElementById('video-container').style.display = '';
+  },
+
+  showSpinner: function() {
+    document.querySelector('.livecard-spinner').style.display = 'block';
+  },
+
+  hideSpinner: function() {
+    document.querySelector('.livecard-spinner').style.display = 'none';
   },
 
 };
