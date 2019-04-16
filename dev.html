@@ -10,10 +10,33 @@
   <title>Checkout</title>
 
   <script type="text/javascript">
+    LiveCard.Context.licenseKey = "zeGBS3PiwkhBSpn-JDbz";
+
+    function createGiftMessage() {
+      LiveCard.showGiftTextInput({
+        showIntro: true, //Client can opt out of showing our intro by passing false here
+        callback: function () { 
+          collectPhoneNumber(); 
+        }
+      });
+    }
+
+    function collectPhoneNumber() {
+      //Client can collect phone with own UI and set directly like here or use our modal as below
+      //LiveCard.recipientPhone = '1234567890';
+      LiveCard.showPhoneInput({
+        callback: function () {
+          //update UI if needed
+        }
+      });
+    }
   </script>
+
 </head>
 
 <body>
+
+  <button onclick="createVideoMessage()">Create Video Message</button><br><br>
   <div id="livecard-wrapper"></div>
 </body>
 

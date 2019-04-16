@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- LiveCard dependencies -->
+    <link rel="stylesheet" href="https://retailer.live.cards/checkout/livecard-sdk/livecard.css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:300,400" rel="stylesheet">
+
+    <script src="https://retailer.live.cards/checkout/livecard-sdk/livecard.js"></script>
+    <!-- LiveCard dependencies -->
+    
+    <title>Checkout</title>
+
+    <script type="text/javascript">
+      LiveCard.licenseKey = "zeGBS3PiwkhBSpn-JDbz";
+      function createGiftMessage() {
+        LiveCard.showGiftTextInput({
+          showIntro: true, //Client can opt out of showing our intro by passing false here
+          
+          callback: function() {
+            collectPhoneNumber();
+          }
+        });
+      }
+      
+      function createImageMessage() {
+        LiveCard.showImageInput({
+          onSuccess: function() {
+            collectPhoneNumber();
+          }
+        });
+      }
+      
+      function createVideoMessage() {
+        LiveCard.startVideoRecording({
+          showIntro: true, //Client can opt out of showing our intro by passing false here
+          onSuccess: function() {
+            collectPhoneNumber();
+          },
+          onFailure: function(errorCode) {
+            console.log('startVideoRecording failure: ' + errorCode);
+            if (errorCode === LiveCardError.RECORDING_NOT_SUPPORTED) {
+              //Client can show own UI for case of webcam recording not supported and expose some UI to choose a file from hd, which triggers LiveCard.selectVideoFile()
+              //Or can use our own modal as here
+              setTimeout(function() {
+                  LiveCard.showRecordingNotSupported();
+              }, 400);
+            }
+          }
+        });
+      }
+      
+      function collectPhoneNumber() {
+        //Client can collect phone with own UI and set directly like here or use our modal as below
+        //LiveCard.recipientPhone = '1234567890';
+        LiveCard.showPhoneInput({
+          callback: function() {
+            //update UI if needed
+          }
+        });
+      }
+      
+      function submitOrder() {
+        LiveCard.createCard({
+          onSuccess: function(liveCardId, mediaUrl) {
+            console.log("Got media url: " + mediaUrl + " for LiveCard ID: " + liveCardId);
+            //pass liveCardId to backend with order details so that when a tracking number is created, it can be posted by server and attached to liveCardId
+          },
+          onFailure: function(error) {
+            console.log('createCard error: ' + error);
+          }
+        });
+      }
+    </script>
+  </head>
+  <body>
+
+    <button onclick="createVideoMessage()">Create Video Message</button><br><br>
+    <button onclick="createGiftMessage()">Create Gift Message</button><br><br>
+    <button onclick="createImageMessage()">Create Image Message</button><br><br>
+    <button onclick="submitOrder()">Submit Order</button><br>
+  
+    <!-- this div must have the id given below -->
+    <div id="livecard-wrapper">    
+    </div>
+    
+  </body>
+</html>
