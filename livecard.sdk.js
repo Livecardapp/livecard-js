@@ -1,3 +1,5 @@
+import dq from './view/dquery';
+
 /**
  * @file See {@link LiveCard} for library properties and methods
  * @author LiveCard LLC
@@ -35,13 +37,12 @@ const ErrorType = {
   CONFIRM_CARD_ERROR: 9
 };
 
-const Context = {
-  licenseKey: null,
+let licenseKey = null;
 
+const Context = {
   // (Optional) Controls whether the SDK requires a recipient phone to create a card. Set to `false` 
   // if you do not plan to collect recipient phone for SMS delivery during the checkout process.
   requireRecipientPhone: true,
-
   isMobile: false,
   usingFileInput: false,
   liveCardId: "",
@@ -60,14 +61,40 @@ const Context = {
   phoneInputCallback: null,
   giftTextInputCallback: null,
   debug: false,
+  modal: null,
 };
 
-const Resources = {};
+const ModalType = {
+  VIDEO: 0,
+  IMAGE: 1,
+  TEXT: 2,
+};
+
+/**
+ * Begin text gift message capture flow (displays in modal)
+ * @param {Object}  params
+ * @param {boolean} params.showIntro        Controls whether the introductory modal describing the text gift message process is shown
+ * @param {captureSuccess} params.callback  Callback after user has entered a text gift message
+ */
+const showGiftTextInput = (params) => {
+  Context.giftTextInputCallback = params.callback;
+  Context.messageType = "text";
+
+  if (params.showIntro) {
+    dq.css("#create_text_instructions", 'display', 'flex');
+    this.showModal("#gift_msg_modal");
+    return;
+  }
+  
+  dq.css("#create_text_instructions", "none");
+  this.showModal("#gift_msg_modal");
+  dq.css("#text-container", "flex");
+};
 
 export {
+  licenseKey,
   ErrorType,
-  Context,
-  Resources,
+  showGiftTextInput,
 };
 
 // =======================

@@ -4,10 +4,9 @@ class MessageModal {
   constructor(modalTag, listener) {
     this.tag = modalTag;
     this.listener = listener;
-    Object.assign(this, ViewMixin);
   }
 
-  inject(callback) {
+  inject(onDone) {
     dq.insert('#livecard-wrapper', this.template());
 
     dq.click('#create_text_card_btn', () => {
@@ -22,7 +21,7 @@ class MessageModal {
     const hide = this.hide.bind(this);
     dq.click('#submit_text_card_btn', () => {
       hide();
-      callback(dq.val('#textGiftMessage'));
+      onDone(dq.val('#textGiftMessage'));
     });
 
     // close button
