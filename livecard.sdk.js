@@ -82,21 +82,21 @@ const showGiftTextInput = (params) => {
   Context.giftTextInputCallback = params.callback;
   Context.messageType = "text";
 
-  // if (Context.modal === null) {
-  //   Context.modal = 
-  // }
-
-  if (params.showIntro) {
-    // dq.css("#create_text_instructions", 'display', 'flex');
-    //this.showModal("#gift_msg_modal");
-    console.log('show intro');
-    return;
+  if (Context.modal !== null && Context.modal.type !== ModalType.TEXT) {
+    Context.modal.remove();
+    Context.modal = null;
   }
 
-  // dq.css("#create_text_instructions", "none");
-  // this.showModal("#gift_msg_modal");
-  console.log('skip intro');
-  // dq.css("#text-container", "flex");
+  if (Context.modal === null) {
+    Context.modal = new MessageModal(ModalType.TEXT);
+    Context.modal.inject((value) => {
+      Context.giftMessage = value;
+      console.log('Context', Context);
+      Context.giftTextInputCallback();
+    });
+  }
+
+  Context.modal.show(params.showIntro);
 };
 
 /**
@@ -109,7 +109,6 @@ const showPhoneInput = (params) => {
   // this.showModal("#card_created_modal");
   console.log('#card_created_modal');
 };
-
 
 export {
   licenseKey,

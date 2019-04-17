@@ -1,9 +1,8 @@
 import dq from './dquery';
 
 class MessageModal {
-  constructor(modalTag, listener) {
+  constructor(modalTag) {
     this.tag = modalTag;
-    this.listener = listener;
   }
 
   inject(onDone) {
@@ -30,17 +29,23 @@ class MessageModal {
   }
 
   remove() {
-    console.log('reset video container');
-    this.listener = null;
-    // remove all event handlers
+    dq.insert('#livecard-wrapper', '');
+  }
+
+  show(withIntro) {
+    if (withIntro) {
+      dq.css("#create_text_instructions", 'display', 'flex');
+      dq.addClass('#gift_msg_modal', 'show');
+      return;
+    }
+
+    dq.css("#create_text_instructions", "none");
+    dq.addClass('#gift_msg_modal', 'show');
+    dq.css("#text-container", "flex");
   }
 
   hide() {
-    this.removeClass('#gift_msg_modal', 'show');
-  }
-
-  show() {
-    this.addClass('#gift_msg_modal', 'show');
+    dq.removeClass('#gift_msg_modal', 'show');
   }
 
   template() {

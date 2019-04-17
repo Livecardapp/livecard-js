@@ -5,7 +5,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+  <!-- LiveCard dependencies -->
+  <link rel="stylesheet" href="/livecard.css">
   <script src="/livecard.sdk.js"></script>
+  <!-- LiveCard dependencies -->
 
   <title>Checkout</title>
 
@@ -15,9 +18,7 @@
     function createGiftMessage() {
       LiveCard.showGiftTextInput({
         showIntro: true, //Client can opt out of showing our intro by passing false here
-        callback: function () {
-          collectPhoneNumber();
-        }
+        callback: function () { collectPhoneNumber(); }
       });
     }
 
