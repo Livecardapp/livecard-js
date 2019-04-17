@@ -90,7 +90,7 @@ const showGiftTextInput = (params) => {
     Context.modal.inject((value) => {
       Context.giftMessage = value;
       console.log('Context', Context);
-      params.callback();
+      params.onSuccess();
     });
   }
 
@@ -111,15 +111,18 @@ const showPhoneInput = (params) => {
   if (Context.modal === null) {
     Context.modal = new CardModal(ModalType.CARD);
     const onBack = () => {
-      
+      Context.modal.remove();
+      Context.modal = null;
+      params.onBack();
     };
 
-    const onDone = (value) => {
+    const onSuccess = (value) => {
       Context.recipientPhone = value;
       console.log('Context', Context);
-      params.callback();
-    }
-    Context.modal.inject(onBack, onDone);
+      params.onSuccess();
+    };
+
+    Context.modal.inject(onBack, onSuccess);
   }
 
   Context.modal.show();
