@@ -1,5 +1,6 @@
-import dq from './view/dquery';
 import MessageModal from './view/message-modal';
+import FileView from './view/file-view';
+import ImageModal from './view/image-modal';
 import CardModal from './view/card-modal';
 
 /**
@@ -54,8 +55,6 @@ const Context = {
   messageType: "text",
   videoRecordSuccessCallback: null,
   videoRecordFailureCallback: null,
-  imageChooseSuccessCallback: null,
-  imageChooseFailureCallback: null,
   createCardSuccessCallback: null,
   createCardFailureCallback: null,
   debug: false,
@@ -64,9 +63,11 @@ const Context = {
 
 const ModalType = {
   VIDEO: 0,
-  IMAGE: 1,
-  TEXT: 2,
-  CARD: 3,
+  VIDEO_FILE: 1,
+  IMAGE: 2,
+  IMAGE_FILE: 3,
+  TEXT: 4,
+  CARD: 5,
 };
 
 let licenseKey = null;
@@ -95,6 +96,32 @@ const showGiftTextInput = (params) => {
   }
 
   Context.modal.show(params.showIntro);
+};
+
+/**
+ * Begin the static image capture flow (displays in modal)
+ * @param {Object}  params
+ * @param {captureSuccess} params.onSuccess  Callback for successful image capture
+ * @param {captureFailure} params.onFailure  Callback for failed image capture
+ */
+const showImageInput = (params) => {
+  Context.messageType = "image";
+  Context.usingFileInput = Context.isMobile;
+
+  const removeable = Context.modal === null ? false :
+    (Context.isMobile ? Context.modal.type !== ModalType.IMAGE_FILE : Context.modal.type !== ModalType.IMAGE);
+
+  if (removeable) {
+    Context.modal.remove();
+    Context.modal = null;
+  }
+
+  if (Context.modal === null) {
+    Context.modal = Context.isMobile ? new FileView(ModalType.IMAGE_FILE) : new ImageModal(ModalType.IMAGE);
+    Context.modal.inject(params.onSuccess, params.onFailure);
+  }
+
+  Context.modal.show();
 };
 
 /**
@@ -132,6 +159,7 @@ export {
   licenseKey,
   ErrorType,
   showGiftTextInput,
+  showImageInput,
   showPhoneInput,
 };
 
@@ -140,6 +168,11 @@ export {
 // =======================
 
 document.addEventListener("DOMContentLoaded", () => {
+  const livecardBox = document.createElement('div');
+
+  livecardBox.id = 'livecard-wrapper';
+  document.querySelector('body').appendChild(livecardBox);
+
   // detect mobile
   if (
     navigator.userAgent.match(/Android/i) ||

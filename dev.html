@@ -14,11 +14,25 @@
 
   <script type="text/javascript">
     LiveCard.licenseKey = "zeGBS3PiwkhBSpn-JDbz";
+    let lastView = 0;
 
     function createGiftMessage() {
+      lastView = 1;
       LiveCard.showGiftTextInput({
         showIntro: true, //Client can opt out of showing our intro by passing false here
-        onSuccess:  () => {
+        onSuccess: () => {
+          collectPhoneNumber();
+        }
+      });
+    }
+
+    function createImageMessage() {
+      lastView = 2;
+      LiveCard.showImageInput({
+        onFailure: () => {
+          console.log('failed image');
+        },
+        onSuccess: () => {
           collectPhoneNumber();
         }
       });
@@ -28,10 +42,19 @@
       //Client can collect phone with own UI and set directly like here or use our modal as below
       //LiveCard.recipientPhone = '1234567890';
       LiveCard.showPhoneInput({
-        onBack:  () => {
-          createGiftMessage();
+        onBack: () => {
+          switch (lastView) {
+            case 1:
+              createGiftMessage();
+              break;
+            case 2:
+              createImageMessage();
+              break;
+            default:
+              break;
+          }
         },
-        onSuccess:  () => {
+        onSuccess: () => {
           //update UI if needed
         }
       });
@@ -42,7 +65,7 @@
 
 <body>
   <button onclick="createGiftMessage()">Create Gift Message</button><br><br>
-  <div id="livecard-wrapper"></div>
+  <button onclick="createImageMessage()">Create Image Message</button><br><br>
 </body>
 
 </html>
