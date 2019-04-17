@@ -71,43 +71,43 @@ export default CardModal;
 // ======================================= remove imask later ==================================================
 
 /* https://unpkg.com/imask@4.1.3/dist/imask.min.js */
-!(function (t, e) {
+!(function(t, e) {
   "object" == typeof exports && "undefined" != typeof module
     ? (module.exports = e())
     : "function" == typeof define && define.amd
-      ? define(e)
-      : (t.IMask = e());
-})(this, function () {
+    ? define(e)
+    : (t.IMask = e());
+})(this, function() {
   "use strict";
-  var t = function (t) {
-    if (null == t) throw TypeError("Can't call method on  " + t);
-    return t;
-  },
+  var t = function(t) {
+      if (null == t) throw TypeError("Can't call method on  " + t);
+      return t;
+    },
     e = {}.hasOwnProperty,
-    n = function (t, n) {
+    n = function(t, n) {
       return e.call(t, n);
     },
     u = {}.toString,
     i = Object("z").propertyIsEnumerable(0)
       ? Object
-      : function (t) {
-        return "String" ==
-          (function (t) {
-            return u.call(t).slice(8, -1);
-          })(t)
-          ? t.split("")
-          : Object(t);
-      },
-    r = function (e) {
+      : function(t) {
+          return "String" ==
+            (function(t) {
+              return u.call(t).slice(8, -1);
+            })(t)
+            ? t.split("")
+            : Object(t);
+        },
+    r = function(e) {
       return i(t(e));
     },
     a = Math.ceil,
     s = Math.floor,
-    o = function (t) {
+    o = function(t) {
       return isNaN((t = +t)) ? 0 : (t > 0 ? s : a)(t);
     },
     l = Math.min,
-    h = function (t) {
+    h = function(t) {
       return t > 0 ? l(o(t), 9007199254740991) : 0;
     },
     c = Math.max,
@@ -117,19 +117,19 @@ export default CardModal;
   }
   var d,
     v,
-    k = p(function (t) {
+    k = p(function(t) {
       var e = (t.exports =
         "undefined" != typeof window && window.Math == Math
           ? window
           : "undefined" != typeof self && self.Math == Math
-            ? self
-            : Function("return this")());
+          ? self
+          : Function("return this")());
       "number" == typeof __g && (__g = e);
     }),
     g = k["__core-js_shared__"] || (k["__core-js_shared__"] = {}),
     y = 0,
     _ = Math.random(),
-    m = function (t) {
+    m = function(t) {
       return "Symbol(".concat(
         void 0 === t ? "" : t,
         ")_",
@@ -138,20 +138,20 @@ export default CardModal;
     },
     A = g[(d = "keys")] || (g[d] = {}),
     C = ((v = !1),
-      function (t, e, n) {
-        var u,
-          i = r(t),
-          a = h(i.length),
-          s = (function (t, e) {
-            return (t = o(t)) < 0 ? c(t + e, 0) : f(t, e);
-          })(n, a);
-        if (v && e != e) {
-          for (; a > s;) if ((u = i[s++]) != u) return !0;
-        } else
-          for (; a > s; s++) if ((v || s in i) && i[s] === e) return v || s || 0;
-        return !v && -1;
-      }),
-    F = (function (t) {
+    function(t, e, n) {
+      var u,
+        i = r(t),
+        a = h(i.length),
+        s = (function(t, e) {
+          return (t = o(t)) < 0 ? c(t + e, 0) : f(t, e);
+        })(n, a);
+      if (v && e != e) {
+        for (; a > s; ) if ((u = i[s++]) != u) return !0;
+      } else
+        for (; a > s; s++) if ((v || s in i) && i[s] === e) return v || s || 0;
+      return !v && -1;
+    }),
+    F = (function(t) {
       return A[t] || (A[t] = m(t));
     })("IE_PROTO"),
     E = "constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf".split(
@@ -159,41 +159,41 @@ export default CardModal;
     ),
     b =
       Object.keys ||
-      function (t) {
-        return (function (t, e) {
+      function(t) {
+        return (function(t, e) {
           var u,
             i = r(t),
             a = 0,
             s = [];
           for (u in i) u != F && n(i, u) && s.push(u);
-          for (; e.length > a;) n(i, (u = e[a++])) && (~C(s, u) || s.push(u));
+          for (; e.length > a; ) n(i, (u = e[a++])) && (~C(s, u) || s.push(u));
           return s;
         })(t, E);
       },
-    B = p(function (t) {
+    B = p(function(t) {
       var e = (t.exports = { version: "2.5.5" });
       "number" == typeof __e && (__e = e);
     }),
     S = (B.version,
-      function (t) {
-        return "object" == typeof t ? null !== t : "function" == typeof t;
-      }),
-    D = function (t) {
+    function(t) {
+      return "object" == typeof t ? null !== t : "function" == typeof t;
+    }),
+    D = function(t) {
       if (!S(t)) throw TypeError(t + " is not an object!");
       return t;
     },
-    T = function (t) {
+    T = function(t) {
       try {
         return !!t();
       } catch (t) {
         return !0;
       }
     },
-    w = !T(function () {
+    w = !T(function() {
       return (
         7 !=
         Object.defineProperty({}, "a", {
-          get: function () {
+          get: function() {
             return 7;
           }
         }).a
@@ -203,14 +203,14 @@ export default CardModal;
     M = S(x) && S(x.createElement),
     P =
       !w &&
-      !T(function () {
+      !T(function() {
         return (
           7 !=
           Object.defineProperty(
             ((t = "div"), M ? x.createElement(t) : {}),
             "a",
             {
-              get: function () {
+              get: function() {
                 return 7;
               }
             }
@@ -222,10 +222,10 @@ export default CardModal;
     I = {
       f: w
         ? Object.defineProperty
-        : function (t, e, n) {
-          if (
-            (D(t),
-              (e = (function (t, e) {
+        : function(t, e, n) {
+            if (
+              (D(t),
+              (e = (function(t, e) {
                 if (!S(t)) return t;
                 var n, u;
                 if (
@@ -246,84 +246,84 @@ export default CardModal;
               })(e, !0)),
               D(n),
               P)
-          )
-            try {
-              return O(t, e, n);
-            } catch (t) { }
-          if ("get" in n || "set" in n)
-            throw TypeError("Accessors not supported!");
-          return "value" in n && (t[e] = n.value), t;
-        }
+            )
+              try {
+                return O(t, e, n);
+              } catch (t) {}
+            if ("get" in n || "set" in n)
+              throw TypeError("Accessors not supported!");
+            return "value" in n && (t[e] = n.value), t;
+          }
     },
     R = w
-      ? function (t, e, n) {
-        return I.f(
-          t,
-          e,
-          (function (t, e) {
-            return {
-              enumerable: !(1 & t),
-              configurable: !(2 & t),
-              writable: !(4 & t),
-              value: e
-            };
-          })(1, n)
-        );
-      }
-      : function (t, e, n) {
-        return (t[e] = n), t;
-      },
-    V = p(function (t) {
+      ? function(t, e, n) {
+          return I.f(
+            t,
+            e,
+            (function(t, e) {
+              return {
+                enumerable: !(1 & t),
+                configurable: !(2 & t),
+                writable: !(4 & t),
+                value: e
+              };
+            })(1, n)
+          );
+        }
+      : function(t, e, n) {
+          return (t[e] = n), t;
+        },
+    V = p(function(t) {
       var e = m("src"),
         u = Function.toString,
         i = ("" + u).split("toString");
-      (B.inspectSource = function (t) {
+      (B.inspectSource = function(t) {
         return u.call(t);
       }),
-        (t.exports = function (t, u, r, a) {
+        (t.exports = function(t, u, r, a) {
           var s = "function" == typeof r;
           s && (n(r, "name") || R(r, "name", u)),
             t[u] !== r &&
-            (s && (n(r, e) || R(r, e, t[u] ? "" + t[u] : i.join(String(u)))),
+              (s && (n(r, e) || R(r, e, t[u] ? "" + t[u] : i.join(String(u)))),
               t === k
                 ? (t[u] = r)
                 : a
-                  ? t[u]
-                    ? (t[u] = r)
-                    : R(t, u, r)
-                  : (delete t[u], R(t, u, r)));
-        })(Function.prototype, "toString", function () {
+                ? t[u]
+                  ? (t[u] = r)
+                  : R(t, u, r)
+                : (delete t[u], R(t, u, r)));
+        })(Function.prototype, "toString", function() {
           return ("function" == typeof this && this[e]) || u.call(this);
         });
     }),
-    j = function (t, e, n) {
+    j = function(t, e, n) {
       if (
-        ((function (t) {
+        ((function(t) {
           if ("function" != typeof t)
             throw TypeError(t + " is not a function!");
         })(t),
-          void 0 === e)
+        void 0 === e)
       )
         return t;
       switch (n) {
         case 1:
-          return function (n) {
+          return function(n) {
             return t.call(e, n);
           };
         case 2:
-          return function (n, u) {
+          return function(n, u) {
             return t.call(e, n, u);
           };
         case 3:
-          return function (n, u, i) {
+          return function(n, u, i) {
             return t.call(e, n, u, i);
           };
       }
-      return function () {
+      return function() {
         return t.apply(e, arguments);
       };
     },
-    N = function (t, e, n) {
+    N = function(t, e, n) {
       var u,
         i,
         r,
@@ -342,8 +342,8 @@ export default CardModal;
             c && i
               ? j(r, k)
               : h && "function" == typeof r
-                ? j(Function.call, r)
-                : r),
+              ? j(Function.call, r)
+              : r),
           f && V(f, u, r, t & N.U),
           p[u] != r && R(p, u, a),
           h && d[u] != r && (d[u] = r);
@@ -363,10 +363,10 @@ export default CardModal;
     U,
     z = N;
   (L = "keys"),
-    (H = function () {
-      return function (e) {
+    (H = function() {
+      return function(e) {
         return b(
-          (function (e) {
+          (function(e) {
             return Object(t(e));
           })(e)
         );
@@ -376,15 +376,15 @@ export default CardModal;
     ((U = {})[L] = H(G)),
     z(
       z.S +
-      z.F *
-      T(function () {
-        G(1);
-      }),
+        z.F *
+          T(function() {
+            G(1);
+          }),
       "Object",
       U
     );
   B.Object.keys;
-  var Y = function (e) {
+  var Y = function(e) {
     var n = String(t(this)),
       u = "",
       i = o(e);
@@ -394,26 +394,26 @@ export default CardModal;
   };
   z(z.P, "String", { repeat: Y });
   B.String.repeat;
-  var Z = function (e, n, u, i) {
-    var r = String(t(e)),
-      a = r.length,
-      s = void 0 === u ? " " : String(u),
-      o = h(n);
-    if (o <= a || "" == s) return r;
-    var l = o - a,
-      c = Y.call(s, Math.ceil(l / s.length));
-    return c.length > l && (c = c.slice(0, l)), i ? c + r : r + c;
-  },
+  var Z = function(e, n, u, i) {
+      var r = String(t(e)),
+        a = r.length,
+        s = void 0 === u ? " " : String(u),
+        o = h(n);
+      if (o <= a || "" == s) return r;
+      var l = o - a,
+        c = Y.call(s, Math.ceil(l / s.length));
+      return c.length > l && (c = c.slice(0, l)), i ? c + r : r + c;
+    },
     $ = k.navigator,
     K = ($ && $.userAgent) || "";
   z(z.P + z.F * /Version\/10\.\d+(\.\d+)? Safari\//.test(K), "String", {
-    padStart: function (t) {
+    padStart: function(t) {
       return Z(this, t, arguments.length > 1 ? arguments[1] : void 0, !0);
     }
   });
   B.String.padStart;
   z(z.P + z.F * /Version\/10\.\d+(\.\d+)? Safari\//.test(K), "String", {
-    padEnd: function (t) {
+    padEnd: function(t) {
       return Z(this, t, arguments.length > 1 ? arguments[1] : void 0, !1);
     }
   });
@@ -421,17 +421,17 @@ export default CardModal;
   function W(t) {
     return (W =
       "function" == typeof Symbol && "symbol" == typeof Symbol.iterator
-        ? function (t) {
-          return typeof t;
-        }
-        : function (t) {
-          return t &&
-            "function" == typeof Symbol &&
-            t.constructor === Symbol &&
-            t !== Symbol.prototype
-            ? "symbol"
-            : typeof t;
-        })(t);
+        ? function(t) {
+            return typeof t;
+          }
+        : function(t) {
+            return t &&
+              "function" == typeof Symbol &&
+              t.constructor === Symbol &&
+              t !== Symbol.prototype
+              ? "symbol"
+              : typeof t;
+          })(t);
   }
   function q(t, e) {
     if (!(t instanceof e))
@@ -453,11 +453,11 @@ export default CardModal;
     return (
       e in t
         ? Object.defineProperty(t, e, {
-          value: n,
-          enumerable: !0,
-          configurable: !0,
-          writable: !0
-        })
+            value: n,
+            enumerable: !0,
+            configurable: !0,
+            writable: !0
+          })
         : (t[e] = n),
       t
     );
@@ -465,7 +465,7 @@ export default CardModal;
   function tt() {
     return (tt =
       Object.assign ||
-      function (t) {
+      function(t) {
         for (var e = 1; e < arguments.length; e++) {
           var n = arguments[e];
           for (var u in n)
@@ -480,11 +480,11 @@ export default CardModal;
         u = Object.keys(n);
       "function" == typeof Object.getOwnPropertySymbols &&
         (u = u.concat(
-          Object.getOwnPropertySymbols(n).filter(function (t) {
+          Object.getOwnPropertySymbols(n).filter(function(t) {
             return Object.getOwnPropertyDescriptor(n, t).enumerable;
           })
         )),
-        u.forEach(function (e) {
+        u.forEach(function(e) {
           X(t, e, n[e]);
         });
     }
@@ -501,14 +501,14 @@ export default CardModal;
   function ut(t) {
     return (ut = Object.setPrototypeOf
       ? Object.getPrototypeOf
-      : function (t) {
-        return t.__proto__ || Object.getPrototypeOf(t);
-      })(t);
+      : function(t) {
+          return t.__proto__ || Object.getPrototypeOf(t);
+        })(t);
   }
   function it(t, e) {
     return (it =
       Object.setPrototypeOf ||
-      function (t, e) {
+      function(t, e) {
         return (t.__proto__ = e), t;
       })(t, e);
   }
@@ -516,7 +516,7 @@ export default CardModal;
     if (null == t) return {};
     var n,
       u,
-      i = (function (t, e) {
+      i = (function(t, e) {
         if (null == t) return {};
         var n,
           u,
@@ -531,19 +531,19 @@ export default CardModal;
       for (u = 0; u < r.length; u++)
         (n = r[u]),
           e.indexOf(n) >= 0 ||
-          (Object.prototype.propertyIsEnumerable.call(t, n) && (i[n] = t[n]));
+            (Object.prototype.propertyIsEnumerable.call(t, n) && (i[n] = t[n]));
     }
     return i;
   }
   function at(t, e) {
     return !e || ("object" != typeof e && "function" != typeof e)
-      ? (function (t) {
-        if (void 0 === t)
-          throw new ReferenceError(
-            "this hasn't been initialised - super() hasn't been called"
-          );
-        return t;
-      })(t)
+      ? (function(t) {
+          if (void 0 === t)
+            throw new ReferenceError(
+              "this hasn't been initialised - super() hasn't been called"
+            );
+          return t;
+        })(t)
       : e;
   }
   function st(t, e) {
@@ -558,32 +558,32 @@ export default CardModal;
     return (ot =
       "undefined" != typeof Reflect && Reflect.get
         ? Reflect.get
-        : function (t, e, n) {
-          var u = st(t, e);
-          if (u) {
-            var i = Object.getOwnPropertyDescriptor(u, e);
-            return i.get ? i.get.call(n) : i.value;
-          }
-        })(t, e, n || t);
+        : function(t, e, n) {
+            var u = st(t, e);
+            if (u) {
+              var i = Object.getOwnPropertyDescriptor(u, e);
+              return i.get ? i.get.call(n) : i.value;
+            }
+          })(t, e, n || t);
   }
   function lt(t, e, n, u) {
     return (lt =
       "undefined" != typeof Reflect && Reflect.set
         ? Reflect.set
-        : function (t, e, n, u) {
-          var i,
-            r = st(t, e);
-          if (r) {
-            if ((i = Object.getOwnPropertyDescriptor(r, e)).set)
-              return i.set.call(u, n), !0;
-            if (!i.writable) return !1;
-          }
-          if ((i = Object.getOwnPropertyDescriptor(u, e))) {
-            if (!i.writable) return !1;
-            (i.value = n), Object.defineProperty(u, e, i);
-          } else X(u, e, n);
-          return !0;
-        })(t, e, n, u);
+        : function(t, e, n, u) {
+            var i,
+              r = st(t, e);
+            if (r) {
+              if ((i = Object.getOwnPropertyDescriptor(r, e)).set)
+                return i.set.call(u, n), !0;
+              if (!i.writable) return !1;
+            }
+            if ((i = Object.getOwnPropertyDescriptor(u, e))) {
+              if (!i.writable) return !1;
+              (i.value = n), Object.defineProperty(u, e, i);
+            } else X(u, e, n);
+            return !0;
+          })(t, e, n, u);
   }
   function ht(t, e, n, u, i) {
     if (!lt(t, e, n, u || t) && i) throw new Error("failed to set property");
@@ -591,10 +591,10 @@ export default CardModal;
   }
   function ct(t, e) {
     return (
-      (function (t) {
+      (function(t) {
         if (Array.isArray(t)) return t;
       })(t) ||
-      (function (t, e) {
+      (function(t, e) {
         var n = [],
           u = !0,
           i = !1,
@@ -617,7 +617,7 @@ export default CardModal;
         }
         return n;
       })(t, e) ||
-      (function () {
+      (function() {
         throw new TypeError(
           "Invalid attempt to destructure non-iterable instance"
         );
@@ -635,18 +635,18 @@ export default CardModal;
     return t.replace(/([.*+?^=!:${}()|[\]\/\\])/g, "\\$1");
   }
   var dt =
-    ("undefined" != typeof window && window) ||
-    ("undefined" != typeof global && global.global === global && global) ||
-    ("undefined" != typeof self && self.self === self && self) ||
-    {},
-    vt = (function () {
+      ("undefined" != typeof window && window) ||
+      ("undefined" != typeof global && global.global === global && global) ||
+      ("undefined" != typeof self && self.self === self && self) ||
+      {},
+    vt = (function() {
       function t(e, n, u, i) {
         for (
           q(this, t),
-          this.value = e,
-          this.cursorPos = n,
-          this.oldValue = u,
-          this.oldSelection = i;
+            this.value = e,
+            this.cursorPos = n,
+            this.oldValue = u,
+            this.oldSelection = i;
           this.value.slice(0, this.startChangePos) !==
           this.oldValue.slice(0, this.startChangePos);
 
@@ -657,35 +657,35 @@ export default CardModal;
         Q(t, [
           {
             key: "startChangePos",
-            get: function () {
+            get: function() {
               return Math.min(this.cursorPos, this.oldSelection.start);
             }
           },
           {
             key: "insertedCount",
-            get: function () {
+            get: function() {
               return this.cursorPos - this.startChangePos;
             }
           },
           {
             key: "inserted",
-            get: function () {
+            get: function() {
               return this.value.substr(this.startChangePos, this.insertedCount);
             }
           },
           {
             key: "removedCount",
-            get: function () {
+            get: function() {
               return Math.max(
                 this.oldSelection.end - this.startChangePos ||
-                this.oldValue.length - this.value.length,
+                  this.oldValue.length - this.value.length,
                 0
               );
             }
           },
           {
             key: "removed",
-            get: function () {
+            get: function() {
               return this.oldValue.substr(
                 this.startChangePos,
                 this.removedCount
@@ -694,13 +694,13 @@ export default CardModal;
           },
           {
             key: "head",
-            get: function () {
+            get: function() {
               return this.value.substring(0, this.startChangePos);
             }
           },
           {
             key: "tail",
-            get: function () {
+            get: function() {
               return this.value.substring(
                 this.startChangePos + this.insertedCount
               );
@@ -708,20 +708,20 @@ export default CardModal;
           },
           {
             key: "removeDirection",
-            get: function () {
+            get: function() {
               return !this.removedCount || this.insertedCount
                 ? ft.NONE
                 : this.oldSelection.end === this.cursorPos ||
                   this.oldSelection.start === this.cursorPos
-                  ? ft.RIGHT
-                  : ft.LEFT;
+                ? ft.RIGHT
+                : ft.LEFT;
             }
           }
         ]),
         t
       );
     })(),
-    kt = (function () {
+    kt = (function() {
       function t(e) {
         q(this, t),
           tt(
@@ -734,7 +734,7 @@ export default CardModal;
         Q(t, [
           {
             key: "aggregate",
-            value: function (t) {
+            value: function(t) {
               return (
                 (this.rawInserted += t.rawInserted),
                 (this.skip = this.skip || t.skip),
@@ -746,7 +746,7 @@ export default CardModal;
           },
           {
             key: "offset",
-            get: function () {
+            get: function() {
               return this.tailShift + this.inserted.length;
             }
           }
@@ -754,7 +754,7 @@ export default CardModal;
         t
       );
     })(),
-    gt = (function () {
+    gt = (function() {
       function t(e) {
         q(this, t),
           (this._value = ""),
@@ -765,26 +765,26 @@ export default CardModal;
         Q(t, [
           {
             key: "updateOptions",
-            value: function (t) {
+            value: function(t) {
               Object.keys(t).length &&
                 this.withValueRefresh(this._update.bind(this, t));
             }
           },
           {
             key: "_update",
-            value: function (t) {
+            value: function(t) {
               tt(this, t);
             }
           },
           {
             key: "reset",
-            value: function () {
+            value: function() {
               this._value = "";
             }
           },
           {
             key: "resolve",
-            value: function (t) {
+            value: function(t) {
               return (
                 this.reset(),
                 this.append(t, { input: !0 }, { value: "" }),
@@ -795,17 +795,17 @@ export default CardModal;
           },
           {
             key: "nearestInputPos",
-            value: function (t, e) {
+            value: function(t, e) {
               return t;
             }
           },
           {
             key: "extractInput",
-            value: function () {
+            value: function() {
               var t =
-                arguments.length > 0 && void 0 !== arguments[0]
-                  ? arguments[0]
-                  : 0,
+                  arguments.length > 0 && void 0 !== arguments[0]
+                    ? arguments[0]
+                    : 0,
                 e =
                   arguments.length > 1 && void 0 !== arguments[1]
                     ? arguments[1]
@@ -815,11 +815,11 @@ export default CardModal;
           },
           {
             key: "extractTail",
-            value: function () {
+            value: function() {
               var t =
-                arguments.length > 0 && void 0 !== arguments[0]
-                  ? arguments[0]
-                  : 0,
+                  arguments.length > 0 && void 0 !== arguments[0]
+                    ? arguments[0]
+                    : 0,
                 e =
                   arguments.length > 1 && void 0 !== arguments[1]
                     ? arguments[1]
@@ -829,31 +829,31 @@ export default CardModal;
           },
           {
             key: "_storeBeforeTailState",
-            value: function () {
+            value: function() {
               this._beforeTailState = this.state;
             }
           },
           {
             key: "_restoreBeforeTailState",
-            value: function () {
+            value: function() {
               this.state = this._beforeTailState;
             }
           },
           {
             key: "_resetBeforeTailState",
-            value: function () {
+            value: function() {
               this._beforeTailState = null;
             }
           },
           {
             key: "appendTail",
-            value: function (t) {
+            value: function(t) {
               return this.append(t ? t.value : "", { tail: !0 });
             }
           },
           {
             key: "_appendCharRaw",
-            value: function (t) {
+            value: function(t) {
               return (
                 (this._value += t), new kt({ inserted: t, rawInserted: t })
               );
@@ -861,11 +861,11 @@ export default CardModal;
           },
           {
             key: "_appendChar",
-            value: function (t) {
+            value: function(t) {
               var e =
-                arguments.length > 1 && void 0 !== arguments[1]
-                  ? arguments[1]
-                  : {},
+                  arguments.length > 1 && void 0 !== arguments[1]
+                    ? arguments[1]
+                    : {},
                 n = arguments.length > 2 ? arguments[2] : void 0;
               if (!(t = this.doPrepare(t, e))) return new kt();
               var u = this.state,
@@ -886,13 +886,13 @@ export default CardModal;
           },
           {
             key: "append",
-            value: function (t, e, n) {
+            value: function(t, e, n) {
               this.value.length;
               for (var u = new kt(), i = 0; i < t.length; ++i)
                 u.aggregate(this._appendChar(t[i], e, n));
               return (
                 null != n &&
-                (this._storeBeforeTailState(),
+                  (this._storeBeforeTailState(),
                   (u.tailShift += this.appendTail(n).tailShift)),
                 u
               );
@@ -900,11 +900,11 @@ export default CardModal;
           },
           {
             key: "remove",
-            value: function () {
+            value: function() {
               var t =
-                arguments.length > 0 && void 0 !== arguments[0]
-                  ? arguments[0]
-                  : 0,
+                  arguments.length > 0 && void 0 !== arguments[0]
+                    ? arguments[0]
+                    : 0,
                 e =
                   arguments.length > 1 && void 0 !== arguments[1]
                     ? arguments[1]
@@ -917,7 +917,7 @@ export default CardModal;
           },
           {
             key: "withValueRefresh",
-            value: function (t) {
+            value: function(t) {
               if (this._refreshing || !this.isInitialized) return t();
               this._refreshing = !0;
               var e = this.unmaskedValue,
@@ -932,7 +932,7 @@ export default CardModal;
           },
           {
             key: "doPrepare",
-            value: function (t) {
+            value: function(t) {
               var e =
                 arguments.length > 1 && void 0 !== arguments[1]
                   ? arguments[1]
@@ -942,7 +942,7 @@ export default CardModal;
           },
           {
             key: "doValidate",
-            value: function (t) {
+            value: function(t) {
               return (
                 (!this.validate || this.validate(this.value, this, t)) &&
                 (!this.parent || this.parent.doValidate(t))
@@ -951,13 +951,13 @@ export default CardModal;
           },
           {
             key: "doCommit",
-            value: function () {
+            value: function() {
               this.commit && this.commit(this.value, this);
             }
           },
           {
             key: "splice",
-            value: function (t, e, n, u) {
+            value: function(t, e, n, u) {
               var i = t + e,
                 r = this.extractTail(i),
                 a = this.nearestInputPos(t, u);
@@ -968,46 +968,46 @@ export default CardModal;
           },
           {
             key: "state",
-            get: function () {
+            get: function() {
               return { _value: this.value };
             },
-            set: function (t) {
+            set: function(t) {
               this._value = t._value;
             }
           },
           {
             key: "value",
-            get: function () {
+            get: function() {
               return this._value;
             },
-            set: function (t) {
+            set: function(t) {
               this.resolve(t);
             }
           },
           {
             key: "unmaskedValue",
-            get: function () {
+            get: function() {
               return this.value;
             },
-            set: function (t) {
+            set: function(t) {
               this.reset(), this.append(t, {}, { value: "" }), this.doCommit();
             }
           },
           {
             key: "typedValue",
-            get: function () {
+            get: function() {
               return this.unmaskedValue;
             },
-            set: function (t) {
+            set: function(t) {
               this.unmaskedValue = t;
             }
           },
           {
             key: "rawInputValue",
-            get: function () {
+            get: function() {
               return this.extractInput(0, this.value.length, { raw: !0 });
             },
-            set: function (t) {
+            set: function(t) {
               this.reset(),
                 this.append(t, { raw: !0 }, { value: "" }),
                 this.doCommit();
@@ -1015,7 +1015,7 @@ export default CardModal;
           },
           {
             key: "isComplete",
-            get: function () {
+            get: function() {
               return !0;
             }
           }
@@ -1028,18 +1028,18 @@ export default CardModal;
     return t instanceof RegExp
       ? dt.IMask.MaskedRegExp
       : "string" == typeof (e = t) || e instanceof String
-        ? dt.IMask.MaskedPattern
-        : t instanceof Date || t === Date
-          ? dt.IMask.MaskedDate
-          : t instanceof Number || "number" == typeof t || t === Number
-            ? dt.IMask.MaskedNumber
-            : Array.isArray(t) || t === Array
-              ? dt.IMask.MaskedDynamic
-              : t.prototype instanceof dt.IMask.Masked
-                ? t
-                : t instanceof Function
-                  ? dt.IMask.MaskedFunction
-                  : (console.warn("Mask not found for mask", t), dt.IMask.Masked);
+      ? dt.IMask.MaskedPattern
+      : t instanceof Date || t === Date
+      ? dt.IMask.MaskedDate
+      : t instanceof Number || "number" == typeof t || t === Number
+      ? dt.IMask.MaskedNumber
+      : Array.isArray(t) || t === Array
+      ? dt.IMask.MaskedDynamic
+      : t.prototype instanceof dt.IMask.Masked
+      ? t
+      : t instanceof Function
+      ? dt.IMask.MaskedFunction
+      : (console.warn("Mask not found for mask", t), dt.IMask.Masked);
     var e;
   }
   function _t(t) {
@@ -1047,11 +1047,11 @@ export default CardModal;
     return e instanceof dt.IMask.Masked ? e : new (yt(e))(t);
   }
   var mt = {
-    0: /\d/,
-    a: /[\u0041-\u005A\u0061-\u007A\u00AA\u00B5\u00BA\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02C1\u02C6-\u02D1\u02E0-\u02E4\u02EC\u02EE\u0370-\u0374\u0376\u0377\u037A-\u037D\u0386\u0388-\u038A\u038C\u038E-\u03A1\u03A3-\u03F5\u03F7-\u0481\u048A-\u0527\u0531-\u0556\u0559\u0561-\u0587\u05D0-\u05EA\u05F0-\u05F2\u0620-\u064A\u066E\u066F\u0671-\u06D3\u06D5\u06E5\u06E6\u06EE\u06EF\u06FA-\u06FC\u06FF\u0710\u0712-\u072F\u074D-\u07A5\u07B1\u07CA-\u07EA\u07F4\u07F5\u07FA\u0800-\u0815\u081A\u0824\u0828\u0840-\u0858\u08A0\u08A2-\u08AC\u0904-\u0939\u093D\u0950\u0958-\u0961\u0971-\u0977\u0979-\u097F\u0985-\u098C\u098F\u0990\u0993-\u09A8\u09AA-\u09B0\u09B2\u09B6-\u09B9\u09BD\u09CE\u09DC\u09DD\u09DF-\u09E1\u09F0\u09F1\u0A05-\u0A0A\u0A0F\u0A10\u0A13-\u0A28\u0A2A-\u0A30\u0A32\u0A33\u0A35\u0A36\u0A38\u0A39\u0A59-\u0A5C\u0A5E\u0A72-\u0A74\u0A85-\u0A8D\u0A8F-\u0A91\u0A93-\u0AA8\u0AAA-\u0AB0\u0AB2\u0AB3\u0AB5-\u0AB9\u0ABD\u0AD0\u0AE0\u0AE1\u0B05-\u0B0C\u0B0F\u0B10\u0B13-\u0B28\u0B2A-\u0B30\u0B32\u0B33\u0B35-\u0B39\u0B3D\u0B5C\u0B5D\u0B5F-\u0B61\u0B71\u0B83\u0B85-\u0B8A\u0B8E-\u0B90\u0B92-\u0B95\u0B99\u0B9A\u0B9C\u0B9E\u0B9F\u0BA3\u0BA4\u0BA8-\u0BAA\u0BAE-\u0BB9\u0BD0\u0C05-\u0C0C\u0C0E-\u0C10\u0C12-\u0C28\u0C2A-\u0C33\u0C35-\u0C39\u0C3D\u0C58\u0C59\u0C60\u0C61\u0C85-\u0C8C\u0C8E-\u0C90\u0C92-\u0CA8\u0CAA-\u0CB3\u0CB5-\u0CB9\u0CBD\u0CDE\u0CE0\u0CE1\u0CF1\u0CF2\u0D05-\u0D0C\u0D0E-\u0D10\u0D12-\u0D3A\u0D3D\u0D4E\u0D60\u0D61\u0D7A-\u0D7F\u0D85-\u0D96\u0D9A-\u0DB1\u0DB3-\u0DBB\u0DBD\u0DC0-\u0DC6\u0E01-\u0E30\u0E32\u0E33\u0E40-\u0E46\u0E81\u0E82\u0E84\u0E87\u0E88\u0E8A\u0E8D\u0E94-\u0E97\u0E99-\u0E9F\u0EA1-\u0EA3\u0EA5\u0EA7\u0EAA\u0EAB\u0EAD-\u0EB0\u0EB2\u0EB3\u0EBD\u0EC0-\u0EC4\u0EC6\u0EDC-\u0EDF\u0F00\u0F40-\u0F47\u0F49-\u0F6C\u0F88-\u0F8C\u1000-\u102A\u103F\u1050-\u1055\u105A-\u105D\u1061\u1065\u1066\u106E-\u1070\u1075-\u1081\u108E\u10A0-\u10C5\u10C7\u10CD\u10D0-\u10FA\u10FC-\u1248\u124A-\u124D\u1250-\u1256\u1258\u125A-\u125D\u1260-\u1288\u128A-\u128D\u1290-\u12B0\u12B2-\u12B5\u12B8-\u12BE\u12C0\u12C2-\u12C5\u12C8-\u12D6\u12D8-\u1310\u1312-\u1315\u1318-\u135A\u1380-\u138F\u13A0-\u13F4\u1401-\u166C\u166F-\u167F\u1681-\u169A\u16A0-\u16EA\u1700-\u170C\u170E-\u1711\u1720-\u1731\u1740-\u1751\u1760-\u176C\u176E-\u1770\u1780-\u17B3\u17D7\u17DC\u1820-\u1877\u1880-\u18A8\u18AA\u18B0-\u18F5\u1900-\u191C\u1950-\u196D\u1970-\u1974\u1980-\u19AB\u19C1-\u19C7\u1A00-\u1A16\u1A20-\u1A54\u1AA7\u1B05-\u1B33\u1B45-\u1B4B\u1B83-\u1BA0\u1BAE\u1BAF\u1BBA-\u1BE5\u1C00-\u1C23\u1C4D-\u1C4F\u1C5A-\u1C7D\u1CE9-\u1CEC\u1CEE-\u1CF1\u1CF5\u1CF6\u1D00-\u1DBF\u1E00-\u1F15\u1F18-\u1F1D\u1F20-\u1F45\u1F48-\u1F4D\u1F50-\u1F57\u1F59\u1F5B\u1F5D\u1F5F-\u1F7D\u1F80-\u1FB4\u1FB6-\u1FBC\u1FBE\u1FC2-\u1FC4\u1FC6-\u1FCC\u1FD0-\u1FD3\u1FD6-\u1FDB\u1FE0-\u1FEC\u1FF2-\u1FF4\u1FF6-\u1FFC\u2071\u207F\u2090-\u209C\u2102\u2107\u210A-\u2113\u2115\u2119-\u211D\u2124\u2126\u2128\u212A-\u212D\u212F-\u2139\u213C-\u213F\u2145-\u2149\u214E\u2183\u2184\u2C00-\u2C2E\u2C30-\u2C5E\u2C60-\u2CE4\u2CEB-\u2CEE\u2CF2\u2CF3\u2D00-\u2D25\u2D27\u2D2D\u2D30-\u2D67\u2D6F\u2D80-\u2D96\u2DA0-\u2DA6\u2DA8-\u2DAE\u2DB0-\u2DB6\u2DB8-\u2DBE\u2DC0-\u2DC6\u2DC8-\u2DCE\u2DD0-\u2DD6\u2DD8-\u2DDE\u2E2F\u3005\u3006\u3031-\u3035\u303B\u303C\u3041-\u3096\u309D-\u309F\u30A1-\u30FA\u30FC-\u30FF\u3105-\u312D\u3131-\u318E\u31A0-\u31BA\u31F0-\u31FF\u3400-\u4DB5\u4E00-\u9FCC\uA000-\uA48C\uA4D0-\uA4FD\uA500-\uA60C\uA610-\uA61F\uA62A\uA62B\uA640-\uA66E\uA67F-\uA697\uA6A0-\uA6E5\uA717-\uA71F\uA722-\uA788\uA78B-\uA78E\uA790-\uA793\uA7A0-\uA7AA\uA7F8-\uA801\uA803-\uA805\uA807-\uA80A\uA80C-\uA822\uA840-\uA873\uA882-\uA8B3\uA8F2-\uA8F7\uA8FB\uA90A-\uA925\uA930-\uA946\uA960-\uA97C\uA984-\uA9B2\uA9CF\uAA00-\uAA28\uAA40-\uAA42\uAA44-\uAA4B\uAA60-\uAA76\uAA7A\uAA80-\uAAAF\uAAB1\uAAB5\uAAB6\uAAB9-\uAABD\uAAC0\uAAC2\uAADB-\uAADD\uAAE0-\uAAEA\uAAF2-\uAAF4\uAB01-\uAB06\uAB09-\uAB0E\uAB11-\uAB16\uAB20-\uAB26\uAB28-\uAB2E\uABC0-\uABE2\uAC00-\uD7A3\uD7B0-\uD7C6\uD7CB-\uD7FB\uF900-\uFA6D\uFA70-\uFAD9\uFB00-\uFB06\uFB13-\uFB17\uFB1D\uFB1F-\uFB28\uFB2A-\uFB36\uFB38-\uFB3C\uFB3E\uFB40\uFB41\uFB43\uFB44\uFB46-\uFBB1\uFBD3-\uFD3D\uFD50-\uFD8F\uFD92-\uFDC7\uFDF0-\uFDFB\uFE70-\uFE74\uFE76-\uFEFC\uFF21-\uFF3A\uFF41-\uFF5A\uFF66-\uFFBE\uFFC2-\uFFC7\uFFCA-\uFFCF\uFFD2-\uFFD7\uFFDA-\uFFDC]/,
-    "*": /./
-  },
-    At = (function () {
+      0: /\d/,
+      a: /[\u0041-\u005A\u0061-\u007A\u00AA\u00B5\u00BA\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02C1\u02C6-\u02D1\u02E0-\u02E4\u02EC\u02EE\u0370-\u0374\u0376\u0377\u037A-\u037D\u0386\u0388-\u038A\u038C\u038E-\u03A1\u03A3-\u03F5\u03F7-\u0481\u048A-\u0527\u0531-\u0556\u0559\u0561-\u0587\u05D0-\u05EA\u05F0-\u05F2\u0620-\u064A\u066E\u066F\u0671-\u06D3\u06D5\u06E5\u06E6\u06EE\u06EF\u06FA-\u06FC\u06FF\u0710\u0712-\u072F\u074D-\u07A5\u07B1\u07CA-\u07EA\u07F4\u07F5\u07FA\u0800-\u0815\u081A\u0824\u0828\u0840-\u0858\u08A0\u08A2-\u08AC\u0904-\u0939\u093D\u0950\u0958-\u0961\u0971-\u0977\u0979-\u097F\u0985-\u098C\u098F\u0990\u0993-\u09A8\u09AA-\u09B0\u09B2\u09B6-\u09B9\u09BD\u09CE\u09DC\u09DD\u09DF-\u09E1\u09F0\u09F1\u0A05-\u0A0A\u0A0F\u0A10\u0A13-\u0A28\u0A2A-\u0A30\u0A32\u0A33\u0A35\u0A36\u0A38\u0A39\u0A59-\u0A5C\u0A5E\u0A72-\u0A74\u0A85-\u0A8D\u0A8F-\u0A91\u0A93-\u0AA8\u0AAA-\u0AB0\u0AB2\u0AB3\u0AB5-\u0AB9\u0ABD\u0AD0\u0AE0\u0AE1\u0B05-\u0B0C\u0B0F\u0B10\u0B13-\u0B28\u0B2A-\u0B30\u0B32\u0B33\u0B35-\u0B39\u0B3D\u0B5C\u0B5D\u0B5F-\u0B61\u0B71\u0B83\u0B85-\u0B8A\u0B8E-\u0B90\u0B92-\u0B95\u0B99\u0B9A\u0B9C\u0B9E\u0B9F\u0BA3\u0BA4\u0BA8-\u0BAA\u0BAE-\u0BB9\u0BD0\u0C05-\u0C0C\u0C0E-\u0C10\u0C12-\u0C28\u0C2A-\u0C33\u0C35-\u0C39\u0C3D\u0C58\u0C59\u0C60\u0C61\u0C85-\u0C8C\u0C8E-\u0C90\u0C92-\u0CA8\u0CAA-\u0CB3\u0CB5-\u0CB9\u0CBD\u0CDE\u0CE0\u0CE1\u0CF1\u0CF2\u0D05-\u0D0C\u0D0E-\u0D10\u0D12-\u0D3A\u0D3D\u0D4E\u0D60\u0D61\u0D7A-\u0D7F\u0D85-\u0D96\u0D9A-\u0DB1\u0DB3-\u0DBB\u0DBD\u0DC0-\u0DC6\u0E01-\u0E30\u0E32\u0E33\u0E40-\u0E46\u0E81\u0E82\u0E84\u0E87\u0E88\u0E8A\u0E8D\u0E94-\u0E97\u0E99-\u0E9F\u0EA1-\u0EA3\u0EA5\u0EA7\u0EAA\u0EAB\u0EAD-\u0EB0\u0EB2\u0EB3\u0EBD\u0EC0-\u0EC4\u0EC6\u0EDC-\u0EDF\u0F00\u0F40-\u0F47\u0F49-\u0F6C\u0F88-\u0F8C\u1000-\u102A\u103F\u1050-\u1055\u105A-\u105D\u1061\u1065\u1066\u106E-\u1070\u1075-\u1081\u108E\u10A0-\u10C5\u10C7\u10CD\u10D0-\u10FA\u10FC-\u1248\u124A-\u124D\u1250-\u1256\u1258\u125A-\u125D\u1260-\u1288\u128A-\u128D\u1290-\u12B0\u12B2-\u12B5\u12B8-\u12BE\u12C0\u12C2-\u12C5\u12C8-\u12D6\u12D8-\u1310\u1312-\u1315\u1318-\u135A\u1380-\u138F\u13A0-\u13F4\u1401-\u166C\u166F-\u167F\u1681-\u169A\u16A0-\u16EA\u1700-\u170C\u170E-\u1711\u1720-\u1731\u1740-\u1751\u1760-\u176C\u176E-\u1770\u1780-\u17B3\u17D7\u17DC\u1820-\u1877\u1880-\u18A8\u18AA\u18B0-\u18F5\u1900-\u191C\u1950-\u196D\u1970-\u1974\u1980-\u19AB\u19C1-\u19C7\u1A00-\u1A16\u1A20-\u1A54\u1AA7\u1B05-\u1B33\u1B45-\u1B4B\u1B83-\u1BA0\u1BAE\u1BAF\u1BBA-\u1BE5\u1C00-\u1C23\u1C4D-\u1C4F\u1C5A-\u1C7D\u1CE9-\u1CEC\u1CEE-\u1CF1\u1CF5\u1CF6\u1D00-\u1DBF\u1E00-\u1F15\u1F18-\u1F1D\u1F20-\u1F45\u1F48-\u1F4D\u1F50-\u1F57\u1F59\u1F5B\u1F5D\u1F5F-\u1F7D\u1F80-\u1FB4\u1FB6-\u1FBC\u1FBE\u1FC2-\u1FC4\u1FC6-\u1FCC\u1FD0-\u1FD3\u1FD6-\u1FDB\u1FE0-\u1FEC\u1FF2-\u1FF4\u1FF6-\u1FFC\u2071\u207F\u2090-\u209C\u2102\u2107\u210A-\u2113\u2115\u2119-\u211D\u2124\u2126\u2128\u212A-\u212D\u212F-\u2139\u213C-\u213F\u2145-\u2149\u214E\u2183\u2184\u2C00-\u2C2E\u2C30-\u2C5E\u2C60-\u2CE4\u2CEB-\u2CEE\u2CF2\u2CF3\u2D00-\u2D25\u2D27\u2D2D\u2D30-\u2D67\u2D6F\u2D80-\u2D96\u2DA0-\u2DA6\u2DA8-\u2DAE\u2DB0-\u2DB6\u2DB8-\u2DBE\u2DC0-\u2DC6\u2DC8-\u2DCE\u2DD0-\u2DD6\u2DD8-\u2DDE\u2E2F\u3005\u3006\u3031-\u3035\u303B\u303C\u3041-\u3096\u309D-\u309F\u30A1-\u30FA\u30FC-\u30FF\u3105-\u312D\u3131-\u318E\u31A0-\u31BA\u31F0-\u31FF\u3400-\u4DB5\u4E00-\u9FCC\uA000-\uA48C\uA4D0-\uA4FD\uA500-\uA60C\uA610-\uA61F\uA62A\uA62B\uA640-\uA66E\uA67F-\uA697\uA6A0-\uA6E5\uA717-\uA71F\uA722-\uA788\uA78B-\uA78E\uA790-\uA793\uA7A0-\uA7AA\uA7F8-\uA801\uA803-\uA805\uA807-\uA80A\uA80C-\uA822\uA840-\uA873\uA882-\uA8B3\uA8F2-\uA8F7\uA8FB\uA90A-\uA925\uA930-\uA946\uA960-\uA97C\uA984-\uA9B2\uA9CF\uAA00-\uAA28\uAA40-\uAA42\uAA44-\uAA4B\uAA60-\uAA76\uAA7A\uAA80-\uAAAF\uAAB1\uAAB5\uAAB6\uAAB9-\uAABD\uAAC0\uAAC2\uAADB-\uAADD\uAAE0-\uAAEA\uAAF2-\uAAF4\uAB01-\uAB06\uAB09-\uAB0E\uAB11-\uAB16\uAB20-\uAB26\uAB28-\uAB2E\uABC0-\uABE2\uAC00-\uD7A3\uD7B0-\uD7C6\uD7CB-\uD7FB\uF900-\uFA6D\uFA70-\uFAD9\uFB00-\uFB06\uFB13-\uFB17\uFB1D\uFB1F-\uFB28\uFB2A-\uFB36\uFB38-\uFB3C\uFB3E\uFB40\uFB41\uFB43\uFB44\uFB46-\uFBB1\uFBD3-\uFD3D\uFD50-\uFD8F\uFD92-\uFDC7\uFDF0-\uFDFB\uFE70-\uFE74\uFE76-\uFEFC\uFF21-\uFF3A\uFF41-\uFF5A\uFF66-\uFFBE\uFFC2-\uFFC7\uFFCA-\uFFCF\uFFD2-\uFFD7\uFFDA-\uFFDC]/,
+      "*": /./
+    },
+    At = (function() {
       function t(e) {
         q(this, t);
         var n = e.mask,
@@ -1062,17 +1062,17 @@ export default CardModal;
         Q(t, [
           {
             key: "reset",
-            value: function () {
+            value: function() {
               (this._isFilled = !1), this.masked.reset();
             }
           },
           {
             key: "remove",
-            value: function () {
+            value: function() {
               var t =
-                arguments.length > 0 && void 0 !== arguments[0]
-                  ? arguments[0]
-                  : 0,
+                  arguments.length > 0 && void 0 !== arguments[0]
+                    ? arguments[0]
+                    : 0,
                 e =
                   arguments.length > 1 && void 0 !== arguments[1]
                     ? arguments[1]
@@ -1084,7 +1084,7 @@ export default CardModal;
           },
           {
             key: "_appendChar",
-            value: function (t) {
+            value: function(t) {
               var e =
                 arguments.length > 1 && void 0 !== arguments[1]
                   ? arguments[1]
@@ -1094,13 +1094,13 @@ export default CardModal;
                 u = this.masked._appendChar(t, e);
               return (
                 u.inserted &&
-                !1 === this.doValidate(e) &&
-                ((u.inserted = u.rawInserted = ""), (this.masked.state = n)),
+                  !1 === this.doValidate(e) &&
+                  ((u.inserted = u.rawInserted = ""), (this.masked.state = n)),
                 u.inserted ||
-                this.isOptional ||
-                this.lazy ||
-                e.input ||
-                (u.inserted = this.placeholderChar),
+                  this.isOptional ||
+                  this.lazy ||
+                  e.input ||
+                  (u.inserted = this.placeholderChar),
                 (u.skip = !u.inserted && !this.isOptional),
                 (this._isFilled = Boolean(u.inserted)),
                 u
@@ -1109,7 +1109,7 @@ export default CardModal;
           },
           {
             key: "_appendPlaceholder",
-            value: function () {
+            value: function() {
               var t = new kt();
               return this._isFilled || this.isOptional
                 ? t
@@ -1120,25 +1120,25 @@ export default CardModal;
           },
           {
             key: "extractTail",
-            value: function () {
+            value: function() {
               var t;
               return (t = this.masked).extractTail.apply(t, arguments);
             }
           },
           {
             key: "appendTail",
-            value: function () {
+            value: function() {
               var t;
               return (t = this.masked).appendTail.apply(t, arguments);
             }
           },
           {
             key: "extractInput",
-            value: function () {
+            value: function() {
               var t =
-                arguments.length > 0 && void 0 !== arguments[0]
-                  ? arguments[0]
-                  : 0,
+                  arguments.length > 0 && void 0 !== arguments[0]
+                    ? arguments[0]
+                    : 0,
                 e =
                   arguments.length > 1 && void 0 !== arguments[1]
                     ? arguments[1]
@@ -1149,11 +1149,11 @@ export default CardModal;
           },
           {
             key: "nearestInputPos",
-            value: function (t) {
+            value: function(t) {
               var e =
-                arguments.length > 1 && void 0 !== arguments[1]
-                  ? arguments[1]
-                  : ft.NONE,
+                  arguments.length > 1 && void 0 !== arguments[1]
+                    ? arguments[1]
+                    : ft.NONE,
                 n = this.value.length,
                 u = Math.min(Math.max(t, 0), n);
               switch (e) {
@@ -1171,7 +1171,7 @@ export default CardModal;
           },
           {
             key: "doValidate",
-            value: function () {
+            value: function() {
               var t, e;
               return (
                 (t = this.masked).doValidate.apply(t, arguments) &&
@@ -1182,13 +1182,13 @@ export default CardModal;
           },
           {
             key: "doCommit",
-            value: function () {
+            value: function() {
               this.masked.doCommit();
             }
           },
           {
             key: "value",
-            get: function () {
+            get: function() {
               return (
                 this.masked.value ||
                 (this._isFilled && !this.isOptional ? this.placeholderChar : "")
@@ -1197,22 +1197,22 @@ export default CardModal;
           },
           {
             key: "unmaskedValue",
-            get: function () {
+            get: function() {
               return this.masked.unmaskedValue;
             }
           },
           {
             key: "isComplete",
-            get: function () {
+            get: function() {
               return Boolean(this.masked.value) || this.isOptional;
             }
           },
           {
             key: "state",
-            get: function () {
+            get: function() {
               return { masked: this.masked.state, _isFilled: this._isFilled };
             },
-            set: function (t) {
+            set: function(t) {
               (this.masked.state = t.masked), (this._isFilled = t._isFilled);
             }
           }
@@ -1220,7 +1220,7 @@ export default CardModal;
         t
       );
     })(),
-    Ct = (function () {
+    Ct = (function() {
       function t(e) {
         q(this, t), tt(this, e), (this._value = "");
       }
@@ -1228,17 +1228,17 @@ export default CardModal;
         Q(t, [
           {
             key: "reset",
-            value: function () {
+            value: function() {
               (this._isRawInput = !1), (this._value = "");
             }
           },
           {
             key: "remove",
-            value: function () {
+            value: function() {
               var t =
-                arguments.length > 0 && void 0 !== arguments[0]
-                  ? arguments[0]
-                  : 0,
+                  arguments.length > 0 && void 0 !== arguments[0]
+                    ? arguments[0]
+                    : 0,
                 e =
                   arguments.length > 1 && void 0 !== arguments[1]
                     ? arguments[1]
@@ -1252,11 +1252,11 @@ export default CardModal;
           },
           {
             key: "nearestInputPos",
-            value: function (t) {
+            value: function(t) {
               var e =
-                arguments.length > 1 && void 0 !== arguments[1]
-                  ? arguments[1]
-                  : ft.NONE,
+                  arguments.length > 1 && void 0 !== arguments[1]
+                    ? arguments[1]
+                    : ft.NONE,
                 n = this._value.length;
               switch (e) {
                 case ft.LEFT:
@@ -1272,11 +1272,11 @@ export default CardModal;
           },
           {
             key: "extractInput",
-            value: function () {
+            value: function() {
               var t =
-                arguments.length > 0 && void 0 !== arguments[0]
-                  ? arguments[0]
-                  : 0,
+                  arguments.length > 0 && void 0 !== arguments[0]
+                    ? arguments[0]
+                    : 0,
                 e =
                   arguments.length > 1 && void 0 !== arguments[1]
                     ? arguments[1]
@@ -1294,7 +1294,7 @@ export default CardModal;
           },
           {
             key: "_appendChar",
-            value: function (t, e) {
+            value: function(t, e) {
               var n = new kt();
               if (this._value) return n;
               var u =
@@ -1311,7 +1311,7 @@ export default CardModal;
           },
           {
             key: "_appendPlaceholder",
-            value: function () {
+            value: function() {
               var t = new kt();
               return this._value
                 ? t
@@ -1320,7 +1320,7 @@ export default CardModal;
           },
           {
             key: "extractTail",
-            value: function () {
+            value: function() {
               arguments.length > 1 && void 0 !== arguments[1]
                 ? arguments[1]
                 : this.value.length;
@@ -1329,35 +1329,35 @@ export default CardModal;
           },
           {
             key: "appendTail",
-            value: function (t) {
+            value: function(t) {
               return this._appendChar(t ? t.value : "", { tail: !0 });
             }
           },
-          { key: "doCommit", value: function () { } },
+          { key: "doCommit", value: function() {} },
           {
             key: "value",
-            get: function () {
+            get: function() {
               return this._value;
             }
           },
           {
             key: "unmaskedValue",
-            get: function () {
+            get: function() {
               return this.isUnmasking ? this.value : "";
             }
           },
           {
             key: "isComplete",
-            get: function () {
+            get: function() {
               return !0;
             }
           },
           {
             key: "state",
-            get: function () {
+            get: function() {
               return { _value: this._value, _isRawInput: this._isRawInput };
             },
-            set: function (t) {
+            set: function(t) {
               tt(this, t);
             }
           }
@@ -1365,7 +1365,7 @@ export default CardModal;
         t
       );
     })(),
-    Ft = (function () {
+    Ft = (function() {
       function t(e) {
         q(this, t), (this.chunks = e);
       }
@@ -1373,9 +1373,9 @@ export default CardModal;
         Q(t, [
           {
             key: "value",
-            get: function () {
+            get: function() {
               return this.chunks
-                .map(function (t) {
+                .map(function(t) {
                   return t.value;
                 })
                 .join("");
@@ -1385,7 +1385,7 @@ export default CardModal;
         t
       );
     })(),
-    Et = (function (t) {
+    Et = (function(t) {
       function e() {
         var t =
           arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};
@@ -1400,7 +1400,7 @@ export default CardModal;
         Q(e, [
           {
             key: "_update",
-            value: function () {
+            value: function() {
               var t =
                 arguments.length > 0 && void 0 !== arguments[0]
                   ? arguments[0]
@@ -1412,7 +1412,7 @@ export default CardModal;
           },
           {
             key: "_rebuildMask",
-            value: function () {
+            value: function() {
               var t = this,
                 n = this.definitions;
               (this._blocks = []),
@@ -1424,12 +1424,12 @@ export default CardModal;
                   if (this.blocks)
                     if (
                       "continue" ===
-                      (function () {
+                      (function() {
                         var e = u.slice(a),
-                          n = Object.keys(t.blocks).filter(function (t) {
+                          n = Object.keys(t.blocks).filter(function(t) {
                             return 0 === e.indexOf(t);
                           });
-                        n.sort(function (t, e) {
+                        n.sort(function(t, e) {
                           return e.length - t.length;
                         });
                         var i = n[0];
@@ -1446,7 +1446,7 @@ export default CardModal;
                           );
                           return (
                             r &&
-                            (t._blocks.push(r),
+                              (t._blocks.push(r),
                               t._maskedBlocks[i] || (t._maskedBlocks[i] = []),
                               t._maskedBlocks[i].push(t._blocks.length - 1)),
                             (a += i.length - 1),
@@ -1468,12 +1468,12 @@ export default CardModal;
                         var l = void 0;
                         (l = o
                           ? new At({
-                            parent: this,
-                            lazy: this.lazy,
-                            placeholderChar: this.placeholderChar,
-                            mask: n[s],
-                            isOptional: r
-                          })
+                              parent: this,
+                              lazy: this.lazy,
+                              placeholderChar: this.placeholderChar,
+                              mask: n[s],
+                              isOptional: r
+                            })
                           : new Ct({ char: s, isUnmasking: i })),
                           this._blocks.push(l);
                       } else r = !r;
@@ -1484,8 +1484,8 @@ export default CardModal;
           },
           {
             key: "_storeBeforeTailState",
-            value: function () {
-              this._blocks.forEach(function (t) {
+            value: function() {
+              this._blocks.forEach(function(t) {
                 "function" == typeof t._storeBeforeTailState &&
                   t._storeBeforeTailState();
               }),
@@ -1494,8 +1494,8 @@ export default CardModal;
           },
           {
             key: "_restoreBeforeTailState",
-            value: function () {
-              this._blocks.forEach(function (t) {
+            value: function() {
+              this._blocks.forEach(function(t) {
                 "function" == typeof t._restoreBeforeTailState &&
                   t._restoreBeforeTailState();
               }),
@@ -1504,8 +1504,8 @@ export default CardModal;
           },
           {
             key: "_resetBeforeTailState",
-            value: function () {
-              this._blocks.forEach(function (t) {
+            value: function() {
+              this._blocks.forEach(function(t) {
                 "function" == typeof t._resetBeforeTailState &&
                   t._resetBeforeTailState();
               }),
@@ -1514,17 +1514,17 @@ export default CardModal;
           },
           {
             key: "reset",
-            value: function () {
+            value: function() {
               ot(ut(e.prototype), "reset", this).call(this),
-                this._blocks.forEach(function (t) {
+                this._blocks.forEach(function(t) {
                   return t.reset();
                 });
             }
           },
           {
             key: "doCommit",
-            value: function () {
-              this._blocks.forEach(function (t) {
+            value: function() {
+              this._blocks.forEach(function(t) {
                 return t.doCommit();
               }),
                 ot(ut(e.prototype), "doCommit", this).call(this);
@@ -1532,26 +1532,26 @@ export default CardModal;
           },
           {
             key: "appendTail",
-            value: function (t) {
+            value: function(t) {
               var n = new kt();
               return (
                 t &&
-                n.aggregate(
-                  t instanceof Ft
-                    ? this._appendTailChunks(t.chunks)
-                    : ot(ut(e.prototype), "appendTail", this).call(this, t)
-                ),
+                  n.aggregate(
+                    t instanceof Ft
+                      ? this._appendTailChunks(t.chunks)
+                      : ot(ut(e.prototype), "appendTail", this).call(this, t)
+                  ),
                 n.aggregate(this._appendPlaceholder())
               );
             }
           },
           {
             key: "_appendCharRaw",
-            value: function (t) {
+            value: function(t) {
               var e =
-                arguments.length > 1 && void 0 !== arguments[1]
-                  ? arguments[1]
-                  : {},
+                  arguments.length > 1 && void 0 !== arguments[1]
+                    ? arguments[1]
+                    : {},
                 n = this._mapPosToBlock(this.value.length),
                 u = new kt();
               if (!n) return u;
@@ -1567,7 +1567,7 @@ export default CardModal;
           },
           {
             key: "_appendTailChunks",
-            value: function (t) {
+            value: function(t) {
               for (var e = new kt(), n = 0; n < t.length && !e.skip; ++n) {
                 var u = t[n],
                   i = this._mapPosToBlock(this.value.length),
@@ -1597,11 +1597,11 @@ export default CardModal;
           },
           {
             key: "extractTail",
-            value: function () {
+            value: function() {
               var t =
-                arguments.length > 0 && void 0 !== arguments[0]
-                  ? arguments[0]
-                  : 0,
+                  arguments.length > 0 && void 0 !== arguments[0]
+                    ? arguments[0]
+                    : 0,
                 e =
                   arguments.length > 1 && void 0 !== arguments[1]
                     ? arguments[1]
@@ -1611,11 +1611,11 @@ export default CardModal;
           },
           {
             key: "extractInput",
-            value: function () {
+            value: function() {
               var t =
-                arguments.length > 0 && void 0 !== arguments[0]
-                  ? arguments[0]
-                  : 0,
+                  arguments.length > 0 && void 0 !== arguments[0]
+                    ? arguments[0]
+                    : 0,
                 e =
                   arguments.length > 1 && void 0 !== arguments[1]
                     ? arguments[1]
@@ -1627,7 +1627,7 @@ export default CardModal;
               if (t === e) return "";
               var u = "";
               return (
-                this._forEachBlocksInRange(t, e, function (t, e, i, r) {
+                this._forEachBlocksInRange(t, e, function(t, e, i, r) {
                   u += t.extractInput(i, r, n);
                 }),
                 u
@@ -1636,7 +1636,7 @@ export default CardModal;
           },
           {
             key: "_extractTailChunks",
-            value: function () {
+            value: function() {
               var t = this,
                 e =
                   arguments.length > 0 && void 0 !== arguments[0]
@@ -1650,7 +1650,7 @@ export default CardModal;
               var u,
                 i = [];
               return (
-                this._forEachBlocksInRange(e, n, function (e, n, r, a) {
+                this._forEachBlocksInRange(e, n, function(e, n, r, a) {
                   for (
                     var s, o = e.extractTail(r, a), l = 0;
                     l < t._stops.length;
@@ -1673,10 +1673,10 @@ export default CardModal;
                         }
                       o.chunks
                         .splice(0, c)
-                        .filter(function (t) {
+                        .filter(function(t) {
                           return t.value;
                         })
-                        .forEach(function (t) {
+                        .forEach(function(t) {
                           u ? (u.value += t.value) : (u = { value: t.value });
                         });
                     }
@@ -1695,7 +1695,7 @@ export default CardModal;
           },
           {
             key: "_appendPlaceholder",
-            value: function (t) {
+            value: function(t) {
               var e = this,
                 n = new kt();
               if (this.lazy && null == t) return n;
@@ -1704,7 +1704,7 @@ export default CardModal;
               var i = u.index,
                 r = null != t ? t : this._blocks.length;
               return (
-                this._blocks.slice(i, r).forEach(function (t) {
+                this._blocks.slice(i, r).forEach(function(t) {
                   if ("function" == typeof t._appendPlaceholder) {
                     var u = null != t._blocks ? [t._blocks.length] : [],
                       i = t._appendPlaceholder.apply(t, u);
@@ -1717,7 +1717,7 @@ export default CardModal;
           },
           {
             key: "_mapPosToBlock",
-            value: function (t) {
+            value: function(t) {
               for (var e = "", n = 0; n < this._blocks.length; ++n) {
                 var u = this._blocks[n],
                   i = e.length;
@@ -1728,19 +1728,19 @@ export default CardModal;
           },
           {
             key: "_blockStartPos",
-            value: function (t) {
-              return this._blocks.slice(0, t).reduce(function (t, e) {
+            value: function(t) {
+              return this._blocks.slice(0, t).reduce(function(t, e) {
                 return t + e.value.length;
               }, 0);
             }
           },
           {
             key: "_forEachBlocksInRange",
-            value: function (t) {
+            value: function(t) {
               var e =
-                arguments.length > 1 && void 0 !== arguments[1]
-                  ? arguments[1]
-                  : this.value.length,
+                  arguments.length > 1 && void 0 !== arguments[1]
+                    ? arguments[1]
+                    : this.value.length,
                 n = arguments.length > 2 ? arguments[2] : void 0,
                 u = this._mapPosToBlock(t);
               if (u) {
@@ -1758,18 +1758,18 @@ export default CardModal;
           },
           {
             key: "remove",
-            value: function () {
+            value: function() {
               var t =
-                arguments.length > 0 && void 0 !== arguments[0]
-                  ? arguments[0]
-                  : 0,
+                  arguments.length > 0 && void 0 !== arguments[0]
+                    ? arguments[0]
+                    : 0,
                 n =
                   arguments.length > 1 && void 0 !== arguments[1]
                     ? arguments[1]
                     : this.value.length,
                 u = ot(ut(e.prototype), "remove", this).call(this, t, n);
               return (
-                this._forEachBlocksInRange(t, n, function (t, e, n, i) {
+                this._forEachBlocksInRange(t, n, function(t, e, n, i) {
                   u.aggregate(t.remove(n, i));
                 }),
                 u
@@ -1778,11 +1778,11 @@ export default CardModal;
           },
           {
             key: "nearestInputPos",
-            value: function (t) {
+            value: function(t) {
               var e =
-                arguments.length > 1 && void 0 !== arguments[1]
-                  ? arguments[1]
-                  : ft.NONE,
+                  arguments.length > 1 && void 0 !== arguments[1]
+                    ? arguments[1]
+                    : ft.NONE,
                 n = this._mapPosToBlock(t) || { index: 0, offset: 0 },
                 u = n.offset,
                 i = n.index,
@@ -1793,7 +1793,7 @@ export default CardModal;
                 a < r.value.length &&
                 (a = r.nearestInputPos(
                   u,
-                  (function (t) {
+                  (function(t) {
                     switch (t) {
                       case ft.LEFT:
                         return ft.FORCE_LEFT;
@@ -1865,7 +1865,7 @@ export default CardModal;
                   e === ft.FORCE_LEFT ||
                   (this.lazy &&
                     !this.extractInput() &&
-                    !(function (t) {
+                    !(function(t) {
                       if (!t) return !1;
                       var e = t.value;
                       return !e || t.nearestInputPos(0, ft.NONE) !== e.length;
@@ -1917,35 +1917,35 @@ export default CardModal;
           },
           {
             key: "maskedBlock",
-            value: function (t) {
+            value: function(t) {
               return this.maskedBlocks(t)[0];
             }
           },
           {
             key: "maskedBlocks",
-            value: function (t) {
+            value: function(t) {
               var e = this,
                 n = this._maskedBlocks[t];
               return n
-                ? n.map(function (t) {
-                  return e._blocks[t];
-                })
+                ? n.map(function(t) {
+                    return e._blocks[t];
+                  })
                 : [];
             }
           },
           {
             key: "state",
-            get: function () {
+            get: function() {
               return et({}, ot(ut(e.prototype), "state", this), {
-                _blocks: this._blocks.map(function (t) {
+                _blocks: this._blocks.map(function(t) {
                   return t.state;
                 })
               });
             },
-            set: function (t) {
+            set: function(t) {
               var n = t._blocks,
                 u = rt(t, ["_blocks"]);
-              this._blocks.forEach(function (t, e) {
+              this._blocks.forEach(function(t, e) {
                 return (t.state = n[e]);
               }),
                 ht(ut(e.prototype), "state", u, this, !0);
@@ -1953,31 +1953,31 @@ export default CardModal;
           },
           {
             key: "isComplete",
-            get: function () {
-              return this._blocks.every(function (t) {
+            get: function() {
+              return this._blocks.every(function(t) {
                 return t.isComplete;
               });
             }
           },
           {
             key: "unmaskedValue",
-            get: function () {
-              return this._blocks.reduce(function (t, e) {
+            get: function() {
+              return this._blocks.reduce(function(t, e) {
                 return t + e.unmaskedValue;
               }, "");
             },
-            set: function (t) {
+            set: function(t) {
               ht(ut(e.prototype), "unmaskedValue", t, this, !0);
             }
           },
           {
             key: "value",
-            get: function () {
-              return this._blocks.reduce(function (t, e) {
+            get: function() {
+              return this._blocks.reduce(function(t, e) {
                 return t + e.value;
               }, "");
             },
-            set: function (t) {
+            set: function(t) {
               ht(ut(e.prototype), "value", t, this, !0);
             }
           }
@@ -1990,86 +1990,86 @@ export default CardModal;
     (Et.ESCAPE_CHAR = "\\"),
     (Et.InputDefinition = At),
     (Et.FixedDefinition = Ct);
-  var bt = (function (t) {
-    function e() {
-      return q(this, e), at(this, ut(e).apply(this, arguments));
-    }
-    return (
-      nt(e, Et),
-      Q(e, [
-        {
-          key: "_update",
-          value: function (t) {
-            t = et({ to: this.to || 0, from: this.from || 0 }, t);
-            var n = String(t.to).length;
-            null != t.maxLength && (n = Math.max(n, t.maxLength)),
-              (t.maxLength = n);
-            for (
-              var u = String(t.to).padStart(n, "0"),
-              i = String(t.from).padStart(n, "0"),
-              r = 0;
-              r < u.length && u[r] === i[r];
+  var bt = (function(t) {
+      function e() {
+        return q(this, e), at(this, ut(e).apply(this, arguments));
+      }
+      return (
+        nt(e, Et),
+        Q(e, [
+          {
+            key: "_update",
+            value: function(t) {
+              t = et({ to: this.to || 0, from: this.from || 0 }, t);
+              var n = String(t.to).length;
+              null != t.maxLength && (n = Math.max(n, t.maxLength)),
+                (t.maxLength = n);
+              for (
+                var u = String(t.to).padStart(n, "0"),
+                  i = String(t.from).padStart(n, "0"),
+                  r = 0;
+                r < u.length && u[r] === i[r];
 
-            )
-              ++r;
-            (t.mask = u.slice(0, r).replace(/0/g, "\\0") + "0".repeat(n - r)),
-              ot(ut(e.prototype), "_update", this).call(this, t);
-          }
-        },
-        {
-          key: "doValidate",
-          value: function () {
-            var t,
-              n = this.value,
-              u = "",
-              i = "",
-              r = ct(n.match(/^(\D*)(\d*)(\D*)/) || [], 3),
-              a = r[1],
-              s = r[2];
-            if (
-              (s &&
-                ((u = "0".repeat(a.length) + s),
+              )
+                ++r;
+              (t.mask = u.slice(0, r).replace(/0/g, "\\0") + "0".repeat(n - r)),
+                ot(ut(e.prototype), "_update", this).call(this, t);
+            }
+          },
+          {
+            key: "doValidate",
+            value: function() {
+              var t,
+                n = this.value,
+                u = "",
+                i = "",
+                r = ct(n.match(/^(\D*)(\d*)(\D*)/) || [], 3),
+                a = r[1],
+                s = r[2];
+              if (
+                (s &&
+                  ((u = "0".repeat(a.length) + s),
                   (i = "9".repeat(a.length) + s)),
                 -1 === n.search(/[^0]/) && n.length <= this._matchFrom)
-            )
-              return !0;
-            (u = u.padEnd(this.maxLength, "0")),
-              (i = i.padEnd(this.maxLength, "9"));
-            for (
-              var o = arguments.length, l = new Array(o), h = 0;
-              h < o;
-              h++
-            )
-              l[h] = arguments[h];
-            return (
-              this.from <= Number(i) &&
-              Number(u) <= this.to &&
-              (t = ot(ut(e.prototype), "doValidate", this)).call.apply(
-                t,
-                [this].concat(l)
               )
-            );
+                return !0;
+              (u = u.padEnd(this.maxLength, "0")),
+                (i = i.padEnd(this.maxLength, "9"));
+              for (
+                var o = arguments.length, l = new Array(o), h = 0;
+                h < o;
+                h++
+              )
+                l[h] = arguments[h];
+              return (
+                this.from <= Number(i) &&
+                Number(u) <= this.to &&
+                (t = ot(ut(e.prototype), "doValidate", this)).call.apply(
+                  t,
+                  [this].concat(l)
+                )
+              );
+            }
+          },
+          {
+            key: "_matchFrom",
+            get: function() {
+              return this.maxLength - String(this.from).length;
+            }
+          },
+          {
+            key: "isComplete",
+            get: function() {
+              return (
+                ot(ut(e.prototype), "isComplete", this) && Boolean(this.value)
+              );
+            }
           }
-        },
-        {
-          key: "_matchFrom",
-          get: function () {
-            return this.maxLength - String(this.from).length;
-          }
-        },
-        {
-          key: "isComplete",
-          get: function () {
-            return (
-              ot(ut(e.prototype), "isComplete", this) && Boolean(this.value)
-            );
-          }
-        }
-      ]),
-      e
-    );
-  })(),
-    Bt = (function (t) {
+        ]),
+        e
+      );
+    })(),
+    Bt = (function(t) {
       function e(t) {
         return q(this, e), at(this, ut(e).call(this, et({}, e.DEFAULTS, t)));
       }
@@ -2078,7 +2078,7 @@ export default CardModal;
         Q(e, [
           {
             key: "_update",
-            value: function (t) {
+            value: function(t) {
               t.mask === Date && delete t.mask,
                 t.pattern && ((t.mask = t.pattern), delete t.pattern);
               var n = t.blocks;
@@ -2086,12 +2086,12 @@ export default CardModal;
                 t.min && (t.blocks.Y.from = t.min.getFullYear()),
                 t.max && (t.blocks.Y.to = t.max.getFullYear()),
                 t.min &&
-                t.max &&
-                t.blocks.Y.from === t.blocks.Y.to &&
-                ((t.blocks.m.from = t.min.getMonth() + 1),
+                  t.max &&
+                  t.blocks.Y.from === t.blocks.Y.to &&
+                  ((t.blocks.m.from = t.min.getMonth() + 1),
                   (t.blocks.m.to = t.max.getMonth() + 1),
                   t.blocks.m.from === t.blocks.m.to &&
-                  ((t.blocks.d.from = t.min.getDate()),
+                    ((t.blocks.d.from = t.min.getDate()),
                     (t.blocks.d.to = t.max.getDate()))),
                 tt(t.blocks, n),
                 ot(ut(e.prototype), "_update", this).call(this, t);
@@ -2099,13 +2099,13 @@ export default CardModal;
           },
           {
             key: "doValidate",
-            value: function () {
+            value: function() {
               for (
                 var t,
-                n = this.date,
-                u = arguments.length,
-                i = new Array(u),
-                r = 0;
+                  n = this.date,
+                  u = arguments.length,
+                  i = new Array(u),
+                  r = 0;
                 r < u;
                 r++
               )
@@ -2125,25 +2125,25 @@ export default CardModal;
           },
           {
             key: "isDateExist",
-            value: function (t) {
+            value: function(t) {
               return this.format(this.parse(t)) === t;
             }
           },
           {
             key: "date",
-            get: function () {
+            get: function() {
               return this.isComplete ? this.parse(this.value) : null;
             },
-            set: function (t) {
+            set: function(t) {
               this.value = this.format(t);
             }
           },
           {
             key: "typedValue",
-            get: function () {
+            get: function() {
               return this.date;
             },
-            set: function (t) {
+            set: function(t) {
               this.date = t;
             }
           }
@@ -2153,14 +2153,14 @@ export default CardModal;
     })();
   (Bt.DEFAULTS = {
     pattern: "d{.}`m{.}`Y",
-    format: function (t) {
+    format: function(t) {
       return [
         String(t.getDate()).padStart(2, "0"),
         String(t.getMonth() + 1).padStart(2, "0"),
         t.getFullYear()
       ].join(".");
     },
-    parse: function (t) {
+    parse: function(t) {
       var e = ct(t.split("."), 3),
         n = e[0],
         u = e[1],
@@ -2168,66 +2168,66 @@ export default CardModal;
       return new Date(i, u - 1, n);
     }
   }),
-    (Bt.GET_DEFAULT_BLOCKS = function () {
+    (Bt.GET_DEFAULT_BLOCKS = function() {
       return {
         d: { mask: bt, from: 1, to: 31, maxLength: 2 },
         m: { mask: bt, from: 1, to: 12, maxLength: 2 },
         Y: { mask: bt, from: 1900, to: 9999 }
       };
     });
-  var St = (function () {
-    function t() {
-      q(this, t);
-    }
-    return (
-      Q(t, [
-        {
-          key: "select",
-          value: function (t, e) {
-            if (
-              null != t &&
-              null != e &&
-              (t !== this.selectionStart || e !== this.selectionEnd)
-            )
+  var St = (function() {
+      function t() {
+        q(this, t);
+      }
+      return (
+        Q(t, [
+          {
+            key: "select",
+            value: function(t, e) {
+              if (
+                null != t &&
+                null != e &&
+                (t !== this.selectionStart || e !== this.selectionEnd)
+              )
+                try {
+                  this._unsafeSelect(t, e);
+                } catch (t) {}
+            }
+          },
+          { key: "_unsafeSelect", value: function(t, e) {} },
+          { key: "bindEvents", value: function(t) {} },
+          { key: "unbindEvents", value: function() {} },
+          {
+            key: "selectionStart",
+            get: function() {
+              var t;
               try {
-                this._unsafeSelect(t, e);
-              } catch (t) { }
+                t = this._unsafeSelectionStart;
+              } catch (t) {}
+              return null != t ? t : this.value.length;
+            }
+          },
+          {
+            key: "selectionEnd",
+            get: function() {
+              var t;
+              try {
+                t = this._unsafeSelectionEnd;
+              } catch (t) {}
+              return null != t ? t : this.value.length;
+            }
+          },
+          {
+            key: "isActive",
+            get: function() {
+              return !1;
+            }
           }
-        },
-        { key: "_unsafeSelect", value: function (t, e) { } },
-        { key: "bindEvents", value: function (t) { } },
-        { key: "unbindEvents", value: function () { } },
-        {
-          key: "selectionStart",
-          get: function () {
-            var t;
-            try {
-              t = this._unsafeSelectionStart;
-            } catch (t) { }
-            return null != t ? t : this.value.length;
-          }
-        },
-        {
-          key: "selectionEnd",
-          get: function () {
-            var t;
-            try {
-              t = this._unsafeSelectionEnd;
-            } catch (t) { }
-            return null != t ? t : this.value.length;
-          }
-        },
-        {
-          key: "isActive",
-          get: function () {
-            return !1;
-          }
-        }
-      ]),
-      t
-    );
-  })(),
-    Dt = (function (t) {
+        ]),
+        t
+      );
+    })(),
+    Dt = (function(t) {
       function e(t) {
         var n;
         return (
@@ -2242,62 +2242,62 @@ export default CardModal;
         Q(e, [
           {
             key: "_unsafeSelect",
-            value: function (t, e) {
+            value: function(t, e) {
               this.input.setSelectionRange(t, e);
             }
           },
           {
             key: "bindEvents",
-            value: function (t) {
+            value: function(t) {
               var n = this;
-              Object.keys(t).forEach(function (u) {
+              Object.keys(t).forEach(function(u) {
                 return n._toggleEventHandler(e.EVENTS_MAP[u], t[u]);
               });
             }
           },
           {
             key: "unbindEvents",
-            value: function () {
+            value: function() {
               var t = this;
-              Object.keys(this._handlers).forEach(function (e) {
+              Object.keys(this._handlers).forEach(function(e) {
                 return t._toggleEventHandler(e);
               });
             }
           },
           {
             key: "_toggleEventHandler",
-            value: function (t, e) {
+            value: function(t, e) {
               this._handlers[t] &&
                 (this.input.removeEventListener(t, this._handlers[t]),
-                  delete this._handlers[t]),
+                delete this._handlers[t]),
                 e &&
-                (this.input.addEventListener(t, e), (this._handlers[t] = e));
+                  (this.input.addEventListener(t, e), (this._handlers[t] = e));
             }
           },
           {
             key: "isActive",
-            get: function () {
+            get: function() {
               return this.input === document.activeElement;
             }
           },
           {
             key: "_unsafeSelectionStart",
-            get: function () {
+            get: function() {
               return this.input.selectionStart;
             }
           },
           {
             key: "_unsafeSelectionEnd",
-            get: function () {
+            get: function() {
               return this.input.selectionEnd;
             }
           },
           {
             key: "value",
-            get: function () {
+            get: function() {
               return this.input.value;
             },
-            set: function (t) {
+            set: function(t) {
               this.input.value = t;
             }
           }
@@ -2313,322 +2313,322 @@ export default CardModal;
     focus: "focus",
     commit: "change"
   };
-  var Tt = (function () {
-    function t(e, n) {
-      q(this, t),
-        (this.el = e instanceof St ? e : new Dt(e)),
-        (this.masked = _t(n)),
-        (this._listeners = {}),
-        (this._value = ""),
-        (this._unmaskedValue = ""),
-        (this._saveSelection = this._saveSelection.bind(this)),
-        (this._onInput = this._onInput.bind(this)),
-        (this._onChange = this._onChange.bind(this)),
-        (this._onDrop = this._onDrop.bind(this)),
-        (this.alignCursor = this.alignCursor.bind(this)),
-        (this.alignCursorFriendly = this.alignCursorFriendly.bind(this)),
-        this._bindEvents(),
-        this.updateValue(),
-        this._onChange();
-    }
-    return (
-      Q(t, [
-        {
-          key: "_bindEvents",
-          value: function () {
-            this.el.bindEvents({
-              selectionChange: this._saveSelection,
-              input: this._onInput,
-              drop: this._onDrop,
-              click: this.alignCursorFriendly,
-              focus: this.alignCursorFriendly,
-              commit: this._onChange
-            });
-          }
-        },
-        {
-          key: "_unbindEvents",
-          value: function () {
-            this.el.unbindEvents();
-          }
-        },
-        {
-          key: "_fireEvent",
-          value: function (t) {
-            var e = this._listeners[t];
-            e &&
-              e.forEach(function (t) {
-                return t();
+  var Tt = (function() {
+      function t(e, n) {
+        q(this, t),
+          (this.el = e instanceof St ? e : new Dt(e)),
+          (this.masked = _t(n)),
+          (this._listeners = {}),
+          (this._value = ""),
+          (this._unmaskedValue = ""),
+          (this._saveSelection = this._saveSelection.bind(this)),
+          (this._onInput = this._onInput.bind(this)),
+          (this._onChange = this._onChange.bind(this)),
+          (this._onDrop = this._onDrop.bind(this)),
+          (this.alignCursor = this.alignCursor.bind(this)),
+          (this.alignCursorFriendly = this.alignCursorFriendly.bind(this)),
+          this._bindEvents(),
+          this.updateValue(),
+          this._onChange();
+      }
+      return (
+        Q(t, [
+          {
+            key: "_bindEvents",
+            value: function() {
+              this.el.bindEvents({
+                selectionChange: this._saveSelection,
+                input: this._onInput,
+                drop: this._onDrop,
+                click: this.alignCursorFriendly,
+                focus: this.alignCursorFriendly,
+                commit: this._onChange
               });
-          }
-        },
-        {
-          key: "_saveSelection",
-          value: function () {
-            this.value !== this.el.value &&
-              console.warn(
-                "Element value was changed outside of mask. Syncronize mask using `mask.updateValue()` to work properly."
-              ),
-              (this._selection = {
-                start: this.selectionStart,
-                end: this.cursorPos
-              });
-          }
-        },
-        {
-          key: "updateValue",
-          value: function () {
-            this.masked.value = this.el.value;
-          }
-        },
-        {
-          key: "updateControl",
-          value: function () {
-            var t = this.masked.unmaskedValue,
-              e = this.masked.value,
-              n = this.unmaskedValue !== t || this.value !== e;
-            (this._unmaskedValue = t),
-              (this._value = e),
-              this.el.value !== e && (this.el.value = e),
-              n && this._fireChangeEvents();
-          }
-        },
-        {
-          key: "updateOptions",
-          value: function (t) {
-            if (
-              !(function t(e, n) {
-                if (n === e) return !0;
-                var u,
-                  i = Array.isArray(n),
-                  r = Array.isArray(e);
-                if (i && r) {
-                  if (n.length != e.length) return !1;
-                  for (u = 0; u < n.length; u++)
-                    if (!t(n[u], e[u])) return !1;
-                  return !0;
+            }
+          },
+          {
+            key: "_unbindEvents",
+            value: function() {
+              this.el.unbindEvents();
+            }
+          },
+          {
+            key: "_fireEvent",
+            value: function(t) {
+              var e = this._listeners[t];
+              e &&
+                e.forEach(function(t) {
+                  return t();
+                });
+            }
+          },
+          {
+            key: "_saveSelection",
+            value: function() {
+              this.value !== this.el.value &&
+                console.warn(
+                  "Element value was changed outside of mask. Syncronize mask using `mask.updateValue()` to work properly."
+                ),
+                (this._selection = {
+                  start: this.selectionStart,
+                  end: this.cursorPos
+                });
+            }
+          },
+          {
+            key: "updateValue",
+            value: function() {
+              this.masked.value = this.el.value;
+            }
+          },
+          {
+            key: "updateControl",
+            value: function() {
+              var t = this.masked.unmaskedValue,
+                e = this.masked.value,
+                n = this.unmaskedValue !== t || this.value !== e;
+              (this._unmaskedValue = t),
+                (this._value = e),
+                this.el.value !== e && (this.el.value = e),
+                n && this._fireChangeEvents();
+            }
+          },
+          {
+            key: "updateOptions",
+            value: function(t) {
+              if (
+                !(function t(e, n) {
+                  if (n === e) return !0;
+                  var u,
+                    i = Array.isArray(n),
+                    r = Array.isArray(e);
+                  if (i && r) {
+                    if (n.length != e.length) return !1;
+                    for (u = 0; u < n.length; u++)
+                      if (!t(n[u], e[u])) return !1;
+                    return !0;
+                  }
+                  if (i != r) return !1;
+                  if (n && e && "object" === W(n) && "object" === W(e)) {
+                    var a = n instanceof Date,
+                      s = e instanceof Date;
+                    if (a && s) return n.getTime() == e.getTime();
+                    if (a != s) return !1;
+                    var o = n instanceof RegExp,
+                      l = e instanceof RegExp;
+                    if (o && l) return n.toString() == e.toString();
+                    if (o != l) return !1;
+                    var h = Object.keys(n);
+                    for (u = 0; u < h.length; u++)
+                      if (!Object.prototype.hasOwnProperty.call(e, h[u]))
+                        return !1;
+                    for (u = 0; u < h.length; u++)
+                      if (!t(e[h[u]], n[h[u]])) return !1;
+                    return !0;
+                  }
+                  return !1;
+                })(this.masked, t)
+              ) {
+                var e = t.mask,
+                  n = rt(t, ["mask"]);
+                (this.mask = e),
+                  this.masked.updateOptions(n),
+                  this.updateControl();
+              }
+            }
+          },
+          {
+            key: "updateCursor",
+            value: function(t) {
+              null != t && ((this.cursorPos = t), this._delayUpdateCursor(t));
+            }
+          },
+          {
+            key: "_delayUpdateCursor",
+            value: function(t) {
+              var e = this;
+              this._abortUpdateCursor(),
+                (this._changingCursorPos = t),
+                (this._cursorChanging = setTimeout(function() {
+                  e.el &&
+                    ((e.cursorPos = e._changingCursorPos),
+                    e._abortUpdateCursor());
+                }, 10));
+            }
+          },
+          {
+            key: "_fireChangeEvents",
+            value: function() {
+              this._fireEvent("accept"),
+                this.masked.isComplete && this._fireEvent("complete");
+            }
+          },
+          {
+            key: "_abortUpdateCursor",
+            value: function() {
+              this._cursorChanging &&
+                (clearTimeout(this._cursorChanging),
+                delete this._cursorChanging);
+            }
+          },
+          {
+            key: "alignCursor",
+            value: function() {
+              this.cursorPos = this.masked.nearestInputPos(
+                this.cursorPos,
+                ft.LEFT
+              );
+            }
+          },
+          {
+            key: "alignCursorFriendly",
+            value: function() {
+              this.selectionStart === this.cursorPos && this.alignCursor();
+            }
+          },
+          {
+            key: "on",
+            value: function(t, e) {
+              return (
+                this._listeners[t] || (this._listeners[t] = []),
+                this._listeners[t].push(e),
+                this
+              );
+            }
+          },
+          {
+            key: "off",
+            value: function(t, e) {
+              if (this._listeners[t]) {
+                if (e) {
+                  var n = this._listeners[t].indexOf(e);
+                  return n >= 0 && this._listeners[t].splice(n, 1), this;
                 }
-                if (i != r) return !1;
-                if (n && e && "object" === W(n) && "object" === W(e)) {
-                  var a = n instanceof Date,
-                    s = e instanceof Date;
-                  if (a && s) return n.getTime() == e.getTime();
-                  if (a != s) return !1;
-                  var o = n instanceof RegExp,
-                    l = e instanceof RegExp;
-                  if (o && l) return n.toString() == e.toString();
-                  if (o != l) return !1;
-                  var h = Object.keys(n);
-                  for (u = 0; u < h.length; u++)
-                    if (!Object.prototype.hasOwnProperty.call(e, h[u]))
-                      return !1;
-                  for (u = 0; u < h.length; u++)
-                    if (!t(e[h[u]], n[h[u]])) return !1;
-                  return !0;
-                }
-                return !1;
-              })(this.masked, t)
-            ) {
-              var e = t.mask,
-                n = rt(t, ["mask"]);
-              (this.mask = e),
-                this.masked.updateOptions(n),
+                delete this._listeners[t];
+              }
+            }
+          },
+          {
+            key: "_onInput",
+            value: function() {
+              if ((this._abortUpdateCursor(), !this._selection))
+                return this.updateValue();
+              var t = new vt(
+                  this.el.value,
+                  this.cursorPos,
+                  this.value,
+                  this._selection
+                ),
+                e = this.masked.splice(
+                  t.startChangePos,
+                  t.removed.length,
+                  t.inserted,
+                  t.removeDirection
+                ).offset,
+                n = this.masked.nearestInputPos(
+                  t.startChangePos + e,
+                  t.removeDirection
+                );
+              this.updateControl(), this.updateCursor(n);
+            }
+          },
+          {
+            key: "_onChange",
+            value: function() {
+              this.value !== this.el.value && this.updateValue(),
+                this.masked.doCommit(),
                 this.updateControl();
             }
-          }
-        },
-        {
-          key: "updateCursor",
-          value: function (t) {
-            null != t && ((this.cursorPos = t), this._delayUpdateCursor(t));
-          }
-        },
-        {
-          key: "_delayUpdateCursor",
-          value: function (t) {
-            var e = this;
-            this._abortUpdateCursor(),
-              (this._changingCursorPos = t),
-              (this._cursorChanging = setTimeout(function () {
-                e.el &&
-                  ((e.cursorPos = e._changingCursorPos),
-                    e._abortUpdateCursor());
-              }, 10));
-          }
-        },
-        {
-          key: "_fireChangeEvents",
-          value: function () {
-            this._fireEvent("accept"),
-              this.masked.isComplete && this._fireEvent("complete");
-          }
-        },
-        {
-          key: "_abortUpdateCursor",
-          value: function () {
-            this._cursorChanging &&
-              (clearTimeout(this._cursorChanging),
-                delete this._cursorChanging);
-          }
-        },
-        {
-          key: "alignCursor",
-          value: function () {
-            this.cursorPos = this.masked.nearestInputPos(
-              this.cursorPos,
-              ft.LEFT
-            );
-          }
-        },
-        {
-          key: "alignCursorFriendly",
-          value: function () {
-            this.selectionStart === this.cursorPos && this.alignCursor();
-          }
-        },
-        {
-          key: "on",
-          value: function (t, e) {
-            return (
-              this._listeners[t] || (this._listeners[t] = []),
-              this._listeners[t].push(e),
-              this
-            );
-          }
-        },
-        {
-          key: "off",
-          value: function (t, e) {
-            if (this._listeners[t]) {
-              if (e) {
-                var n = this._listeners[t].indexOf(e);
-                return n >= 0 && this._listeners[t].splice(n, 1), this;
-              }
-              delete this._listeners[t];
+          },
+          {
+            key: "_onDrop",
+            value: function(t) {
+              t.preventDefault(), t.stopPropagation();
+            }
+          },
+          {
+            key: "destroy",
+            value: function() {
+              this._unbindEvents(),
+                (this._listeners.length = 0),
+                delete this.el;
+            }
+          },
+          {
+            key: "mask",
+            get: function() {
+              return this.masked.mask;
+            },
+            set: function(t) {
+              if (
+                !(
+                  null == t ||
+                  t === this.masked.mask ||
+                  (t === Date && this.masked instanceof Bt)
+                )
+              )
+                if (this.masked.constructor !== yt(t)) {
+                  var e = _t({ mask: t });
+                  (e.unmaskedValue = this.masked.unmaskedValue),
+                    (this.masked = e);
+                } else this.masked.updateOptions({ mask: t });
+            }
+          },
+          {
+            key: "value",
+            get: function() {
+              return this._value;
+            },
+            set: function(t) {
+              (this.masked.value = t), this.updateControl(), this.alignCursor();
+            }
+          },
+          {
+            key: "unmaskedValue",
+            get: function() {
+              return this._unmaskedValue;
+            },
+            set: function(t) {
+              (this.masked.unmaskedValue = t),
+                this.updateControl(),
+                this.alignCursor();
+            }
+          },
+          {
+            key: "typedValue",
+            get: function() {
+              return this.masked.typedValue;
+            },
+            set: function(t) {
+              (this.masked.typedValue = t),
+                this.updateControl(),
+                this.alignCursor();
+            }
+          },
+          {
+            key: "selectionStart",
+            get: function() {
+              return this._cursorChanging
+                ? this._changingCursorPos
+                : this.el.selectionStart;
+            }
+          },
+          {
+            key: "cursorPos",
+            get: function() {
+              return this._cursorChanging
+                ? this._changingCursorPos
+                : this.el.selectionEnd;
+            },
+            set: function(t) {
+              this.el.isActive && (this.el.select(t, t), this._saveSelection());
             }
           }
-        },
-        {
-          key: "_onInput",
-          value: function () {
-            if ((this._abortUpdateCursor(), !this._selection))
-              return this.updateValue();
-            var t = new vt(
-              this.el.value,
-              this.cursorPos,
-              this.value,
-              this._selection
-            ),
-              e = this.masked.splice(
-                t.startChangePos,
-                t.removed.length,
-                t.inserted,
-                t.removeDirection
-              ).offset,
-              n = this.masked.nearestInputPos(
-                t.startChangePos + e,
-                t.removeDirection
-              );
-            this.updateControl(), this.updateCursor(n);
-          }
-        },
-        {
-          key: "_onChange",
-          value: function () {
-            this.value !== this.el.value && this.updateValue(),
-              this.masked.doCommit(),
-              this.updateControl();
-          }
-        },
-        {
-          key: "_onDrop",
-          value: function (t) {
-            t.preventDefault(), t.stopPropagation();
-          }
-        },
-        {
-          key: "destroy",
-          value: function () {
-            this._unbindEvents(),
-              (this._listeners.length = 0),
-              delete this.el;
-          }
-        },
-        {
-          key: "mask",
-          get: function () {
-            return this.masked.mask;
-          },
-          set: function (t) {
-            if (
-              !(
-                null == t ||
-                t === this.masked.mask ||
-                (t === Date && this.masked instanceof Bt)
-              )
-            )
-              if (this.masked.constructor !== yt(t)) {
-                var e = _t({ mask: t });
-                (e.unmaskedValue = this.masked.unmaskedValue),
-                  (this.masked = e);
-              } else this.masked.updateOptions({ mask: t });
-          }
-        },
-        {
-          key: "value",
-          get: function () {
-            return this._value;
-          },
-          set: function (t) {
-            (this.masked.value = t), this.updateControl(), this.alignCursor();
-          }
-        },
-        {
-          key: "unmaskedValue",
-          get: function () {
-            return this._unmaskedValue;
-          },
-          set: function (t) {
-            (this.masked.unmaskedValue = t),
-              this.updateControl(),
-              this.alignCursor();
-          }
-        },
-        {
-          key: "typedValue",
-          get: function () {
-            return this.masked.typedValue;
-          },
-          set: function (t) {
-            (this.masked.typedValue = t),
-              this.updateControl(),
-              this.alignCursor();
-          }
-        },
-        {
-          key: "selectionStart",
-          get: function () {
-            return this._cursorChanging
-              ? this._changingCursorPos
-              : this.el.selectionStart;
-          }
-        },
-        {
-          key: "cursorPos",
-          get: function () {
-            return this._cursorChanging
-              ? this._changingCursorPos
-              : this.el.selectionEnd;
-          },
-          set: function (t) {
-            this.el.isActive && (this.el.select(t, t), this._saveSelection());
-          }
-        }
-      ]),
-      t
-    );
-  })(),
-    wt = (function (t) {
+        ]),
+        t
+      );
+    })(),
+    wt = (function(t) {
       function e() {
         return q(this, e), at(this, ut(e).apply(this, arguments));
       }
@@ -2637,14 +2637,14 @@ export default CardModal;
         Q(e, [
           {
             key: "_update",
-            value: function (t) {
+            value: function(t) {
               t.enum && (t.mask = "*".repeat(t.enum[0].length)),
                 ot(ut(e.prototype), "_update", this).call(this, t);
             }
           },
           {
             key: "doValidate",
-            value: function () {
+            value: function() {
               for (
                 var t, n = this, u = arguments.length, i = new Array(u), r = 0;
                 r < u;
@@ -2652,7 +2652,7 @@ export default CardModal;
               )
                 i[r] = arguments[r];
               return (
-                this.enum.some(function (t) {
+                this.enum.some(function(t) {
                   return t.indexOf(n.unmaskedValue) >= 0;
                 }) &&
                 (t = ot(ut(e.prototype), "doValidate", this)).call.apply(
@@ -2666,7 +2666,7 @@ export default CardModal;
         e
       );
     })(),
-    xt = (function (t) {
+    xt = (function(t) {
       function e(t) {
         return q(this, e), at(this, ut(e).call(this, et({}, e.DEFAULTS, t)));
       }
@@ -2675,14 +2675,14 @@ export default CardModal;
         Q(e, [
           {
             key: "_update",
-            value: function (t) {
+            value: function(t) {
               ot(ut(e.prototype), "_update", this).call(this, t),
                 this._updateRegExps();
             }
           },
           {
             key: "_updateRegExps",
-            value: function () {
+            value: function() {
               var t = "",
                 e = "";
               this.allowNegative
@@ -2708,11 +2708,11 @@ export default CardModal;
           },
           {
             key: "extractTail",
-            value: function () {
+            value: function() {
               var t =
-                arguments.length > 0 && void 0 !== arguments[0]
-                  ? arguments[0]
-                  : 0,
+                  arguments.length > 0 && void 0 !== arguments[0]
+                    ? arguments[0]
+                    : 0,
                 n =
                   arguments.length > 1 && void 0 !== arguments[1]
                     ? arguments[1]
@@ -2725,13 +2725,13 @@ export default CardModal;
           },
           {
             key: "_removeThousandsSeparators",
-            value: function (t) {
+            value: function(t) {
               return t.replace(this._thousandsSeparatorRegExp, "");
             }
           },
           {
             key: "_insertThousandsSeparators",
-            value: function (t) {
+            value: function(t) {
               var e = t.split(this.radix);
               return (
                 (e[0] = e[0].replace(
@@ -2744,12 +2744,12 @@ export default CardModal;
           },
           {
             key: "doPrepare",
-            value: function (t) {
+            value: function(t) {
               for (
                 var n,
-                u = arguments.length,
-                i = new Array(u > 1 ? u - 1 : 0),
-                r = 1;
+                  u = arguments.length,
+                  i = new Array(u > 1 ? u - 1 : 0),
+                  r = 1;
                 r < u;
                 r++
               )
@@ -2767,15 +2767,15 @@ export default CardModal;
           },
           {
             key: "_separatorsCount",
-            value: function () {
+            value: function() {
               for (
                 var t =
-                  arguments.length > 0 && void 0 !== arguments[0]
-                    ? arguments[0]
-                    : this._value,
-                e = this._removeThousandsSeparators(t).length,
-                n = e,
-                u = 0;
+                    arguments.length > 0 && void 0 !== arguments[0]
+                      ? arguments[0]
+                      : this._value,
+                  e = this._removeThousandsSeparators(t).length,
+                  n = e,
+                  u = 0;
                 u <= n;
                 ++u
               )
@@ -2785,7 +2785,7 @@ export default CardModal;
           },
           {
             key: "_appendCharRaw",
-            value: function (t) {
+            value: function(t) {
               var n =
                 arguments.length > 1 && void 0 !== arguments[1]
                   ? arguments[1]
@@ -2818,11 +2818,11 @@ export default CardModal;
           },
           {
             key: "remove",
-            value: function () {
+            value: function() {
               var t =
-                arguments.length > 0 && void 0 !== arguments[0]
-                  ? arguments[0]
-                  : 0,
+                  arguments.length > 0 && void 0 !== arguments[0]
+                    ? arguments[0]
+                    : 0,
                 e =
                   arguments.length > 1 && void 0 !== arguments[1]
                     ? arguments[1]
@@ -2839,31 +2839,31 @@ export default CardModal;
           },
           {
             key: "nearestInputPos",
-            value: function (t, e) {
+            value: function(t, e) {
               if (!e) return t;
-              var n = (function (t, e) {
+              var n = (function(t, e) {
                 return e === ft.LEFT && --t, t;
               })(t, e);
               return (
                 this.value[n] === this.thousandsSeparator &&
-                (t = (function (t, e) {
-                  switch (e) {
-                    case ft.LEFT:
-                      return --t;
-                    case ft.RIGHT:
-                    case ft.FORCE_RIGHT:
-                      return ++t;
-                    default:
-                      return t;
-                  }
-                })(t, e)),
+                  (t = (function(t, e) {
+                    switch (e) {
+                      case ft.LEFT:
+                        return --t;
+                      case ft.RIGHT:
+                      case ft.FORCE_RIGHT:
+                        return ++t;
+                      default:
+                        return t;
+                    }
+                  })(t, e)),
                 t
               );
             }
           },
           {
             key: "doValidate",
-            value: function (t) {
+            value: function(t) {
               var n = (t.input
                 ? this._numberRegExpInput
                 : this._numberRegExp
@@ -2885,7 +2885,7 @@ export default CardModal;
           },
           {
             key: "doCommit",
-            value: function () {
+            value: function() {
               var t = this.number,
                 n = t;
               null != this.min && (n = Math.max(n, this.min)),
@@ -2900,15 +2900,15 @@ export default CardModal;
           },
           {
             key: "_normalizeZeros",
-            value: function (t) {
+            value: function(t) {
               var e = this._removeThousandsSeparators(t).split(this.radix);
               return (
-                (e[0] = e[0].replace(/^(\D*)(0*)(\d*)/, function (t, e, n, u) {
+                (e[0] = e[0].replace(/^(\D*)(0*)(\d*)/, function(t, e, n, u) {
                   return e + u;
                 })),
                 t.length && !/\d$/.test(e[0]) && (e[0] = e[0] + "0"),
                 e.length > 1 &&
-                ((e[1] = e[1].replace(/0*$/, "")),
+                  ((e[1] = e[1].replace(/0*$/, "")),
                   e[1].length || (e.length = 1)),
                 this._insertThousandsSeparators(e.join(this.radix))
               );
@@ -2916,7 +2916,7 @@ export default CardModal;
           },
           {
             key: "_padFractionalZeros",
-            value: function (t) {
+            value: function(t) {
               if (!t) return t;
               var e = t.split(this.radix);
               return (
@@ -2928,12 +2928,12 @@ export default CardModal;
           },
           {
             key: "unmaskedValue",
-            get: function () {
+            get: function() {
               return this._removeThousandsSeparators(
                 this._normalizeZeros(this.value)
               ).replace(this.radix, ".");
             },
-            set: function (t) {
+            set: function(t) {
               ht(
                 ut(e.prototype),
                 "unmaskedValue",
@@ -2945,25 +2945,25 @@ export default CardModal;
           },
           {
             key: "number",
-            get: function () {
+            get: function() {
               return Number(this.unmaskedValue);
             },
-            set: function (t) {
+            set: function(t) {
               this.unmaskedValue = String(t);
             }
           },
           {
             key: "typedValue",
-            get: function () {
+            get: function() {
               return this.number;
             },
-            set: function (t) {
+            set: function(t) {
               this.number = t;
             }
           },
           {
             key: "allowNegative",
-            get: function () {
+            get: function() {
               return (
                 this.signed ||
                 (null != this.min && this.min < 0) ||
@@ -2984,28 +2984,7 @@ export default CardModal;
     normalizeZeros: !0,
     padFractionalZeros: !1
   };
-  var Mt = (function (t) {
-    function e() {
-      return q(this, e), at(this, ut(e).apply(this, arguments));
-    }
-    return (
-      nt(e, gt),
-      Q(e, [
-        {
-          key: "_update",
-          value: function (t) {
-            t.mask &&
-              (t.validate = function (e) {
-                return e.search(t.mask) >= 0;
-              }),
-              ot(ut(e.prototype), "_update", this).call(this, t);
-          }
-        }
-      ]),
-      e
-    );
-  })(),
-    Pt = (function (t) {
+  var Mt = (function(t) {
       function e() {
         return q(this, e), at(this, ut(e).apply(this, arguments));
       }
@@ -3014,7 +2993,28 @@ export default CardModal;
         Q(e, [
           {
             key: "_update",
-            value: function (t) {
+            value: function(t) {
+              t.mask &&
+                (t.validate = function(e) {
+                  return e.search(t.mask) >= 0;
+                }),
+                ot(ut(e.prototype), "_update", this).call(this, t);
+            }
+          }
+        ]),
+        e
+      );
+    })(),
+    Pt = (function(t) {
+      function e() {
+        return q(this, e), at(this, ut(e).apply(this, arguments));
+      }
+      return (
+        nt(e, gt),
+        Q(e, [
+          {
+            key: "_update",
+            value: function(t) {
               t.mask && (t.validate = t.mask),
                 ot(ut(e.prototype), "_update", this).call(this, t);
             }
@@ -3023,7 +3023,7 @@ export default CardModal;
         e
       );
     })(),
-    Ot = (function (t) {
+    Ot = (function(t) {
       function e(t) {
         var n;
         return (
@@ -3040,19 +3040,19 @@ export default CardModal;
         Q(e, [
           {
             key: "_update",
-            value: function (t) {
+            value: function(t) {
               ot(ut(e.prototype), "_update", this).call(this, t),
                 "mask" in t &&
-                (this.compiledMasks = Array.isArray(t.mask)
-                  ? t.mask.map(function (t) {
-                    return _t(t);
-                  })
-                  : []);
+                  (this.compiledMasks = Array.isArray(t.mask)
+                    ? t.mask.map(function(t) {
+                        return _t(t);
+                      })
+                    : []);
             }
           },
           {
             key: "_appendCharRaw",
-            value: function () {
+            value: function() {
               var t,
                 e = this._applyDispatch.apply(this, arguments);
               this.currentMask &&
@@ -3064,32 +3064,32 @@ export default CardModal;
           },
           {
             key: "_storeBeforeTailState",
-            value: function () {
+            value: function() {
               ot(ut(e.prototype), "_storeBeforeTailState", this).call(this),
                 this.currentMask && this.currentMask._storeBeforeTailState();
             }
           },
           {
             key: "_restoreBeforeTailState",
-            value: function () {
+            value: function() {
               ot(ut(e.prototype), "_restoreBeforeTailState", this).call(this),
                 this.currentMask && this.currentMask._restoreBeforeTailState();
             }
           },
           {
             key: "_resetBeforeTailState",
-            value: function () {
+            value: function() {
               ot(ut(e.prototype), "_resetBeforeTailState", this).call(this),
                 this.currentMask && this.currentMask._resetBeforeTailState();
             }
           },
           {
             key: "_applyDispatch",
-            value: function () {
+            value: function() {
               var t =
-                arguments.length > 0 && void 0 !== arguments[0]
-                  ? arguments[0]
-                  : "",
+                  arguments.length > 0 && void 0 !== arguments[0]
+                    ? arguments[0]
+                    : "",
                 e =
                   arguments.length > 1 && void 0 !== arguments[1]
                     ? arguments[1]
@@ -3117,10 +3117,10 @@ export default CardModal;
                   (s.tailShift = h.inserted.length - n.length),
                     this._storeBeforeTailState(),
                     r &&
-                    (s.tailShift += this.currentMask.append(r, {
-                      raw: !0,
-                      tail: !0
-                    }).tailShift);
+                      (s.tailShift += this.currentMask.append(r, {
+                        raw: !0,
+                        tail: !0
+                      }).tailShift);
                 } else
                   (this.currentMask.state = o),
                     (this.currentMask._beforeTailState = l);
@@ -3129,7 +3129,7 @@ export default CardModal;
           },
           {
             key: "doDispatch",
-            value: function (t) {
+            value: function(t) {
               var e =
                 arguments.length > 1 && void 0 !== arguments[1]
                   ? arguments[1]
@@ -3139,7 +3139,7 @@ export default CardModal;
           },
           {
             key: "doValidate",
-            value: function () {
+            value: function() {
               for (
                 var t, n, u = arguments.length, i = new Array(u), r = 0;
                 r < u;
@@ -3158,16 +3158,16 @@ export default CardModal;
           },
           {
             key: "reset",
-            value: function () {
+            value: function() {
               this.currentMask && this.currentMask.reset(),
-                this.compiledMasks.forEach(function (t) {
+                this.compiledMasks.forEach(function(t) {
                   return t.reset();
                 });
             }
           },
           {
             key: "remove",
-            value: function () {
+            value: function() {
               var t,
                 e = new kt();
               this.currentMask &&
@@ -3179,7 +3179,7 @@ export default CardModal;
           },
           {
             key: "extractInput",
-            value: function () {
+            value: function() {
               var t;
               return this.currentMask
                 ? (t = this.currentMask).extractInput.apply(t, arguments)
@@ -3188,7 +3188,7 @@ export default CardModal;
           },
           {
             key: "extractTail",
-            value: function () {
+            value: function() {
               for (
                 var t, n, u = arguments.length, i = new Array(u), r = 0;
                 r < u;
@@ -3198,21 +3198,21 @@ export default CardModal;
               return this.currentMask
                 ? (t = this.currentMask).extractTail.apply(t, i)
                 : (n = ot(ut(e.prototype), "extractTail", this)).call.apply(
-                  n,
-                  [this].concat(i)
-                );
+                    n,
+                    [this].concat(i)
+                  );
             }
           },
           {
             key: "doCommit",
-            value: function () {
+            value: function() {
               this.currentMask && this.currentMask.doCommit(),
                 ot(ut(e.prototype), "doCommit", this).call(this);
             }
           },
           {
             key: "nearestInputPos",
-            value: function () {
+            value: function() {
               for (
                 var t, n, u = arguments.length, i = new Array(u), r = 0;
                 r < u;
@@ -3222,70 +3222,70 @@ export default CardModal;
               return this.currentMask
                 ? (t = this.currentMask).nearestInputPos.apply(t, i)
                 : (n = ot(ut(e.prototype), "nearestInputPos", this)).call.apply(
-                  n,
-                  [this].concat(i)
-                );
+                    n,
+                    [this].concat(i)
+                  );
             }
           },
           {
             key: "value",
-            get: function () {
+            get: function() {
               return this.currentMask ? this.currentMask.value : "";
             },
-            set: function (t) {
+            set: function(t) {
               ht(ut(e.prototype), "value", t, this, !0);
             }
           },
           {
             key: "unmaskedValue",
-            get: function () {
+            get: function() {
               return this.currentMask ? this.currentMask.unmaskedValue : "";
             },
-            set: function (t) {
+            set: function(t) {
               ht(ut(e.prototype), "unmaskedValue", t, this, !0);
             }
           },
           {
             key: "typedValue",
-            get: function () {
+            get: function() {
               return this.currentMask ? this.currentMask.typedValue : "";
             },
-            set: function (t) {
+            set: function(t) {
               var e = String(t);
               this.currentMask &&
                 ((this.currentMask.typedValue = t),
-                  (e = this.currentMask.unmaskedValue)),
+                (e = this.currentMask.unmaskedValue)),
                 (this.unmaskedValue = e);
             }
           },
           {
             key: "isComplete",
-            get: function () {
+            get: function() {
               return !!this.currentMask && this.currentMask.isComplete;
             }
           },
           {
             key: "state",
-            get: function () {
+            get: function() {
               return et({}, ot(ut(e.prototype), "state", this), {
                 _rawInputValue: this.rawInputValue,
-                compiledMasks: this.compiledMasks.map(function (t) {
+                compiledMasks: this.compiledMasks.map(function(t) {
                   return t.state;
                 }),
                 currentMaskRef: this.currentMask,
                 currentMask: this.currentMask && this.currentMask.state
               });
             },
-            set: function (t) {
+            set: function(t) {
               var n = t.compiledMasks,
                 u = t.currentMaskRef,
                 i = t.currentMask,
                 r = rt(t, ["compiledMasks", "currentMaskRef", "currentMask"]);
-              this.compiledMasks.forEach(function (t, e) {
+              this.compiledMasks.forEach(function(t, e) {
                 return (t.state = n[e]);
               }),
                 null != u &&
-                ((this.currentMask = u), (this.currentMask.state = i)),
+                  ((this.currentMask = u), (this.currentMask.state = i)),
                 ht(ut(e.prototype), "state", r, this, !0);
             }
           }
@@ -3299,10 +3299,10 @@ export default CardModal;
   }
   return (
     (Ot.DEFAULTS = {
-      dispatch: function (t, e, n) {
+      dispatch: function(t, e, n) {
         if (e.compiledMasks.length) {
           var u = e.rawInputValue,
-            i = e.compiledMasks.map(function (e, i) {
+            i = e.compiledMasks.map(function(e, i) {
               return (
                 (e.rawInputValue = u),
                 e.append(t, n),
@@ -3310,7 +3310,7 @@ export default CardModal;
               );
             });
           return (
-            i.sort(function (t, e) {
+            i.sort(function(t, e) {
               return e.weight - t.weight;
             }),
             e.compiledMasks[i[0].index]

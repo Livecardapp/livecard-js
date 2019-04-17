@@ -58,8 +58,6 @@ const Context = {
   imageChooseFailureCallback: null,
   createCardSuccessCallback: null,
   createCardFailureCallback: null,
-  phoneInputCallback: null,
-  giftTextInputCallback: null,
   debug: false,
   modal: null,
 };
@@ -68,6 +66,7 @@ const ModalType = {
   VIDEO: 0,
   IMAGE: 1,
   TEXT: 2,
+  CARD: 3,
 };
 
 let licenseKey = null;
@@ -79,7 +78,6 @@ let licenseKey = null;
  * @param {captureSuccess} params.callback  Callback after user has entered a text gift message
  */
 const showGiftTextInput = (params) => {
-  Context.giftTextInputCallback = params.callback;
   Context.messageType = "text";
 
   if (Context.modal !== null && Context.modal.type !== ModalType.TEXT) {
@@ -92,7 +90,7 @@ const showGiftTextInput = (params) => {
     Context.modal.inject((value) => {
       Context.giftMessage = value;
       console.log('Context', Context);
-      Context.giftTextInputCallback();
+      params.callback();
     });
   }
 
@@ -105,9 +103,26 @@ const showGiftTextInput = (params) => {
  * @param {captureSuccess} params.callback  Callback for successful phone capture
  */
 const showPhoneInput = (params) => {
-  Context.phoneInputCallback = params.callback;
-  // this.showModal("#card_created_modal");
-  console.log('#card_created_modal');
+  if (Context.modal !== null && Context.modal.type !== ModalType.CARD) {
+    Context.modal.remove();
+    Context.modal = null;
+  }
+
+  if (Context.modal === null) {
+    Context.modal = new CardModal(ModalType.CARD);
+    const onBack = () => {
+      
+    };
+
+    const onDone = (value) => {
+      Context.recipientPhone = value;
+      console.log('Context', Context);
+      params.callback();
+    }
+    Context.modal.inject(onBack, onDone);
+  }
+
+  Context.modal.show();
 };
 
 export {
