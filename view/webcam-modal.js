@@ -1,65 +1,35 @@
+import dq from './dquery';
+
 class WebcamModal {
-  constructor(isMobile, modalTag, listener) {
-    this.isMobile = isMobile;
+  constructor(modalTag, imageMode = true) {
     this.tag = modalTag;
-    this.listener = listener;
+    this.imageMode = imageMode;
   }
 
   insert() {
-    document.querySelector("#livecard-wrapper").innerHTML = this.template();
-
-    // reset video container
-    document.getElementById('video-container').classList.remove('livecard-fade-show', 'livecard-fade-show-start');
-    document.getElementById('video-container').style.display = '';
-    document.querySelector("#livecard-wrapper").innerHTML = '';
-
-    // input image
-    document.querySelector("#inputImage").onchange = () => {
-      this.hideAllModals();
-      if (document.querySelector("#inputImage").files.length === 0) {
-        this.imageChooseFailureCallback(LiveCardError.NO_IMAGE_SELECTED);
-        return;
-      }
-      this.imageChooseSuccessCallback();
-    };
-
-    // input video
-    document.querySelector("#inputVideo").onchange = () => {
-      this.hideAllModals();
-      if (document.querySelector("#inputVideo").files.length === 0) {
-        this.videoRecordFailureCallback(LiveCardError.NO_VIDEO_SELECTED);
-        return;
-      }
-      this.videoRecordSuccessCallback();
-    };
+    dq.insert('#livecard-wrapper', this.template());
 
     // controls
-    document.querySelector("#capture").onloadedmetadata = () => { this.hideSpinner(); };
-    document.querySelector("#btnRecord").addEventListener("click", () => this.listener.btnRecordClick());
-    document.querySelector("#btnStop").addEventListener("click", () => this.listener.btnStopClick());
-    document.querySelector("#btnRetake").addEventListener("click", () => this.listener.btnRetakeClick());
-    document.querySelector("#btnPlay").addEventListener("click", () => this.listener.btnPlayClick());
-    document.querySelector("#btnUse").addEventListener("click", () => this.listener.btnUseClick());
+    dq.on('#capture', 'loadedmetadata', () => { this.hideSpinner(); });
+    dq.click('#btnRecord', () => this.listener.btnRecordClick());
+    dq.click('#btnStop', () => this.listener.btnStopClick());
+    dq.click('#btnRetake', () => this.listener.btnRetakeClick());
+    dq.click('#btnPlay', () => this.listener.btnPlayClick());
+    dq.click('#btnUse', () => this.listener.btnUseClick());
 
     // instructions
-    document
-      .querySelector("#create_video_card_btn")
-      .addEventListener("click", () => {
-        if (this.isMobile) {
-          this.hideModal("#video_gift_msg_modal");
-        } else {
-          document.querySelector("#create_video_instructions").classList.add("livecard-fade-out");
-          setTimeout(function () {
-            document.querySelector("#create_video_instructions").style.display = "none";
-            document.querySelector("#create_video_instructions").classList.remove("livecard-fade-out");
-            document.querySelector("#video_gift_msg_modal").classList.add("showing-video-container");
-            document.querySelector("#video-container").classList.add("livecard-fade-show-start");
-            document.querySelector("#video-container").classList.add("livecard-fade-show");
-            setTimeout(function () { document.querySelector("#video-container").style.display = "block"; }, 400);
-          }, 400);
-        }
-        this.showRecordingUI();
-      });
+    dq.click('#create_video_card_btn', () => {
+      dq.addClass('#create_video_instructions', 'livecard-fade-out');
+      setTimeout(() => {
+        dq.css('#create_video_instructions', 'display', 'none');
+        dq.removeClass('#create_video_instructions', 'livecard-fade-out');
+        dq.addClass('#video_gift_msg_modal', 'showing-video-container');
+        dq.addClass('#video-container', 'livecard-fade-show-start');
+        dq.addClass('#video-container', 'livecard-fade-show');
+        setTimeout(() => { dq.css('#video-container', 'display', 'block'); }, 400);
+      }, 400);
+      this.showRecordingUI();
+    });
 
     // close button
     const closeBtn = document.querySelectorAll('.livecard-modal-close');
@@ -68,31 +38,31 @@ class WebcamModal {
   }
 
   remove() {
-    console.log('reset video container');
-    this.listener = null;
-    // remove all event handlers
+    // todo: stop video stream
+    dq.insert('#livecard-wrapper', '');
   }
 
   hide() {
-    document.querySelector("#video_gift_msg_modal").classList.remove("show");
-    document.querySelector("#video_gift_msg_modal").classList.remove("showing-video-container");
-    document.querySelector("#create_video_instructions").style.display = "block";
-    document.querySelector("#video-container").style.display = "none";
+    dq.removeClass('#video_gift_msg_modal', 'show');
+    dq.removeClass('#video_gift_msg_modal', 'showing-video-container');
+    dq.css('#create_video_instructions', 'display', 'block');
+    dq.css('#video-container', 'display', 'none');
   }
 
   show() {
-    document.querySelector("#video_gift_msg_modal").classList.add("show");
+    dq.addClass('#video_gift_msg_modal', 'show');
   }
 
   showSpinner() {
-    document.querySelector('.livecard-spinner').style.display = 'block';
+    dq.css('.livecard-spinner', 'display', 'block');
   }
 
   hideSpinner() {
-    document.querySelector('.livecard-spinner').style.display = 'none';
+    dq.css('.livecard-spinner', 'display', 'none');
   }
 
   template() {
+    const canvas = this.imageMode ? '<canvas id="imgCanvas" style="display: none;"></canvas>' : '';
     return `
       <div class="livecard-modal fade" id="video_gift_msg_modal" tabindex="-1" role="dialog" aria-labelledby="video_gift_msg_modal_label" aria-hidden="true">
         <div class="livecard-modal-dialog livecard-modal-dialog-centered" role="document">
@@ -129,11 +99,9 @@ class WebcamModal {
               </div>
               <div id="video-container" class="livecard-hidden" style="--aspect-ratio:16/9;">
                 <div class="livecard-spinner" style="display: none;"></div>
-                <input type="file" accept="video/mp4,video/x-m4v,video/webm,video/quicktime,video/*" capture="user" id="inputVideo" style="display: none;">
-                <input type="file" accept="image/*" id="inputImage" style="display: none;">
                 <video id="capture" autoplay muted playsinline></video>
                 <video id="recorded" style="display: none"></video>
-                <canvas id="imgCanvas" style="display: none;"></canvas>
+                ${canvas}
                 <div class="livecard-controls">
                   <img src="https://retailer.live.cards/checkout/livecard-sdk/images/video-record.png" class="icon-video-record" id="btnRecord" />
                   <img src="https://retailer.live.cards/checkout/livecard-sdk/images/video-stop.png" class="icon-video-stop" style="display: none;" id="btnStop" />

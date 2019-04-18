@@ -11,6 +11,11 @@ const dq = {
   addClass: (id, cls) => { document.querySelector(id).classList.add(cls); },
   removeClass: (id, cls) => { document.querySelector(id).classList.remove(cls); },
   val: (id) => { return document.querySelector(id).value; },
+  on: (id, event, f) => {
+    if (event === 'loadedmetadata') {
+      document.querySelector(id).onloadedmetadata = f;
+    }
+  },
 };
 
 export default dq;

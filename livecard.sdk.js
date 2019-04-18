@@ -117,7 +117,7 @@ const showImageInput = (params) => {
   }
 
   if (Context.modal === null) {
-    Context.modal = Context.isMobile ? new FileView(ModalType.IMAGE_FILE) : new ImageModal(ModalType.IMAGE);
+    Context.modal = Context.isMobile ? new FileView(ModalType.IMAGE_FILE, true) : new ImageModal(ModalType.IMAGE);
     Context.modal.inject(params.onSuccess, params.onFailure);
   }
 
