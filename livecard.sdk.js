@@ -1,7 +1,9 @@
+import WebcamModal from './view/webcam-modal';
 import MessageModal from './view/message-modal';
 import FileView from './view/file-view';
 import ImageModal from './view/image-modal';
 import CardModal from './view/card-modal';
+import dq from './view/dquery';
 
 /**
  * @file See {@link LiveCard} for library properties and methods
@@ -46,13 +48,13 @@ const Context = {
   requireRecipientPhone: true,
   isMobile: false,
   usingFileInput: false,
-  liveCardId: "",
+  liveCardId: '',
   recordedBlobs: [],
   snapshotDataUrl: null,
   mediaRecorder: null,
-  giftMessage: "",
-  recipientPhone: "",
-  messageType: "text",
+  giftMessage: '',
+  recipientPhone: '',
+  messageType: 'text',
   videoRecordSuccessCallback: null,
   videoRecordFailureCallback: null,
   createCardSuccessCallback: null,
@@ -73,13 +75,46 @@ const ModalType = {
 let licenseKey = null;
 
 /**
+ * Begin the video capture flow (display in modal)
+ * @param {Object}  params
+ * @param {boolean} params.showIntro        Controls whether the introductory modal describing the video recording process is shown
+ * @param {captureSuccess} params.onSuccess  Callback for successful recording
+ * @param {captureFailure} params.onFailure  Callback for failed recording
+ */
+const startVideoRecording = (params) => {
+  Context.videoRecordSuccessCallback = params.onSuccess;
+  Context.videoRecordFailureCallback = params.onFailure;
+
+  Context.messageType = 'video';
+
+  const webcamModal = new WebcamModal(ModalType.VIDEO, false);
+  webcamModal.inject();
+
+  if (params.showIntro) {
+    dq.css('#create_video_instructions', 'display', 'block');
+    return;
+  }
+
+  dq.css('#create_video_instructions', 'display', 'none');
+  if (Context.isMobile) return;
+
+  setTimeout(function () {
+    dq.addClass('#video_gift_msg_modal', 'showing-video-container');
+    dq.addClass('#video-container', 'livecard-fade-show-start');
+    dq.addClass('#video-container', 'livecard-fade-show');
+    setTimeout(function () { dq.css('#video-container', 'display', 'block'); }, 400);
+  }, 400);
+
+}
+
+/**
  * Begin text gift message capture flow (displays in modal)
  * @param {Object}  params
  * @param {boolean} params.showIntro        Controls whether the introductory modal describing the text gift message process is shown
  * @param {captureSuccess} params.callback  Callback after user has entered a text gift message
  */
 const showGiftTextInput = (params) => {
-  Context.messageType = "text";
+  Context.messageType = 'text';
 
   if (Context.modal !== null && Context.modal.type !== ModalType.TEXT) {
     Context.modal.remove();
@@ -105,7 +140,7 @@ const showGiftTextInput = (params) => {
  * @param {captureFailure} params.onFailure  Callback for failed image capture
  */
 const showImageInput = (params) => {
-  Context.messageType = "image";
+  Context.messageType = 'image';
   Context.usingFileInput = Context.isMobile;
 
   const removeable = Context.modal === null ? false :
@@ -158,6 +193,7 @@ const showPhoneInput = (params) => {
 export {
   licenseKey,
   ErrorType,
+  startVideoRecording,
   showGiftTextInput,
   showImageInput,
   showPhoneInput,
@@ -167,7 +203,7 @@ export {
 // INITIALIZE LIVECARD APP
 // =======================
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener('DOMContentLoaded', () => {
   const livecardBox = document.createElement('div');
 
   livecardBox.id = 'livecard-wrapper';
@@ -192,8 +228,8 @@ document.addEventListener("DOMContentLoaded", () => {
   Context.usingFileInput = Context.isMobile;
 
   // init live card id
-  let guid = "";
-  const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let guid = '';
+  const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
   for (var i = 0; i < 6; i++)
     guid += possible.charAt(Math.floor(Math.random() * possible.length));

@@ -16,6 +16,27 @@
     LiveCard.licenseKey = "zeGBS3PiwkhBSpn-JDbz";
     let lastView = 0;
 
+    function createVideoMessage() {
+      LiveCard.startVideoRecording({
+        showIntro: true, //Client can opt out of showing our intro by passing false here
+        onSuccess: function () {
+          collectPhoneNumber();
+        },
+        onFailure: function (errorCode) {
+          console.log('startVideoRecording failure: ' + errorCode);
+          if (errorCode === LiveCardError.RECORDING_NOT_SUPPORTED) {
+            //Client can show own UI for case of webcam recording not supported and expose some UI to choose a file from hd, which triggers LiveCard.selectVideoFile()
+            //Or can use our own modal as here
+            setTimeout(function () {
+              //LiveCard.showRecordingNotSupported();
+              console.log('not supported')
+            }, 400);
+          }
+        }
+      });
+    }
+
+
     function createGiftMessage() {
       lastView = 1;
       LiveCard.showGiftTextInput({
@@ -64,6 +85,7 @@
 </head>
 
 <body>
+  <button onclick="createVideoMessage()">Create Video Message</button><br><br>
   <button onclick="createGiftMessage()">Create Gift Message</button><br><br>
   <button onclick="createImageMessage()">Create Image Message</button><br><br>
 </body>

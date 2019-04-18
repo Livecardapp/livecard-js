@@ -1,23 +1,23 @@
 import dq from './dquery';
 
 class WebcamModal {
-  constructor(modalTag, imageMode = true) {
+  constructor(modalTag, imageMode) {
     this.tag = modalTag;
     this.imageMode = imageMode;
   }
 
-  insert() {
+  inject() {
     dq.insert('#livecard-wrapper', this.template());
 
     // controls
     dq.on('#capture', 'loadedmetadata', () => { this.hideSpinner(); });
-    dq.click('#btnRecord', () => this.listener.btnRecordClick());
-    dq.click('#btnStop', () => this.listener.btnStopClick());
-    dq.click('#btnRetake', () => this.listener.btnRetakeClick());
-    dq.click('#btnPlay', () => this.listener.btnPlayClick());
-    dq.click('#btnUse', () => this.listener.btnUseClick());
+    dq.click('#btnRecord', () => this.btnRecordClick());
+    dq.click('#btnStop', () => this.btnStopClick());
+    dq.click('#btnRetake', () => this.btnRetakeClick());
+    dq.click('#btnPlay', () => this.btnPlayClick());
+    dq.click('#btnUse', () => this.btnUseClick());
 
-    // instructions
+    const showRecordingUI = this.showRecordingUI.bind(this);
     dq.click('#create_video_card_btn', () => {
       dq.addClass('#create_video_instructions', 'livecard-fade-out');
       setTimeout(() => {
@@ -28,13 +28,14 @@ class WebcamModal {
         dq.addClass('#video-container', 'livecard-fade-show');
         setTimeout(() => { dq.css('#video-container', 'display', 'block'); }, 400);
       }, 400);
-      this.showRecordingUI();
+      showRecordingUI();
     });
 
     // close button
-    const closeBtn = document.querySelectorAll('.livecard-modal-close');
     const remove = this.remove.bind(this);
-    closeBtn.addEventListener('click', event => { remove(); });
+    dq.click('.livecard-modal-close', () => { remove(); });
+
+    this.show();
   }
 
   remove() {
@@ -59,6 +60,58 @@ class WebcamModal {
 
   hideSpinner() {
     dq.css('.livecard-spinner', 'display', 'none');
+  }
+
+  showRecordingUI() {
+    if (navigator.mediaDevices) {
+      console.log('get stream');
+      this.showSpinner();
+      // const constraints = {
+      //   audio: true,
+      //   video: { width: { ideal: 1920, min: 1280 }, height: { ideal: 1080, min: 720 } }
+      // };
+      // navigator.mediaDevices
+      //   .getUserMedia(constraints)
+      //   .then(this.showVideoCaptureUI.bind(this))
+      //   .catch(this.videoCaptureNotSupported.bind(this));
+    } else {
+      // this.hideAllModals();
+      // this.videoRecordFailureCallback(LiveCardError.RECORDING_NOT_SUPPORTED);
+      console.log('failure');
+    }
+  }
+
+  showVideoCaptureUI(vstream) {
+    window.stream = vstream;
+    document.querySelector("#capture").srcObject = vstream;
+    dq.addClass("#video-container", "livecard-fade-show");
+  }
+
+  videoCaptureNotSupported(error) {
+    this.hideSpinner();
+    console.log('video recording not supported');
+    // this.hideAllModals();
+    // this.videoRecordFailureCallback(LiveCardError.RECORDING_NOT_SUPPORTED);
+  }
+
+  btnRecordClick() {
+    console.log('start recording');
+  }
+
+  btnStopClick() {
+    console.log('stop recording');
+  }
+
+  btnRetakeClick() {
+    console.log('retake recording');
+  }
+
+  btnPlayClick() {
+    console.log('play recording');
+  }
+
+  btnUseClick() {
+    console.log('use recording');
   }
 
   template() {
