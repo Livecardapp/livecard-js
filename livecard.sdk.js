@@ -1,4 +1,4 @@
-import WebcamModal from './view/webcam-modal';
+import VideoModal from './view/video-modal';
 import MessageModal from './view/message-modal';
 import FileView from './view/file-view';
 import ImageModal from './view/image-modal';
@@ -55,8 +55,6 @@ const Context = {
   giftMessage: '',
   recipientPhone: '',
   messageType: 'text',
-  videoRecordSuccessCallback: null,
-  videoRecordFailureCallback: null,
   createCardSuccessCallback: null,
   createCardFailureCallback: null,
   debug: false,
@@ -82,29 +80,25 @@ let licenseKey = null;
  * @param {captureFailure} params.onFailure  Callback for failed recording
  */
 const startVideoRecording = (params) => {
-  Context.videoRecordSuccessCallback = params.onSuccess;
-  Context.videoRecordFailureCallback = params.onFailure;
-
   Context.messageType = 'video';
 
-  const webcamModal = new WebcamModal(ModalType.VIDEO, false);
-  webcamModal.inject();
+  const webcamModal = new VideoModal(ModalType.VIDEO, Context.isMobile);
+  webcamModal.inject(params.onSuccess, params.onFailure);
 
-  if (params.showIntro) {
-    dq.css('#create_video_instructions', 'display', 'block');
-    return;
-  }
+  dq.css('#create_video_instructions', 'display', params.showIntro ? 'block' : 'none');
+  // if (params.showIntro) {
+  //   dq.css('#create_video_instructions', 'display', 'block');
+  //   return;
+  // }
 
-  dq.css('#create_video_instructions', 'display', 'none');
-  if (Context.isMobile) return;
-
-  setTimeout(function () {
-    dq.addClass('#video_gift_msg_modal', 'showing-video-container');
-    dq.addClass('#video-container', 'livecard-fade-show-start');
-    dq.addClass('#video-container', 'livecard-fade-show');
-    setTimeout(function () { dq.css('#video-container', 'display', 'block'); }, 400);
-  }, 400);
-
+  // dq.css('#create_video_instructions', 'display', 'none');
+  // if (Context.isMobile) return;
+  // setTimeout(function () {
+  //   dq.addClass('#video_gift_msg_modal', 'showing-video-container');
+  //   dq.addClass('#video-container', 'livecard-fade-show-start');
+  //   dq.addClass('#video-container', 'livecard-fade-show');
+  //   setTimeout(function () { dq.css('#video-container', 'display', 'block'); }, 400);
+  // }, 400);
 }
 
 /**
@@ -221,7 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
   ) {
     Context.isMobile = true;
   } else {
-    Context.isMobile = false;
+    Context.isMobile = true;
   }
 
   // init file input flag
