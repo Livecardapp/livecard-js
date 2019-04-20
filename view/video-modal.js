@@ -81,7 +81,6 @@ class VideoModal {
       })
       .catch(error => {
         hideSpinner();
-        console.log('video recording not supported');
         onFailure(0);
       });
   }
