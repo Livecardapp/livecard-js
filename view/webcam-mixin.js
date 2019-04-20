@@ -23,12 +23,27 @@ const WebcamMixin = {
     dq.css('#video-container', 'display', 'none');
   },
 
-  startSpinner: () => {
+  showSpinner: () => {
     dq.css('.livecard-spinner', 'display', 'block');
   },
 
-  stopSpinner: () => {
+  hideSpinner: () => {
     dq.css('.livecard-spinner', 'display', 'none');
+  },
+
+  show: () => {
+    dq.addClass('#video_gift_msg_modal', 'show');
+  },
+
+  hide: () => {
+    dq.removeClass('#video_gift_msg_modal', 'show');
+    dq.removeClass('#video_gift_msg_modal', 'showing-video-container');
+    dq.css('#create_video_instructions', 'display', 'block');
+    dq.css('#video-container', 'display', 'none');
+  },
+
+  remove: () => {
+    dq.insert('#livecard-wrapper', '');
   },
 
   getStream: async () => {
@@ -50,20 +65,6 @@ const WebcamMixin = {
     }
   },
 
-  // showVideoCaptureUI(vstream) {
-  //   this.hideSpinner();
-  //   window.stream = vstream;
-  //   document.querySelector("#capture").srcObject = vstream;
-  //   dq.addClass("#video-container", "livecard-fade-show");
-  // }
-
-  // videoCaptureNotSupported(error) {
-  //   this.hideSpinner();
-  //   console.log('video recording not supported');
-  //   // this.hideAllModals();
-  //   // this.videoRecordFailureCallback(LiveCardError.RECORDING_NOT_SUPPORTED);
-  // }
-
   template: (components, includeControls) => {
     const controls = includeControls ? `
     <div class="livecard-controls">
@@ -73,7 +74,7 @@ const WebcamMixin = {
       <img src="https://retailer.live.cards/checkout/livecard-sdk/images/video-play.png" class="icon-video-play" style="display: none;" id="btnPlay" />
       <button id="btnUse" style="display: none;">Use</button>
     </div>` : '';
-    
+
     return `
       <div class="livecard-modal fade" id="video_gift_msg_modal" tabindex="-1" role="dialog" aria-labelledby="video_gift_msg_modal_label" aria-hidden="true">
         <div class="livecard-modal-dialog livecard-modal-dialog-centered" role="document">

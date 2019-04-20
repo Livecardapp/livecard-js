@@ -215,7 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
   ) {
     Context.isMobile = true;
   } else {
-    Context.isMobile = true;
+    Context.isMobile = false;
   }
 
   // init file input flag
