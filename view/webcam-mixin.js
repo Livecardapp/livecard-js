@@ -50,17 +50,7 @@ const WebcamMixin = {
     if (navigator.mediaDevices) {
       console.log('get stream');
       this.startSpinner();
-      // const constraints = {
-      //   audio: true,
-      //   video: { width: { ideal: 1920, min: 1280 }, height: { ideal: 1080, min: 720 } }
-      // };
-      // navigator.mediaDevices
-      //   .getUserMedia(constraints)
-      //   .then(this.showVideoCaptureUI.bind(this))
-      //   .catch(this.videoCaptureNotSupported.bind(this));
     } else {
-      // this.hideAllModals();
-      // this.videoRecordFailureCallback(LiveCardError.RECORDING_NOT_SUPPORTED);
       console.log('failure');
     }
   },

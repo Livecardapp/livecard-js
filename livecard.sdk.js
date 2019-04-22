@@ -81,24 +81,8 @@ let licenseKey = null;
  */
 const startVideoRecording = (params) => {
   Context.messageType = 'video';
-
-  const webcamModal = new VideoModal(ModalType.VIDEO, Context.isMobile);
-  webcamModal.inject(params.onSuccess, params.onFailure);
-
-  dq.css('#create_video_instructions', 'display', params.showIntro ? 'block' : 'none');
-  // if (params.showIntro) {
-  //   dq.css('#create_video_instructions', 'display', 'block');
-  //   return;
-  // }
-
-  // dq.css('#create_video_instructions', 'display', 'none');
-  // if (Context.isMobile) return;
-  // setTimeout(function () {
-  //   dq.addClass('#video_gift_msg_modal', 'showing-video-container');
-  //   dq.addClass('#video-container', 'livecard-fade-show-start');
-  //   dq.addClass('#video-container', 'livecard-fade-show');
-  //   setTimeout(function () { dq.css('#video-container', 'display', 'block'); }, 400);
-  // }, 400);
+  const webcamModal = new VideoModal(ModalType.VIDEO, Context.isMobile, params.onSuccess, params.onFailure);
+  webcamModal.inject(params.showIntro);
 }
 
 /**
