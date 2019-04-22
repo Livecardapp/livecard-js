@@ -1,12 +1,22 @@
 import dq from './dquery';
 
 class ImageModal {
-  constructor(modalTag) {
-    this.tag = modalTag;
+  constructor(tag, isMobile, onSuccess, onFailure) {
+    this.tag = tag;
+    this.isMobile = isMobile;
+    this.onSuccess = onSuccess;
+    this.onFailure = onFailure;
   }
 
-  inject(onSuccess, onFailure) {
+  inject() {
     dq.insert('#livecard-wrapper', this.template());
+
+    dq.change("#inputImage", () => {
+      document.querySelector("#inputImage").files.length === 0 ?
+        this.onFailure(LiveCardError.NO_IMAGE_SELECTED) : this.onSuccess();
+    });
+
+    if (this.isMobile) return;
 
     // dq.click('#btnImageFromWebcam', () => {
     //   this.hideModal('#choose_image_modal');
@@ -21,15 +31,10 @@ class ImageModal {
       this.usingFileInput = true;
       dq.click('#inputImage');
     });
-
-    dq.change("#inputImage", () => {
-      // this.hideAllModals();
-      document.querySelector("#inputImage").files.length === 0 ? onFailure(LiveCardError.NO_IMAGE_SELECTED) : onSuccess();
-    });
-
+    
     // close button
     const remove = this.remove.bind(this);
-    dq.click('.livecard-modal-close', event => { remove(); });
+    dq.click('.livecard-modal-close', () => { remove(); });
   }
 
   remove() {
@@ -37,16 +42,17 @@ class ImageModal {
   }
 
   show() {
-    dq.addClass('#choose_image_modal', 'show');
+    this.isMobile ? dq.click('#inputImage') : dq.addClass('#choose_image_modal', 'show');
   }
 
   hide() {
+    if (this.isMobile) return;
     dq.removeClass('#choose_image_modal', 'show');
   }
 
   template() {
-    return `
-    <div class="livecard-modal fade" id="choose_image_modal" tabindex="-1" role="dialog" aria-labelledby="choose_image_modal_label" aria-hidden="true">
+    return this.isMobile ? `<input type="file" accept="image/*" id="inputImage" style="display: none;">` :
+      `<div class="livecard-modal fade" id="choose_image_modal" tabindex="-1" role="dialog" aria-labelledby="choose_image_modal_label" aria-hidden="true">
       <div class="livecard-modal-dialog livecard-modal-dialog-centered" role="document">
         <div class="livecard-modal-content">
           <div class="livecard-modal-body" id="chooseImageMessage">

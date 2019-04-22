@@ -1,9 +1,7 @@
 import VideoModal from './view/video-modal';
 import MessageModal from './view/message-modal';
-import FileView from './view/file-view';
 import ImageModal from './view/image-modal';
 import CardModal from './view/card-modal';
-import dq from './view/dquery';
 
 /**
  * @file See {@link LiveCard} for library properties and methods
@@ -63,11 +61,9 @@ const Context = {
 
 const ModalType = {
   VIDEO: 0,
-  VIDEO_FILE: 1,
-  IMAGE: 2,
-  IMAGE_FILE: 3,
-  TEXT: 4,
-  CARD: 5,
+  IMAGE: 1,
+  TEXT: 2,
+  CARD: 3,
 };
 
 let licenseKey = null;
@@ -81,8 +77,18 @@ let licenseKey = null;
  */
 const startVideoRecording = (params) => {
   Context.messageType = 'video';
-  const webcamModal = new VideoModal(ModalType.VIDEO, Context.isMobile, params.onSuccess, params.onFailure);
-  webcamModal.inject(params.showIntro);
+
+  if (Context.modal !== null && Context.modal.type !== ModalType.VIDEO) {
+    Context.modal.remove();
+    Context.modal = null;
+  }
+
+  if (Context.modal === null) {
+    Context.modal = new VideoModal(ModalType.VIDEO, Context.isMobile, params.onSuccess, params.onFailure);
+    Context.modal.inject(params.showIntro);
+  }
+
+  Context.modal.show();
 }
 
 /**
@@ -121,17 +127,14 @@ const showImageInput = (params) => {
   Context.messageType = 'image';
   Context.usingFileInput = Context.isMobile;
 
-  const removeable = Context.modal === null ? false :
-    (Context.isMobile ? Context.modal.type !== ModalType.IMAGE_FILE : Context.modal.type !== ModalType.IMAGE);
-
-  if (removeable) {
+  if (Context.modal !== null && Context.modal.type !== ModalType.IMAGE) {
     Context.modal.remove();
     Context.modal = null;
   }
 
   if (Context.modal === null) {
-    Context.modal = Context.isMobile ? new FileView(ModalType.IMAGE_FILE, true) : new ImageModal(ModalType.IMAGE);
-    Context.modal.inject(params.onSuccess, params.onFailure);
+    Context.modal = new ImageModal(ModalType.IMAGE, Context.isMobile, params.onSuccess, params.onFailure);
+    Context.modal.inject();
   }
 
   Context.modal.show();

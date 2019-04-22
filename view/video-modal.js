@@ -2,8 +2,8 @@ import dq from './dquery';
 import WebcamMixin from './webcam-mixin';
 
 class VideoModal {
-  constructor(modalTag, isMobile, onSuccess, onFailure) {
-    this.tag = modalTag;
+  constructor(tag, isMobile, onSuccess, onFailure) {
+    this.tag = tag;
     this.isMobile = isMobile;
     this.onSuccess = onSuccess;
     this.onFailure = onFailure;
@@ -27,7 +27,7 @@ class VideoModal {
     dq.click('.livecard-modal-close', () => { remove(); });
 
     // show
-    this.show();
+    // this.show();
 
     if (this.isMobile) {
       dq.change("#inputVideo", () => {

@@ -1,3 +1,7 @@
+button:focus {
+  outline:0;
+}
+
 /* adapted from bootstrap modal css */
 .livecard-modal-open {
   overflow: hidden;
