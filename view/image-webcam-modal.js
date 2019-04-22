@@ -7,7 +7,6 @@ class ImageWebcamModal {
     this.onSuccess = onSuccess;
     this.onFailure = onFailure;
     Object.assign(this, WebcamMixin());
-    console.log(this);
   }
 
   inject() {
