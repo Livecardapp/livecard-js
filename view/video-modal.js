@@ -11,7 +11,7 @@ class VideoModal {
     this.recordedBlobs = [];
     this.mediaRecorder = null;
 
-    Object.assign(this, WebcamMixin);
+    Object.assign(this, WebcamMixin());
   }
 
   inject(showIntro) {
@@ -25,9 +25,6 @@ class VideoModal {
     // close button
     const remove = this.remove.bind(this);
     dq.click('.livecard-modal-close', () => { remove(); });
-
-    // show
-    // this.show();
 
     if (this.isMobile) {
       dq.change("#inputVideo", () => {
@@ -51,6 +48,7 @@ class VideoModal {
     dq.click('#btnUse', () => this.btnUseClick());
 
     const _showRecordingUI = this._showRecordingUI.bind(this);
+    const onFailure = this.onFailure;
     dq.click('#create_video_card_btn', () => {
       dq.addClass('#create_video_instructions', 'livecard-fade-out');
       setTimeout(() => {
@@ -61,7 +59,7 @@ class VideoModal {
         dq.addClass('#video-container', 'livecard-fade-show');
         setTimeout(() => { dq.css('#video-container', 'display', 'block'); }, 400);
       }, 400);
-      _showRecordingUI();
+      _showRecordingUI(onFailure);
     });
   }
 
@@ -142,33 +140,6 @@ class VideoModal {
     const recordedVideo = document.querySelector("#recorded");
     const superBuffer = new Blob(this.recordedBlobs, { type: "video/webm" });
     recordedVideo.src = window.URL.createObjectURL(superBuffer);
-  }
-
-  _showRecordingUI() {
-    if (typeof navigator.mediaDevices === 'undefined' || navigator.mediaDevices === null)
-      return this.onFailure(0);
-
-    this.showSpinner();
-
-    const constraints = {
-      audio: true,
-      video: { width: { ideal: 1920, min: 1280 }, height: { ideal: 1080, min: 720 } }
-    };
-
-    const hideSpinner = this.hideSpinner.bind(this);
-    const onFailure = this.onFailure;
-
-    navigator.mediaDevices
-      .getUserMedia(constraints)
-      .then(vstream => {
-        window.stream = vstream;
-        document.querySelector("#capture").srcObject = vstream;
-        dq.addClass("#video-container", "livecard-fade-show");
-      })
-      .catch(error => {
-        hideSpinner();
-        onFailure(0);
-      });
   }
 }
 

@@ -1,6 +1,7 @@
 import VideoModal from './view/video-modal';
 import MessageModal from './view/message-modal';
 import ImageModal from './view/image-modal';
+import ImageWebcamModal from './view/image-webcam-modal';
 import CardModal from './view/card-modal';
 
 /**
@@ -133,7 +134,20 @@ const showImageInput = (params) => {
   }
 
   if (Context.modal === null) {
-    Context.modal = new ImageModal(ModalType.IMAGE, Context.isMobile, params.onSuccess, params.onFailure);
+    const onSuccess = (type) => {
+      if (type === 0) {
+        params.onSuccess();
+      } else if (type === 1) {
+        const onCamSuccess = (url) => {
+          Context.snapshotDataUrl = url;
+          params.onSuccess();
+        };
+        Context.modal = new ImageWebcamModal(ModalType.IMAGE, onCamSuccess, params.onFailure);
+        Context.modal.inject();
+        Context.modal.show();
+      }
+    };
+    Context.modal = new ImageModal(ModalType.IMAGE, Context.isMobile, onSuccess, params.onFailure);
     Context.modal.inject();
   }
 

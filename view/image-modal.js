@@ -12,28 +12,22 @@ class ImageModal {
     dq.insert('#livecard-wrapper', this.template());
 
     dq.change("#inputImage", () => {
-      document.querySelector("#inputImage").files.length === 0 ?
-        this.onFailure(LiveCardError.NO_IMAGE_SELECTED) : this.onSuccess();
+      document.querySelector("#inputImage").files.length === 0 ? this.onFailure(2) : this.onSuccess(0);
     });
 
     if (this.isMobile) return;
 
-    // dq.click('#btnImageFromWebcam', () => {
-    //   this.hideModal('#choose_image_modal');
-    //   dq.css('#create_video_instructions', 'display', 'none');
-    //   this.showRecordingUI();
-    //   dq.addClass('#video_gift_msg_modal', 'showing-video-container');
-    //   this.showModal('#video_gift_msg_modal');
-    //   dq.css('#video-container', 'display', 'block');
-    // });
+    const onSuccess = this.onSuccess;
+    const remove = this.remove;
 
-    dq.click('#btnImageFromDisk', () => {
-      this.usingFileInput = true;
-      dq.click('#inputImage');
+    dq.click('#btnImageFromWebcam', () => { 
+      remove();
+      onSuccess(1); 
     });
     
+    dq.click('#btnImageFromDisk', () => { dq.click('#inputImage'); });
+
     // close button
-    const remove = this.remove.bind(this);
     dq.click('.livecard-modal-close', () => { remove(); });
   }
 
