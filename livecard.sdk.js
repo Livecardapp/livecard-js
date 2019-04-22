@@ -107,14 +107,14 @@ const showGiftTextInput = (params) => {
 
   if (Context.modal === null) {
     Context.modal = new MessageModal(ModalType.TEXT);
-    Context.modal.inject((value) => {
+    Context.modal.inject(params.showIntro, (value) => {
       Context.giftMessage = value;
       console.log('Context', Context);
       params.onSuccess();
     });
   }
 
-  Context.modal.show(params.showIntro);
+  Context.modal.show();
 };
 
 /**

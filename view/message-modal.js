@@ -5,8 +5,13 @@ class MessageModal {
     this.tag = modalTag;
   }
 
-  inject(onDone) {
+  inject(showIntro, onDone) {
     dq.insert('#livecard-wrapper', this.template());
+
+    if (showIntro) {
+      dq.css("#create_text_instructions", 'display', 'flex');
+      dq.addClass('#gift_msg_modal', 'show');
+    }
 
     dq.click('#create_text_card_btn', () => {
       dq.addClass('#create_text_instructions', 'livecard-fade-out');
@@ -32,13 +37,7 @@ class MessageModal {
     dq.insert('#livecard-wrapper', '');
   }
 
-  show(withIntro) {
-    if (withIntro) {
-      dq.css("#create_text_instructions", 'display', 'flex');
-      dq.addClass('#gift_msg_modal', 'show');
-      return;
-    }
-
+  show() {
     dq.css("#create_text_instructions", "none");
     dq.addClass('#gift_msg_modal', 'show');
     dq.css("#text-container", "flex");
