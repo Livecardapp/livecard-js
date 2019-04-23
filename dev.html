@@ -28,14 +28,12 @@
             //Client can show own UI for case of webcam recording not supported and expose some UI to choose a file from hd, which triggers LiveCard.selectVideoFile()
             //Or can use our own modal as here
             setTimeout(function () {
-              //LiveCard.showRecordingNotSupported();
-              console.log('not supported')
+              LiveCard.showRecordingNotSupported();
             }, 400);
           }
         }
       });
     }
-
 
     function createGiftMessage() {
       lastView = 1;

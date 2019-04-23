@@ -185,6 +185,14 @@ const showPhoneInput = (params) => {
   Context.modal.show();
 };
 
+/**
+ * Show modal informing user that video recording is not supported
+ */
+const showRecordingNotSupported = () => {
+  // this.showModal("#capture_not_supported_modal");
+  console.log('not supported');
+};
+
 export {
   licenseKey,
   ErrorType,
@@ -192,6 +200,7 @@ export {
   showGiftTextInput,
   showImageInput,
   showPhoneInput,
+  showRecordingNotSupported,
 };
 
 // =======================
