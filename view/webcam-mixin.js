@@ -31,13 +31,13 @@ const WebcamMixin = () => {
 
     template: (components, includeControls) => {
       const controls = includeControls ? `
-    <div class="livecard-controls">
-      <img src="https://retailer.live.cards/checkout/livecard-sdk/images/video-record.png" class="icon-video-record" id="btnRecord" />
-      <img src="https://retailer.live.cards/checkout/livecard-sdk/images/video-stop.png" class="icon-video-stop" style="display: none;" id="btnStop" />
-      <button id="btnRetake" style="display: none;">Retake</button>
-      <img src="https://retailer.live.cards/checkout/livecard-sdk/images/video-play.png" class="icon-video-play" style="display: none;" id="btnPlay" />
-      <button id="btnUse" style="display: none;">Use</button>
-    </div>` : '';
+      <div class="livecard-controls">
+        <img src="https://retailer.live.cards/checkout/livecard-sdk/images/video-record.png" class="icon-video-record" id="btnRecord" />
+        <img src="https://retailer.live.cards/checkout/livecard-sdk/images/video-stop.png" class="icon-video-stop" style="display: none;" id="btnStop" />
+        <button id="btnRetake" style="display: none;">Retake</button>
+        <img src="https://retailer.live.cards/checkout/livecard-sdk/images/video-play.png" class="icon-video-play" style="display: none;" id="btnPlay" />
+        <button id="btnUse" style="display: none;">Use</button>
+      </div>` : '';
 
       return `
       <div class="livecard-modal fade" id="video_gift_msg_modal" tabindex="-1" role="dialog" aria-labelledby="video_gift_msg_modal_label" aria-hidden="true">
@@ -83,32 +83,6 @@ const WebcamMixin = () => {
         </div>
       </div>`;
     },
-
-    // PRIVATE
-
-    _showRecordingUI: (onFailure) => {
-      if (typeof navigator.mediaDevices === 'undefined' || navigator.mediaDevices === null)
-        return onFailure(0);
-
-      dq.css('.livecard-spinner', 'display', 'block');
-
-      const constraints = {
-        audio: true,
-        video: { width: { ideal: 1920, min: 1280 }, height: { ideal: 1080, min: 720 } }
-      };
-
-      navigator.mediaDevices
-        .getUserMedia(constraints)
-        .then(vstream => {
-          window.stream = vstream;
-          document.querySelector("#capture").srcObject = vstream;
-          dq.addClass("#video-container", "livecard-fade-show");
-        })
-        .catch(error => {
-          dq.css('.livecard-spinner', 'display', 'none');
-          onFailure(0);
-        });
-    }
   }
 };
 

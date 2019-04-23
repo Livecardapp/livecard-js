@@ -24,7 +24,7 @@
         },
         onFailure: function (errorCode) {
           console.log('startVideoRecording failure: ' + errorCode);
-          if (errorCode === LiveCardError.RECORDING_NOT_SUPPORTED) {
+          if (errorCode === LiveCard.ErrorType.RECORDING_NOT_SUPPORTED) {
             //Client can show own UI for case of webcam recording not supported and expose some UI to choose a file from hd, which triggers LiveCard.selectVideoFile()
             //Or can use our own modal as here
             setTimeout(function () {

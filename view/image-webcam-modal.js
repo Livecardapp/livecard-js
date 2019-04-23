@@ -71,6 +71,31 @@ class ImageWebcamModal {
     window.stream.getTracks().forEach(function (curTrack) { curTrack.stop(); });
     this.onSuccess(canvas.toDataURL("image/jpeg"));
   }
+  // PRIVATE
+
+  _showRecordingUI(onFailure) {
+    if (typeof navigator.mediaDevices === 'undefined' || navigator.mediaDevices === null)
+      return onFailure(0);
+
+    dq.css('.livecard-spinner', 'display', 'block');
+
+    const constraints = {
+      audio: true,
+      video: { width: { ideal: 1920, min: 1280 }, height: { ideal: 1080, min: 720 } }
+    };
+
+    navigator.mediaDevices
+      .getUserMedia(constraints)
+      .then(vstream => {
+        window.stream = vstream;
+        document.querySelector("#capture").srcObject = vstream;
+        dq.addClass("#video-container", "livecard-fade-show");
+      })
+      .catch(error => {
+        dq.css('.livecard-spinner', 'display', 'none');
+        onFailure(0);
+      });
+  }
 
 }
 

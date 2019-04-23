@@ -1,4 +1,5 @@
 import dq from './dquery';
+import VideoModel from '../model/video';
 import WebcamMixin from './webcam-mixin';
 
 class VideoModal {
@@ -7,10 +8,7 @@ class VideoModal {
     this.isMobile = isMobile;
     this.onSuccess = onSuccess;
     this.onFailure = onFailure;
-
-    this.recordedBlobs = [];
-    this.mediaRecorder = null;
-
+    this.videoModel = new VideoModel();
     Object.assign(this, WebcamMixin());
   }
 
@@ -47,7 +45,7 @@ class VideoModal {
     dq.click('#btnPlay', () => this.btnPlayClick());
     dq.click('#btnUse', () => this.btnUseClick());
 
-    const _showRecordingUI = this._showRecordingUI.bind(this);
+    const _showRecordingView = this._showRecordingView.bind(this);
     const onFailure = this.onFailure;
     dq.click('#create_video_card_btn', () => {
       dq.addClass('#create_video_instructions', 'livecard-fade-out');
@@ -59,49 +57,26 @@ class VideoModal {
         dq.addClass('#video-container', 'livecard-fade-show');
         setTimeout(() => { dq.css('#video-container', 'display', 'block'); }, 400);
       }, 400);
-      _showRecordingUI(onFailure);
+      _showRecordingView(onFailure);
     });
   }
 
   btnRecordClick() {
-    this.recordedBlobs = [];
-    var options = { mimeType: "video/webm;codecs=vp9" };
-    if (window.MediaRecorder != undefined) {
-      try {
-        if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-          console.log(options.mimeType + " is not Supported");
-          options = { mimeType: "video/webm;codecs=vp8" };
-          if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-            console.log(options.mimeType + " is not Supported");
-            options = { mimeType: "video/webm" };
-            if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-              console.log(options.mimeType + " is not Supported");
-              options = { mimeType: "" };
-            }
-          }
-        }
-        this.mediaRecorder = new MediaRecorder(window.stream, options);
-      } catch (e) {
-        console.error("Exception while creating MediaRecorder: " + e);
-        return;
-      }
-    }
-    console.log("Created MediaRecorder", this.mediaRecorder, "with options", options);
-    this.mediaRecorder.ondataavailable = this._handleDataAvailable.bind(this);
-    this.mediaRecorder.start(10); // collect 10ms of data
-    console.log("MediaRecorder started", this.mediaRecorder);
+    this.videoModel.start();
     dq.css("#btnRecord", 'display', "none");
     dq.css("#btnStop", 'display', "inline");
   }
 
   btnStopClick() {
-    this.mediaRecorder.stop();
-    console.log("Recorded Blobs: ", this.recordedBlobs.length);
+    this.videoModel.stop();
     dq.css("#btnStop", 'display', "none");
     dq.css("#btnPlay", 'display', "inline");
     dq.css("#btnRetake", 'display', "inline");
     dq.css("#btnUse", 'display', "inline");
-    this._showStaticVideo();
+
+    // show static video
+    document.querySelector("#recorded").src = this.videoModel.buffer();
+
     dq.css("#capture", 'display', "none");
     dq.css("#recorded", 'display', "block");
   }
@@ -111,7 +86,7 @@ class VideoModal {
   }
 
   btnRetakeClick() {
-    this.recordedBlobs = [];
+    this.videoModel.reset();
     dq.css("#recorded", 'display', "none");
     dq.css("#capture", 'display', "block");
     dq.css("#btnPlay", 'display', "none");
@@ -123,24 +98,24 @@ class VideoModal {
   btnUseClick() {
     dq.css("#video-container", 'display', "none");
     document.getElementById("recorded").pause();
-    window.stream.getTracks().forEach(function (curTrack) { curTrack.stop(); });
     this.hide();
-    this.recordedBlobs.length > 0 ? this.onSuccess() : this.onFailure(3);
+    this.videoModel.stageVideoForUpload() ? this.onSuccess() : this.onFailure(3);
   }
 
   // PRIVATE
 
-  _handleDataAvailable(evt) {
-    if (typeof window.MediaRecorder === 'undefined') return;
-    if (evt.data && evt.data.size === 0) return;
-    this.recordedBlobs.push(evt.data);
+  async _showRecordingView(onFailure) {
+    try {
+      dq.css('.livecard-spinner', 'display', 'block');
+      const result = await this.videoModel.init();
+      if (typeof result.stream !== 'undefined')
+        document.querySelector("#capture").srcObject = result.stream;
+      dq.addClass("#video-container", "livecard-fade-show");
+    } catch (error) {
+      onFailure(0);
+    }
   }
 
-  _showStaticVideo() {
-    const recordedVideo = document.querySelector("#recorded");
-    const superBuffer = new Blob(this.recordedBlobs, { type: "video/webm" });
-    recordedVideo.src = window.URL.createObjectURL(superBuffer);
-  }
 }
 
 export default VideoModal;
