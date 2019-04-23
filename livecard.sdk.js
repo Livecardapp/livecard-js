@@ -112,7 +112,6 @@ const showGiftTextInput = (params) => {
     Context.modal = new MessageModal(ModalType.TEXT);
     Context.modal.inject(params.showIntro, (value) => {
       Context.giftMessage = value;
-      console.log('Context', Context);
       params.onSuccess();
     });
   }
@@ -177,7 +176,6 @@ const showPhoneInput = (params) => {
 
     const onSuccess = (value) => {
       Context.recipientPhone = value;
-      console.log('Context', Context);
       params.onSuccess();
     };
 
