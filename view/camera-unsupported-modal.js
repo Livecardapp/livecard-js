@@ -1,10 +1,9 @@
 import dq from './dquery';
 
 class CameraUnsupportedModal {
-  constructor(tag, onSuccess, onFailure) {
+  constructor(tag, onSuccess) {
     this.tag = tag;
     this.onSuccess = onSuccess;
-    this.onFailure = onFailure;
   }
 
   inject() {
@@ -12,12 +11,15 @@ class CameraUnsupportedModal {
     const remove = this.remove;
     dq.click("#btnChooseVideo", () => { dq.click("#inputVideo"); });
     const onSuccess = this.onSuccess;
-    const onFailure = this.onFailure;
     dq.change("#inputVideo", () => {
-      document.querySelector("#inputVideo").files.length === 0 ? onFailure(1) : onSuccess();
+      if (document.querySelector("#inputVideo").files.length > 0) onSuccess();
       remove();
     });
     dq.click('.livecard-modal-close', () => { remove(); });
+  }
+
+  show() {
+    dq.addClass('#capture_not_supported_modal', 'show');
   }
 
   remove() {

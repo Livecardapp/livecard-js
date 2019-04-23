@@ -3,6 +3,7 @@ import MessageModal from './view/message-modal';
 import ImageModal from './view/image-modal';
 import ImageWebcamModal from './view/image-webcam-modal';
 import CardModal from './view/card-modal';
+import CameraUnsupportedModal from './view/camera-unsupported-modal';
 
 /**
  * @file See {@link LiveCard} for library properties and methods
@@ -65,6 +66,7 @@ const ModalType = {
   IMAGE: 1,
   TEXT: 2,
   CARD: 3,
+  UNSUPPORTED: 4,
 };
 
 let licenseKey = null;
@@ -188,9 +190,18 @@ const showPhoneInput = (params) => {
 /**
  * Show modal informing user that video recording is not supported
  */
-const showRecordingNotSupported = () => {
-  // this.showModal("#capture_not_supported_modal");
-  console.log('not supported');
+const showRecordingNotSupported = (params) => {
+  if (Context.modal !== null && Context.modal.type !== ModalType.UNSUPPORTED) {
+    Context.modal.remove();
+    Context.modal = null;
+  }
+
+  if (Context.modal === null) {
+    Context.modal = new CameraUnsupportedModal(ModalType.UNSUPPORTED, params.onSuccess);
+    Context.modal.inject();
+  }
+
+  Context.modal.show();
 };
 
 export {
