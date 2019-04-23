@@ -1,5 +1,5 @@
 import dq from './dquery';
-import VideoModel from '../model/video';
+import VideoCameraModel from '../model/video-camera';
 import WebcamMixin from './webcam-mixin';
 
 class VideoModal {
@@ -8,7 +8,7 @@ class VideoModal {
     this.isMobile = isMobile;
     this.onSuccess = onSuccess;
     this.onFailure = onFailure;
-    this.videoModel = new VideoModel();
+    this.camera = new VideoCameraModel();
     Object.assign(this, WebcamMixin());
   }
 
@@ -62,20 +62,20 @@ class VideoModal {
   }
 
   btnRecordClick() {
-    this.videoModel.start();
+    this.camera.start();
     dq.css("#btnRecord", 'display', "none");
     dq.css("#btnStop", 'display', "inline");
   }
 
   btnStopClick() {
-    this.videoModel.stop();
+    this.camera.stop();
     dq.css("#btnStop", 'display', "none");
     dq.css("#btnPlay", 'display', "inline");
     dq.css("#btnRetake", 'display', "inline");
     dq.css("#btnUse", 'display', "inline");
 
     // show static video
-    document.querySelector("#recorded").src = this.videoModel.buffer();
+    document.querySelector("#recorded").src = this.camera.buffer();
 
     dq.css("#capture", 'display', "none");
     dq.css("#recorded", 'display', "block");
@@ -86,7 +86,7 @@ class VideoModal {
   }
 
   btnRetakeClick() {
-    this.videoModel.reset();
+    this.camera.reset();
     dq.css("#recorded", 'display', "none");
     dq.css("#capture", 'display', "block");
     dq.css("#btnPlay", 'display', "none");
@@ -99,19 +99,20 @@ class VideoModal {
     dq.css("#video-container", 'display', "none");
     document.getElementById("recorded").pause();
     this.hide();
-    this.videoModel.stageVideoForUpload() ? this.onSuccess() : this.onFailure(3);
+    this.camera.stageVideoForUpload() ? this.onSuccess() : this.onFailure(3);
   }
 
   // PRIVATE
 
   async _showRecordingView(onFailure) {
     try {
-      dq.css('.livecard-spinner', 'display', 'block');
-      const result = await this.videoModel.init();
+      this.showSpinner();
+      const result = await this.camera.init();
       if (typeof result.stream !== 'undefined')
         document.querySelector("#capture").srcObject = result.stream;
       dq.addClass("#video-container", "livecard-fade-show");
     } catch (error) {
+      this.hideSpinner();
       onFailure(0);
     }
   }

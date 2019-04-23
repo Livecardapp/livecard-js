@@ -1,6 +1,6 @@
 import { WebcamVideoRecorder } from '../lib/webcam';
 
-class VideoModel {
+class VideoCameraModel {
   constructor() {
     this.type = 0;
     this.recorder = null;
@@ -48,4 +48,4 @@ class VideoModel {
   }
 }
 
-export default VideoModel;
+export default VideoCameraModel;

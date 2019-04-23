@@ -1,11 +1,13 @@
 import dq from './dquery';
 import WebcamMixin from './webcam-mixin';
+import ImageCameraModel from '../model/image-camera';
 
 class ImageWebcamModal {
   constructor(tag, onSuccess, onFailure) {
     this.tag = tag;
     this.onSuccess = onSuccess;
     this.onFailure = onFailure;
+    this.camera = new ImageCameraModel();
     Object.assign(this, WebcamMixin());
   }
 
@@ -68,33 +70,21 @@ class ImageWebcamModal {
   btnUseClick() {
     const canvas = document.getElementById("imgCanvas");
     this.hide();
-    window.stream.getTracks().forEach(function (curTrack) { curTrack.stop(); });
+    this.camera.streamStop();
     this.onSuccess(canvas.toDataURL("image/jpeg"));
   }
   // PRIVATE
 
-  _showRecordingUI(onFailure) {
-    if (typeof navigator.mediaDevices === 'undefined' || navigator.mediaDevices === null)
-      return onFailure(0);
-
-    dq.css('.livecard-spinner', 'display', 'block');
-
-    const constraints = {
-      audio: true,
-      video: { width: { ideal: 1920, min: 1280 }, height: { ideal: 1080, min: 720 } }
-    };
-
-    navigator.mediaDevices
-      .getUserMedia(constraints)
-      .then(vstream => {
-        window.stream = vstream;
-        document.querySelector("#capture").srcObject = vstream;
-        dq.addClass("#video-container", "livecard-fade-show");
-      })
-      .catch(error => {
-        dq.css('.livecard-spinner', 'display', 'none');
-        onFailure(0);
-      });
+  async _showRecordingUI(onFailure) {
+    try {
+      this.showSpinner();
+      const stream = await this.camera.init();
+      document.querySelector("#capture").srcObject = stream;
+      dq.addClass("#video-container", "livecard-fade-show");
+    } catch (error) {
+      this.hideSpinner();
+      onFailure(0);
+    }
   }
 
 }
