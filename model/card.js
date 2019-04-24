@@ -1,13 +1,8 @@
+import ErrorType from '../lib/errors';
 import LCRequest from '../lib/request';
-import { LCMessage, LCMessageType } from '../model/message';
+import { MessageModel, MessageModelType } from '../model/message';
 
-const LCCardError = {
-  RECIPIENT_PHONE_MISSING: 0,
-  MESSAGE_MISSING: 1,
-  CREATE_CARD_ERROR: 2,
-};
-
-class LCCard {
+class CardModel {
   constructor(recipientPhoneRequired = false) {
     this.recipientPhoneRequired = recipientPhoneRequired;
     this.recipientPhone = null;
@@ -15,30 +10,28 @@ class LCCard {
   }
 
   setRecipientPhoneNumber(phoneNumber) {
-    if (typeof phoneNumber !== 'string' || phoneNumber.length === 0) return false;
+    if (typeof phoneNumber !== 'string' || phoneNumber.length === 0) 
+      return false;
     this.recipientPhone = phoneNumber;
     return true;
   }
 
   setMessage(message) {
     if (typeof message !== 'object' || message === null) return false;
-    if (!(message instanceof LCMessage)) return false;
+    if (!(message instanceof MessageModel)) return false;
     this.message = message;
     return true;
   }
 
   validate() {
     if (this.recipientPhoneRequired && this.recipientPhone === null)
-      return LCCardError.RECIPIENT_PHONE_MISSING;
+      return ErrorType.MISSING_PHONE;
 
     if (this.message === null)
-      return LCCardError.MESSAGE_MISSING;
+      return ErrorType.MISSING_TEXT;
 
     const messageErrorCode = this.message.validate();
-    if (messageErrorCode !== null)
-      return messageErrorCode;
-
-    return null;
+    return messageErrorCode === null ? null : messageErrorCode;
   }
 
   async save(licenseKey, liveCardId) {
@@ -56,26 +49,26 @@ class LCCard {
     if (this.recipientPhone !== null)
       body['card[recipient_phone_number]'] = this.recipientPhone;
 
-    if (this.message.type === LCMessageType.TEXT) {
+    if (this.message.type === MessageModelType.TEXT) {
       body['card[gift_message]'] = this.message.content;
-    } else if (this.message.type === LCMessageType.IMAGE) {
+    } else if (this.message.type === MessageModelType.IMAGE) {
       body['card[file]'] = this.message.content;
     }
 
     try {
       const data = await request.post('cards', headers, body);
-      if (this.messageType === 'video') {
-        const videoRequest = new LCRequest(baseUrl);
-        const videoBody = {};
 
-        videoBody['video[file]'] = this.message.content;
-        videoBody['video[card_id]'] = data.card.id;
-
-        videoData = await videoRequest.post('videos/upload', headers, videoBody);
-        return Promise.resolve({ liveCardId, videoUrl: videoData.card.video_url.replace('video.mov', 'video_trans.mp4') });
-      } else {
+      if (this.messageType !== 'video')
         return Promise.resolve({ liveCardId, imageUrl: data.card.image_url });
-      }
+
+      const videoRequest = new LCRequest(baseUrl);
+      const videoBody = {};
+
+      videoBody['video[file]'] = this.message.content;
+      videoBody['video[card_id]'] = data.card.id;
+
+      videoData = await videoRequest.post('videos/upload', headers, videoBody);
+      return Promise.resolve({ liveCardId, videoUrl: videoData.card.video_url.replace('video.mov', 'video_trans.mp4') });
     } catch (error) {
       console.log(error.message);
       return Promise.reject(new Error(LCCardError.CREATE_CARD_ERROR));
@@ -83,7 +76,4 @@ class LCCard {
   }
 }
 
-export {
-  LCCardError,
-  LCCard
-};
+export default CardModel;
