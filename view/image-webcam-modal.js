@@ -1,6 +1,7 @@
 import dq from './dquery';
 import WebcamMixin from './webcam-mixin';
 import ImageCameraModel from '../model/image-camera';
+import ErrorType from '../lib/errors';
 
 class ImageWebcamModal {
   constructor(tag, onSuccess, onFailure) {
@@ -83,7 +84,7 @@ class ImageWebcamModal {
       dq.addClass("#video-container", "livecard-fade-show");
     } catch (error) {
       this.hideSpinner();
-      onFailure(0);
+      onFailure(ErrorType.RECORDING_NOT_SUPPORTED);
     }
   }
 

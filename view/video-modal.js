@@ -1,6 +1,7 @@
 import dq from './dquery';
 import VideoCameraModel from '../model/video-camera';
 import WebcamMixin from './webcam-mixin';
+import ErrorType from '../lib/errors';
 
 class VideoModal {
   constructor(tag, isMobile, onSuccess, onFailure) {
@@ -26,7 +27,8 @@ class VideoModal {
 
     if (this.isMobile) {
       dq.change("#inputVideo", () => {
-        document.querySelector("#inputVideo").files.length === 0 ? this.onFailure(1) : this.onSuccess();
+        document.querySelector("#inputVideo").files.length === 0 ?
+          this.onFailure(ErrorType.NO_VIDEO_SELECTED) : this.onSuccess();
       });
 
       const hide = this.hide.bind(this);
@@ -99,7 +101,7 @@ class VideoModal {
     dq.css("#video-container", 'display', "none");
     document.getElementById("recorded").pause();
     this.hide();
-    this.camera.stageVideoForUpload() ? this.onSuccess() : this.onFailure(3);
+    this.camera.stageVideoForUpload() ? this.onSuccess() : this.onFailure(ErrorType.RECORDING_FAILED);
   }
 
   // PRIVATE
@@ -113,7 +115,7 @@ class VideoModal {
       dq.addClass("#video-container", "livecard-fade-show");
     } catch (error) {
       this.hideSpinner();
-      onFailure(0);
+      onFailure(ErrorType.RECORDING_NOT_SUPPORTED);
     }
   }
 
