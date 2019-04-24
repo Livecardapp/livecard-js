@@ -19,6 +19,7 @@ class CardModel {
   setMessage(message) {
     if (typeof message !== 'object' || message === null) return false;
     if (!(message instanceof MessageModel)) return false;
+    if (message.validate() !== null) return false;
     this.message = message;
     return true;
   }
@@ -71,7 +72,7 @@ class CardModel {
       return Promise.resolve({ liveCardId, videoUrl: videoData.card.video_url.replace('video.mov', 'video_trans.mp4') });
     } catch (error) {
       console.log(error.message);
-      return Promise.reject(new Error(LCCardError.CREATE_CARD_ERROR));
+      return Promise.reject(new Error(ErrorType.CREATE_CARD_ERROR));
     }
   }
 }

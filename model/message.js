@@ -15,7 +15,7 @@ class MessageModel {
     return this._setContentAsBlobFromFiles(MessageModelType.VIDEO, files);
   }
 
-  setContentAsVideoFromBlobs(recordedBlobs) {
+  setContentAsVideoFromCamera(recordedBlobs) {
     this.content = new Blob(recordedBlobs, { type: 'video/webm' });
     this.type = MessageModelType.VIDEO;
     return true;
@@ -25,12 +25,12 @@ class MessageModel {
     return this._setContentAsBlobFromFiles(MessageModelType.IMAGE, files);
   }
 
-  setContentAsImageFromDataURL(url) {
+  setContentAsImageFromCamera(canvasDataUrl) {
     // method creates image from canvas base64 data url string
-    if (typeof url !== 'string' || url.length === 0)
+    if (typeof canvasDataUrl !== 'string' || canvasDataUrl.length === 0)
       return false;
 
-    const parts = url.split(',');
+    const parts = canvasDataUrl.split(',');
     const mime = parts[0].match(/:(.*?);/)[1];
 
     if (parts[0].indexOf('base64') !== -1) {
@@ -54,7 +54,8 @@ class MessageModel {
   }
 
   setContentAsText(text) {
-    if (typeof text !== 'string' || text === null) return false;
+    if (typeof text !== 'string' || text === null) 
+      return false;
     this.content = text;
     this.type = MessageModelType.TEXT;
     return true;
