@@ -1,7 +1,7 @@
 import dq from './dquery';
 import IMask from 'imask';
 
-class CardModal {
+class PhoneModal {
   constructor(modalTag) {
     this.tag = modalTag;
   }
@@ -66,4 +66,4 @@ class CardModal {
 
 };
 
-export default CardModal;
+export default PhoneModal;

@@ -17,6 +17,7 @@
     let lastView = 0;
 
     function createVideoMessage() {
+      let lastView = 1;
       LiveCard.startVideoRecording({
         showIntro: true, //Client can opt out of showing our intro by passing false here
         onSuccess: function () {
@@ -25,28 +26,25 @@
         onFailure: function (errorCode) {
           console.log('startVideoRecording failure: ' + errorCode);
           if (errorCode === LiveCard.ErrorType.RECORDING_NOT_SUPPORTED) {
-            //Client can show own UI for case of webcam recording not supported and expose some UI to choose a file from hd, which triggers LiveCard.selectVideoFile()
-            //Or can use our own modal as here
-            setTimeout(function () {
-              LiveCard.showRecordingNotSupported();
-            }, 400);
+            // Client can show own UI for case of webcam recording not supported and expose some UI 
+            // to choose a file from hd, which triggers LiveCard.selectVideoFile()
+            // Or can use our own modal as here
+            setTimeout(function () { LiveCard.showRecordingNotSupported(); }, 400);
           }
         }
       });
     }
 
     function createGiftMessage() {
-      lastView = 1;
+      lastView = 2;
       LiveCard.showGiftTextInput({
         showIntro: true, //Client can opt out of showing our intro by passing false here
-        onSuccess: () => {
-          collectPhoneNumber();
-        }
+        onSuccess: () => { collectPhoneNumber(); },
       });
     }
 
     function createImageMessage() {
-      lastView = 2;
+      lastView = 3;
       LiveCard.showImageInput({
         onFailure: () => {
           console.log('failed image');
@@ -64,9 +62,12 @@
         onBack: () => {
           switch (lastView) {
             case 1:
-              createGiftMessage();
+              createVideoMessage();
               break;
             case 2:
+              createGiftMessage();
+              break;
+            case 3:
               createImageMessage();
               break;
             default:

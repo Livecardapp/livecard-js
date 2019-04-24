@@ -2,7 +2,7 @@ import VideoModal from './view/video-modal';
 import MessageModal from './view/message-modal';
 import ImageModal from './view/image-modal';
 import ImageWebcamModal from './view/image-webcam-modal';
-import CardModal from './view/card-modal';
+import PhoneModal from './view/phone-modal';
 import CameraUnsupportedModal from './view/camera-unsupported-modal';
 import ErrorType from './lib/errors';
 
@@ -11,13 +11,15 @@ import ErrorType from './lib/errors';
  * @author LiveCard LLC
  */
 
+let licenseKey = null;
+// (Optional) Controls whether the SDK requires a recipient phone to create a card. Set to `false` 
+// if you do not plan to collect recipient phone for SMS delivery during the checkout process.
+let requireRecipientPhone = true;
+
 const Context = {
-  // (Optional) Controls whether the SDK requires a recipient phone to create a card. Set to `false` 
-  // if you do not plan to collect recipient phone for SMS delivery during the checkout process.
-  requireRecipientPhone: true,
   isMobile: false,
-  liveCardId: '',
-  recipientPhone: '',
+  liveCardId: null,
+  recipientPhone: null,
   createCardSuccessCallback: null,
   createCardFailureCallback: null,
   debug: false,
@@ -32,8 +34,6 @@ const ModalType = {
   CARD: 3,
   UNSUPPORTED: 4,
 };
-
-let licenseKey = null;
 
 /**
  * Begin the video capture flow (display in modal)
@@ -137,7 +137,7 @@ const showPhoneInput = (params) => {
   }
 
   if (Context.modal === null) {
-    Context.modal = new CardModal(ModalType.CARD);
+    Context.modal = new PhoneModal(ModalType.CARD);
     const onBack = () => {
       Context.modal.remove();
       Context.modal = null;
@@ -173,8 +173,9 @@ const showRecordingNotSupported = (params) => {
 };
 
 export {
-  licenseKey,
   ErrorType,
+  licenseKey,
+  requireRecipientPhone,
   startVideoRecording,
   showGiftTextInput,
   showImageInput,
