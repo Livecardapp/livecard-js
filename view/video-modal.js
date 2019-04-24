@@ -2,6 +2,7 @@ import dq from './dquery';
 import VideoCameraModel from '../model/video-camera';
 import WebcamMixin from './webcam-mixin';
 import ErrorType from '../lib/errors';
+import { MessageModel } from '../model/message';
 
 class VideoModal {
   constructor(tag, isMobile, onSuccess, onFailure) {
@@ -27,8 +28,11 @@ class VideoModal {
 
     if (this.isMobile) {
       dq.change("#inputVideo", () => {
-        document.querySelector("#inputVideo").files.length === 0 ?
-          this.onFailure(ErrorType.NO_VIDEO_SELECTED) : this.onSuccess();
+        if (document.querySelector("#inputVideo").files.length === 0)
+          return this.onFailure(ErrorType.NO_VIDEO_SELECTED);
+        const message = new MessageModel();
+        message.setContentAsVideoFromFiles(document.querySelector("#inputVideo").files);
+        this.onSuccess(message);
       });
 
       const hide = this.hide.bind(this);
@@ -101,7 +105,11 @@ class VideoModal {
     dq.css("#video-container", 'display', "none");
     document.getElementById("recorded").pause();
     this.hide();
-    this.camera.stageVideoForUpload() ? this.onSuccess() : this.onFailure(ErrorType.RECORDING_FAILED);
+    if (!this.camera.stageVideoForUpload())
+      return this.onFailure(ErrorType.RECORDING_FAILED);
+    const message = new MessageModel();
+    message.setContentAsVideoFromCamera(this.camera.data());
+    this.onSuccess(message);
   }
 
   // PRIVATE

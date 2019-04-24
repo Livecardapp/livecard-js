@@ -1,6 +1,7 @@
 import dq from './dquery';
 import WebcamMixin from './webcam-mixin';
 import ImageCameraModel from '../model/image-camera';
+import { MessageModel } from '../model/message';
 import ErrorType from '../lib/errors';
 
 class ImageWebcamModal {
@@ -72,8 +73,11 @@ class ImageWebcamModal {
     const canvas = document.getElementById("imgCanvas");
     this.hide();
     this.camera.streamStop();
-    this.onSuccess(canvas.toDataURL("image/jpeg"));
+    const message = new MessageModel();
+    message.setContentAsImageFromCamera(canvas.toDataURL("image/jpeg"));
+    this.onSuccess(message);
   }
+
   // PRIVATE
 
   async _showRecordingUI(onFailure) {

@@ -1,4 +1,5 @@
 import dq from './dquery';
+import { MessageModel } from '../model/message';
 
 class MessageModal {
   constructor(modalTag) {
@@ -25,7 +26,9 @@ class MessageModal {
     const hide = this.hide.bind(this);
     dq.click('#submit_text_card_btn', () => {
       hide();
-      onDone(dq.val('#textGiftMessage'));
+      const message = new MessageModel();
+      message.setContentAsText(dq.val('#textGiftMessage'));
+      onDone(message);
     });
 
     // close button

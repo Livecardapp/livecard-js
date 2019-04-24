@@ -16,18 +16,13 @@ const Context = {
   // if you do not plan to collect recipient phone for SMS delivery during the checkout process.
   requireRecipientPhone: true,
   isMobile: false,
-  usingFileInput: false,
   liveCardId: '',
-  recordedBlobs: [],
-  snapshotDataUrl: null,
-  mediaRecorder: null,
-  giftMessage: '',
   recipientPhone: '',
-  messageType: 'text',
   createCardSuccessCallback: null,
   createCardFailureCallback: null,
   debug: false,
   modal: null,
+  message: null,
 };
 
 const ModalType = {
@@ -48,15 +43,18 @@ let licenseKey = null;
  * @param {captureFailure} params.onFailure  Callback for failed recording
  */
 const startVideoRecording = (params) => {
-  Context.messageType = 'video';
-
   if (Context.modal !== null && Context.modal.type !== ModalType.VIDEO) {
     Context.modal.remove();
     Context.modal = null;
   }
 
   if (Context.modal === null) {
-    Context.modal = new VideoModal(ModalType.VIDEO, Context.isMobile, params.onSuccess, params.onFailure);
+    const onSuccessFromVideoInput = (videoMessage) => {
+      Context.message = videoMessage;
+      console.log('onSuccess video message', Context.message);
+      params.onSuccess();
+    };
+    Context.modal = new VideoModal(ModalType.VIDEO, Context.isMobile, onSuccessFromVideoInput, params.onFailure);
     Context.modal.inject(params.showIntro);
   }
 
@@ -70,8 +68,6 @@ const startVideoRecording = (params) => {
  * @param {captureSuccess} params.callback  Callback after user has entered a text gift message
  */
 const showGiftTextInput = (params) => {
-  Context.messageType = 'text';
-
   if (Context.modal !== null && Context.modal.type !== ModalType.TEXT) {
     Context.modal.remove();
     Context.modal = null;
@@ -79,10 +75,12 @@ const showGiftTextInput = (params) => {
 
   if (Context.modal === null) {
     Context.modal = new MessageModal(ModalType.TEXT);
-    Context.modal.inject(params.showIntro, (value) => {
-      Context.giftMessage = value;
+    const onSuccessFromTextInput = (textMessage) => {
+      Context.message = textMessage;
+      console.log('onSuccess text message', Context.message);
       params.onSuccess();
-    });
+    };
+    Context.modal.inject(params.showIntro, onSuccessFromTextInput);
   }
 
   Context.modal.show();
@@ -95,29 +93,32 @@ const showGiftTextInput = (params) => {
  * @param {captureFailure} params.onFailure  Callback for failed image capture
  */
 const showImageInput = (params) => {
-  Context.messageType = 'image';
-  Context.usingFileInput = Context.isMobile;
-
   if (Context.modal !== null && Context.modal.type !== ModalType.IMAGE) {
     Context.modal.remove();
     Context.modal = null;
   }
 
   if (Context.modal === null) {
-    const onSuccess = (type) => {
-      if (type === 0) {
+    const onSuccessFromImageSourceSelection = (imageMessageFromFile) => {
+      if (imageMessageFromFile !== null) {
+        Context.message = imageMessageFromFile;
+        console.log('onSuccess file image message', Context.message);
         params.onSuccess();
-      } else if (type === 1) {
-        const onCamSuccess = (url) => {
-          Context.snapshotDataUrl = url;
-          params.onSuccess();
-        };
-        Context.modal = new ImageWebcamModal(ModalType.IMAGE, onCamSuccess, params.onFailure);
-        Context.modal.inject();
-        Context.modal.show();
+        return;
       }
+
+      const onSuccessFromCamera = (imageMessageFromCamera) => {
+        Context.message = imageMessageFromCamera;
+        console.log('onSuccess camera image message', Context.message);
+        params.onSuccess();
+      };
+
+      Context.modal = new ImageWebcamModal(ModalType.IMAGE, onSuccessFromCamera, params.onFailure);
+      Context.modal.inject();
+      Context.modal.show();
     };
-    Context.modal = new ImageModal(ModalType.IMAGE, Context.isMobile, onSuccess, params.onFailure);
+
+    Context.modal = new ImageModal(ModalType.IMAGE, Context.isMobile, onSuccessFromImageSourceSelection, params.onFailure);
     Context.modal.inject();
   }
 
@@ -206,9 +207,6 @@ document.addEventListener('DOMContentLoaded', () => {
     Context.isMobile = false;
   }
 
-  // init file input flag
-  Context.usingFileInput = Context.isMobile;
-
   // init live card id
   let guid = '';
   const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -218,5 +216,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
   Context.liveCardId = guid;
 
-  console.log('Done init: ', Context.isMobile, Context.usingFileInput, Context.liveCardId);
+  console.log('Done init: ', Context.isMobile, Context.liveCardId);
 });

@@ -38,6 +38,10 @@ class VideoCameraModel {
     return this.recorder.bufferVideo();
   }
 
+  data() {
+    return this.recorder.blobs;
+  }
+
   reset() {
     this.recorder.reset();
   }

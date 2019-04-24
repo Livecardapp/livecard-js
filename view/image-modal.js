@@ -1,5 +1,6 @@
 import dq from './dquery';
 import ErrorType from '../lib/errors';
+import { MessageModel } from '../model/message';
 
 class ImageModal {
   constructor(tag, isMobile, onSuccess, onFailure) {
@@ -13,8 +14,12 @@ class ImageModal {
     dq.insert('#livecard-wrapper', this.template());
 
     dq.change("#inputImage", () => {
-      document.querySelector("#inputImage").files.length === 0 ?
-        this.onFailure(ErrorType.NO_IMAGE_SELECTED) : this.onSuccess(0);
+      if (document.querySelector("#inputImage").files.length === 0)
+        return this.onFailure(ErrorType.NO_IMAGE_SELECTED);
+
+      const message = new MessageModel();
+      message.setContentAsImageFromFiles(document.querySelector("#inputImage").files);
+      this.onSuccess(message);
     });
 
     if (this.isMobile) return;
@@ -24,7 +29,7 @@ class ImageModal {
 
     dq.click('#btnImageFromWebcam', () => {
       remove();
-      onSuccess(1);
+      onSuccess(null);
     });
 
     dq.click('#btnImageFromDisk', () => { dq.click('#inputImage'); });
