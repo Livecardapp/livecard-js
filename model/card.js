@@ -2,15 +2,19 @@ import ErrorType from '../lib/errors';
 import LCRequest from '../lib/request';
 import { MessageModel, MessageModelType } from '../model/message';
 
+const baseUrl = 'https://api.livecard.cards/api';
+
 class CardModel {
-  constructor(recipientPhoneRequired = false) {
+  constructor(licenseKey, liveCardId, recipientPhoneRequired) {
+    this.licenseKey = licenseKey;
+    this.liveCardId = liveCardId;
     this.recipientPhoneRequired = recipientPhoneRequired;
     this.recipientPhone = null;
     this.message = null;
   }
 
   setRecipientPhoneNumber(phoneNumber) {
-    if (typeof phoneNumber !== 'string' || phoneNumber.length === 0) 
+    if (typeof phoneNumber !== 'string' || phoneNumber.length === 0)
       return false;
     this.recipientPhone = phoneNumber;
     return true;
@@ -35,14 +39,13 @@ class CardModel {
     return messageErrorCode === null ? null : messageErrorCode;
   }
 
-  async save(licenseKey, liveCardId) {
+  async setOrder() {
     const errorCode = this.validate();
     if (errorCode !== null)
       return Promise.reject(new Error(errorCode));
 
-    const baseUrl = 'https://api.livecard.cards/api';
     const request = new LCRequest(baseUrl);
-    const headers = { 'Accept': 'application/vnd.LiveCard+json;version=1', 'License-Key': licenseKey };
+    const headers = { 'Accept': 'application/vnd.LiveCard+json;version=1', 'License-Key': this.licenseKey };
     const body = {};
 
     body['card[livecard_id]'] = this.liveCardId;
@@ -73,6 +76,20 @@ class CardModel {
     } catch (error) {
       console.log(error.message);
       return Promise.reject(new Error(ErrorType.CREATE_CARD_ERROR));
+    }
+  }
+
+  async confirmOrder() {
+    const request = new LCRequest(baseUrl);
+    const headers = { 'Accept': 'application/vnd.LiveCard+json;version=1', 'License-Key': this.licenseKey };
+    const body = { 'card[livecard_id]': this.liveCardId, 'card[order_confirmed]': true };
+    try {
+      await request.put('cards/update_order', headers, body);
+      console.log('Order confirmed for LiveCard id ' + this.liveCardId);
+      return Promise.resolve();
+    } catch (error) {
+      console.log(error.message);
+      return Promise.reject(new Error(ErrorType.CONFIRM_CARD_ERROR));
     }
   }
 }
