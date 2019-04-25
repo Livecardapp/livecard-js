@@ -213,6 +213,29 @@ const createCard = async (params) => {
   }
 };
 
+/**
+* Indicates failed request to create or confirm gift message
+*
+* @callback serverFailure
+* @param {LiveCardError} errorCode
+*/
+
+/**
+ * Attempt to confirm gift message record when user completes checkout
+ * @param {Object}  params
+ * @param {confirmSuccess} params.callback  Callback after successful confirmation of gift message record
+ * @param {serverFailure} params.callback  Callback after failure to confirm gift message record
+ */
+const confirmCard = async (params) => {
+  try {
+    const card = new CardModel(Settings.licenseKey, Context.liveCardId);
+    await card.confirmOrder();
+    params.onSuccess();
+  } catch (error) {
+    params.onFailure(error);
+  }
+}
+
 export {
   ErrorType,
   Settings,
@@ -222,6 +245,7 @@ export {
   showPhoneInput,
   showRecordingNotSupported,
   createCard,
+  confirmCard,
 };
 
 // =======================

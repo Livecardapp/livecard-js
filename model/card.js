@@ -5,7 +5,7 @@ import { MessageModel, MessageModelType } from '../model/message';
 const baseUrl = 'https://api.livecard.cards/api';
 
 class CardModel {
-  constructor(licenseKey, liveCardId, recipientPhoneRequired) {
+  constructor(licenseKey, liveCardId, recipientPhoneRequired = false) {
     this.licenseKey = licenseKey;
     this.liveCardId = liveCardId;
     this.recipientPhoneRequired = recipientPhoneRequired;

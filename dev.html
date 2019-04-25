@@ -14,6 +14,7 @@
 
   <script type="text/javascript">
     LiveCard.Settings.licenseKey = "zeGBS3PiwkhBSpn-JDbz";
+    let cardId = null;
     let lastView = 0;
 
     function createVideoMessage() {
@@ -84,12 +85,25 @@
       LiveCard.createCard({
         onSuccess: function (liveCardId, mediaUrl) {
           document.getElementById('submit-order-label').innerHTML = 'Got media url: ' + mediaUrl + ' for LiveCard ID: ' + liveCardId;
+          cardId = liveCardId;
         },
         onFailure: function (error) {
           document.getElementById('submit-order-label').innerHTML = 'createCard error: ' + error;
         }
       });
     }
+
+    function confirmLastOrder() {
+      LiveCard.confirmCard({
+        onSuccess: function () {
+          document.getElementById('confirm-last-order-label').innerHTML = 'Confirmed LiveCard order ' + cardId;
+        },
+        onFailure: function (error) {
+          document.getElementById('confirm-last-order-label').innerHTML = 'Confirm error: ' + error;
+        }
+      });
+    }
+
   </script>
 
 </head>
@@ -99,7 +113,9 @@
   <button onclick="createGiftMessage()">Create Gift Message</button><br><br>
   <button onclick="createImageMessage()">Create Image Message</button><br><br>
   <button id="submit-order" onclick="submitOrder()">Submit Order</button><br><br>
-  <label id="submit-order-label" for="submit-order"></label>  
+  <label id="submit-order-label" for="submit-order"></label><br><br>
+  <button id="confirm-last-order" onclick="confirmLastOrder()">Confirm Order</button><br><br>
+  <label id="confirm-last-order-label" for="confirm-last-order"></label>  
 </body>
 
 </html>
