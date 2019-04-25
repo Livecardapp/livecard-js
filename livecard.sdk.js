@@ -5,6 +5,7 @@ import ImageWebcamModal from './view/image-webcam-modal';
 import PhoneModal from './view/phone-modal';
 import CameraUnsupportedModal from './view/camera-unsupported-modal';
 import ErrorType from './lib/errors';
+import CardModel from './model/card';
 
 /**
  * @file See {@link LiveCard} for library properties and methods
@@ -20,8 +21,6 @@ const Context = {
   isMobile: false,
   liveCardId: null,
   recipientPhone: null,
-  createCardSuccessCallback: null,
-  createCardFailureCallback: null,
   debug: false,
   modal: null,
   message: null,
@@ -172,6 +171,45 @@ const showRecordingNotSupported = (params) => {
   Context.modal.show();
 };
 
+/**
+* Indicates successful request to create gift message
+*
+* @param {string} liveCardId   The unique identifier assigned to this gift message by LiveCard
+* @param {string} imageUrl     The direct URL to the image or video associated with this gift message
+* @callback createSuccess
+*/
+
+/**
+* Indicates successful request to confirm gift message
+*
+* @callback confirmSuccess
+*/
+
+/**
+ * Attempt to save gift message record
+ * @param {Object}  params
+ * @param {createSuccess} params.callback  Callback after successful save of gift message record
+ * @param {serverFailure} params.callback  Callback after failure to save gift message record
+ */
+const createCard = async (params) => {
+  const card = new CardModel(licenseKey, Context.liveCardId, requireRecipientPhone);
+  card.setRecipientPhoneNumber(Context.recipientPhone);
+  card.setMessage(Context.message);
+  const err = card.validate();
+
+  if (err !== null) {
+    params.onFailure(err);
+    return;
+  }
+
+  try {
+    const result = await card.setOrder();
+    params.onSuccess(result.liveCardId, result.mediaUrl);
+  } catch (error) {
+    params.onFailure(error);
+  }
+};
+
 export {
   ErrorType,
   licenseKey,
@@ -181,6 +219,7 @@ export {
   showImageInput,
   showPhoneInput,
   showRecordingNotSupported,
+  createCard,
 };
 
 // =======================

@@ -79,6 +79,17 @@
         }
       });
     }
+
+    function submitOrder() {
+      LiveCard.createCard({
+        onSuccess: function (liveCardId, mediaUrl) {
+          document.getElementById('submit-order-label').innerHTML = 'Got media url: ' + mediaUrl + ' for LiveCard ID: ' + liveCardId;
+        },
+        onFailure: function (error) {
+          document.getElementById('submit-order-label').innerHTML = 'createCard error: ' + error;
+        }
+      });
+    }
   </script>
 
 </head>
@@ -87,6 +98,8 @@
   <button onclick="createVideoMessage()">Create Video Message</button><br><br>
   <button onclick="createGiftMessage()">Create Gift Message</button><br><br>
   <button onclick="createImageMessage()">Create Image Message</button><br><br>
+  <button id="submit-order" onclick="submitOrder()">Submit Order</button><br><br>
+  <label id="submit-order-label" for="submit-order">Hello</label>  
 </body>
 
 </html>

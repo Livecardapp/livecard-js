@@ -33,7 +33,7 @@ class CardModel {
       return ErrorType.MISSING_PHONE;
 
     if (this.message === null)
-      return ErrorType.MISSING_TEXT;
+      return ErrorType.MISSING_MESSAGE;
 
     const messageErrorCode = this.message.validate();
     return messageErrorCode === null ? null : messageErrorCode;
@@ -60,19 +60,26 @@ class CardModel {
     }
 
     try {
-      const data = await request.post('cards', headers, body);
+      const res = await request.post('cards', headers, body);
+      console.log('got response', res);
 
-      if (this.message.type !== MessageModelType.VIDEO)
-        return Promise.resolve({ liveCardId, imageUrl: data.card.image_url });
+      if (res.status !== 200) {
+        throw new Error(ErrorType.CREATE_CARD_ERROR);
+      }
+
+      if (this.message.type === MessageModelType.IMAGE)
+        return Promise.resolve({ liveCardId: this.liveCardId, mediaUrl: res.card.image_url });
+      else if (this.message.type === MessageModelType.TEXT)
+        return Promise.resolve({ liveCardId: this.liveCardId, mediaUrl: null });
 
       const videoRequest = new LCRequest(baseUrl);
       const videoBody = {};
 
       videoBody['video[file]'] = this.message.content;
-      videoBody['video[card_id]'] = data.card.id;
+      videoBody['video[card_id]'] = res.card.id;
 
       videoData = await videoRequest.post('videos/upload', headers, videoBody);
-      return Promise.resolve({ liveCardId, videoUrl: videoData.card.video_url.replace('video.mov', 'video_trans.mp4') });
+      return Promise.resolve({ liveCardId, mediaUrl: videoData.card.video_url.replace('video.mov', 'video_trans.mp4') });
     } catch (error) {
       console.log(error.message);
       return Promise.reject(new Error(ErrorType.CREATE_CARD_ERROR));
