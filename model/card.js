@@ -63,14 +63,12 @@ class CardModel {
       const res = await request.post('cards', headers, body);
       console.log('got response', res);
 
-      if (res.status !== 200) {
+      if (!res.success) {
         throw new Error(ErrorType.CREATE_CARD_ERROR);
       }
 
-      if (this.message.type === MessageModelType.IMAGE)
+      if (this.message.type !== MessageModelType.VIDEO)
         return Promise.resolve({ liveCardId: this.liveCardId, mediaUrl: res.card.image_url });
-      else if (this.message.type === MessageModelType.TEXT)
-        return Promise.resolve({ liveCardId: this.liveCardId, mediaUrl: null });
 
       const videoRequest = new LCRequest(baseUrl);
       const videoBody = {};

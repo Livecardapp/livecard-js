@@ -12,10 +12,13 @@ import CardModel from './model/card';
  * @author LiveCard LLC
  */
 
-let licenseKey = null;
-// (Optional) Controls whether the SDK requires a recipient phone to create a card. Set to `false` 
-// if you do not plan to collect recipient phone for SMS delivery during the checkout process.
-let requireRecipientPhone = true;
+const Settings = {
+  licenseKey: null,
+
+  // (Optional) Controls whether the SDK requires a recipient phone to create a card. Set to `false` 
+  // if you do not plan to collect recipient phone for SMS delivery during the checkout process.
+  requireRecipientPhone: true,
+};
 
 const Context = {
   isMobile: false,
@@ -192,7 +195,7 @@ const showRecordingNotSupported = (params) => {
  * @param {serverFailure} params.callback  Callback after failure to save gift message record
  */
 const createCard = async (params) => {
-  const card = new CardModel(licenseKey, Context.liveCardId, requireRecipientPhone);
+  const card = new CardModel(Settings.licenseKey, Context.liveCardId, Settings.requireRecipientPhone);
   card.setRecipientPhoneNumber(Context.recipientPhone);
   card.setMessage(Context.message);
   const err = card.validate();
@@ -212,8 +215,7 @@ const createCard = async (params) => {
 
 export {
   ErrorType,
-  licenseKey,
-  requireRecipientPhone,
+  Settings,
   startVideoRecording,
   showGiftTextInput,
   showImageInput,
