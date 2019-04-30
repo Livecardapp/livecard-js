@@ -77,7 +77,7 @@ class MessageModel {
 
   _setContentAsBlobFromFiles(type, files) {
     if (files.length === 0) return false;
-    this.content = files[0].slice();
+    this.content = files[0];
     this.type = type;
     return true;
   }
