@@ -2,7 +2,7 @@ import ErrorType from '../lib/errors';
 import LCRequest from '../lib/request';
 import { MessageModel, MessageModelType } from '../model/message';
 
-const baseUrl = 'https://api.livecard.cards/api';
+const domain = 'https://api.livecard.cards/api';
 
 class CardModel {
   constructor(licenseKey, liveCardId, recipientPhoneRequired = false) {
@@ -39,28 +39,28 @@ class CardModel {
     return messageErrorCode === null ? null : messageErrorCode;
   }
 
-  async setOrder() {
+  async createOrder() {
     const errorCode = this.validate();
     if (errorCode !== null)
       return Promise.reject(new Error(errorCode));
 
-    const request = new LCRequest(baseUrl);
-    const headers = { 'Accept': 'application/vnd.LiveCard+json;version=1', 'License-Key': this.licenseKey };
-    const body = {};
+    const request = new LCRequest(domain, 'cards');
 
-    body['card[livecard_id]'] = this.liveCardId;
+    request.setHeader('Accept', 'application/vnd.LiveCard+json;version=1');
+    request.setHeader('License-Key', this.licenseKey);
+    request.setData('card[livecard_id]', this.liveCardId);
 
     if (this.recipientPhone !== null)
-      body['card[recipient_phone_number]'] = this.recipientPhone;
+      request.setData('card[recipient_phone_number]', this.recipientPhone);
 
     if (this.message.type === MessageModelType.TEXT) {
-      body['card[gift_message]'] = this.message.content;
+      request.setData('card[gift_message]', this.message.content);
     } else if (this.message.type === MessageModelType.IMAGE) {
       request.setAttachment('card[file]', this.message.content);
     }
 
     try {
-      const res = await request.post('cards', headers, body);
+      const res = await request.post();
       console.log('got card response', res);
 
       if (!res.success) {
@@ -70,13 +70,13 @@ class CardModel {
       if (this.message.type !== MessageModelType.VIDEO)
         return Promise.resolve({ liveCardId: this.liveCardId, mediaUrl: res.card.image_url });
 
-      const videoRequest = new LCRequest(baseUrl);
-      const videoBody = {};
+      const videoReq = new LCRequest(domain, 'videos/upload');
+      videoReq.setHeader('Accept', 'application/vnd.LiveCard+json;version=1');
+      videoReq.setHeader('License-Key', this.licenseKey);
+      videoReq.setData('video[card_id]', res.card.id);
+      videoReq.setAttachment('video[file]', this.message.content, 'video.mov');
 
-      videoRequest.setAttachment('video[file]', this.message.content, 'video.mov');
-      videoBody['video[card_id]'] = res.card.id;
-
-      const videoRes = await videoRequest.post('videos/upload', headers, videoBody);
+      const videoRes = await videoReq.post();
       console.log('got video response', videoRes.card.video_url.replace('video.mov', 'video_trans.mp4'));
 
       return Promise.resolve({ liveCardId: this.liveCardId, mediaUrl: videoRes.card.video_url.replace('video.mov', 'video_trans.mp4') });
@@ -87,11 +87,15 @@ class CardModel {
   }
 
   async confirmOrder() {
-    const request = new LCRequest(baseUrl);
-    const headers = { 'Accept': 'application/vnd.LiveCard+json;version=1', 'License-Key': this.licenseKey };
-    const body = { 'card[livecard_id]': this.liveCardId, 'card[order_confirmed]': true };
+    const req = new LCRequest(domain, 'cards/update_order');
+    
+    req.setHeader('Accept', 'application/vnd.LiveCard+json;version=1');
+    req.setHeader('License-Key', this.licenseKey);
+    req.setData('card[livecard_id]', this.liveCardId);
+    req.setData('card[order_confirmed]', true);
+
     try {
-      await request.put('cards/update_order', headers, body);
+      await req.put();
       return Promise.resolve();
     } catch (error) {
       console.log(error.message);

@@ -206,7 +206,7 @@ const createCard = async (params) => {
   }
 
   try {
-    const result = await card.setOrder();
+    const result = await card.createOrder();
     params.onSuccess(result.liveCardId, result.mediaUrl);
   } catch (error) {
     params.onFailure(error);
