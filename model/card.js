@@ -56,12 +56,12 @@ class CardModel {
     if (this.message.type === MessageModelType.TEXT) {
       body['card[gift_message]'] = this.message.content;
     } else if (this.message.type === MessageModelType.IMAGE) {
-      body['card[file]'] = this.message.content;
+      request.setAttachment('card[file]', this.message.content);
     }
 
     try {
       const res = await request.post('cards', headers, body);
-      console.log('got response', res);
+      console.log('got card response', res);
 
       if (!res.success) {
         throw new Error(ErrorType.CREATE_CARD_ERROR);
@@ -73,11 +73,13 @@ class CardModel {
       const videoRequest = new LCRequest(baseUrl);
       const videoBody = {};
 
-      videoBody['video[file]'] = this.message.content;
+      videoRequest.setAttachment('video[file]', this.message.content, 'video.mov');
       videoBody['video[card_id]'] = res.card.id;
 
-      videoData = await videoRequest.post('videos/upload', headers, videoBody);
-      return Promise.resolve({ liveCardId, mediaUrl: videoData.card.video_url.replace('video.mov', 'video_trans.mp4') });
+      const videoRes = await videoRequest.post('videos/upload', headers, videoBody);
+      console.log('got video response', videoRes.card.video_url.replace('video.mov', 'video_trans.mp4'));
+
+      return Promise.resolve({ liveCardId: this.liveCardId, mediaUrl: videoRes.card.video_url.replace('video.mov', 'video_trans.mp4') });
     } catch (error) {
       console.log(error.message);
       return Promise.reject(new Error(ErrorType.CREATE_CARD_ERROR));
@@ -90,7 +92,6 @@ class CardModel {
     const body = { 'card[livecard_id]': this.liveCardId, 'card[order_confirmed]': true };
     try {
       await request.put('cards/update_order', headers, body);
-      console.log('Order confirmed for LiveCard id ' + this.liveCardId);
       return Promise.resolve();
     } catch (error) {
       console.log(error.message);

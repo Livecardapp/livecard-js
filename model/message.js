@@ -30,7 +30,6 @@ class MessageModel {
     if (typeof canvasDataUrl !== 'string' || canvasDataUrl.length === 0)
       return false;
 
-    console.log('process image', canvasDataUrl);
     const parts = canvasDataUrl.split(',');
     const mime = parts[0].match(/:(.*?);/)[1];
 
