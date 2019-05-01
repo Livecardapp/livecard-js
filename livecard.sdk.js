@@ -43,6 +43,78 @@ const resetModal = () => {
 }
 
 /**
+ * Begin text gift message capture flow (displays in modal)
+ * @param {Object}  params
+ * @param {boolean} params.showIntro        Controls whether the introductory modal describing the text gift message process is shown
+ * @param {captureSuccess} params.callback  Callback after user has entered a text gift message
+ */
+const showGiftTextInput = (params) => {
+  if (Context.modal !== null && Context.modal.type !== ModalType.TEXT)
+    resetModal();
+
+  if (Context.modal === null) {
+    Context.modal = new MessageModal(ModalType.TEXT);
+    const onSuccessFromTextInput = (textMessage) => {
+      Context.message = textMessage;
+      console.log('onSuccess text message', Context.message);
+      resetModal();
+      params.onSuccess();
+    };
+    const onFailureFromTextInput = (errorCode) => {
+      resetModal();
+      params.onFailure(errorCode);
+    };
+    Context.modal.inject(params.showIntro, onSuccessFromTextInput, onFailureFromTextInput);
+  }
+
+  Context.modal.show();
+};
+
+/**
+ * Begin the static image capture flow (displays in modal)
+ * @param {Object}  params
+ * @param {captureSuccess} params.onSuccess  Callback for successful image capture
+ * @param {captureFailure} params.onFailure  Callback for failed image capture
+ */
+const showImageInput = (params) => {
+  if (Context.modal !== null && Context.modal.type !== ModalType.IMAGE)
+    resetModal();
+
+  if (Context.modal === null) {
+    const onFailureFromImageInput = (errorCode) => {
+      resetModal();
+      params.onSuccess(errorCode);
+    };
+
+    const onSuccessFromImageSourceSelection = (imageMessageFromFile) => {
+      if (imageMessageFromFile !== null) {
+        Context.message = imageMessageFromFile;
+        console.log('onSuccess file image message', Context.message);
+        resetModal();
+        params.onSuccess();
+        return;
+      }
+
+      const onSuccessFromCamera = (imageMessageFromCamera) => {
+        Context.message = imageMessageFromCamera;
+        console.log('onSuccess camera image message', Context.message);
+        resetModal();
+        params.onSuccess();
+      };
+
+      Context.modal = new ImageWebcamModal(ModalType.IMAGE, onSuccessFromCamera, onFailureFromImageInput);
+      Context.modal.inject();
+      Context.modal.show();
+    };
+
+    Context.modal = new ImageModal(ModalType.IMAGE, Context.isMobile, onSuccessFromImageSourceSelection, onFailureFromImageInput);
+    Context.modal.inject();
+  }
+
+  Context.modal.show();
+};
+
+/**
  * Begin the video capture flow (display in modal)
  * @param {Object}  params
  * @param {boolean} params.showIntro        Controls whether the introductory modal describing the video recording process is shown
@@ -73,69 +145,6 @@ const startVideoRecording = (params) => {
 
   Context.modal.show();
 }
-
-/**
- * Begin text gift message capture flow (displays in modal)
- * @param {Object}  params
- * @param {boolean} params.showIntro        Controls whether the introductory modal describing the text gift message process is shown
- * @param {captureSuccess} params.callback  Callback after user has entered a text gift message
- */
-const showGiftTextInput = (params) => {
-  if (Context.modal !== null && Context.modal.type !== ModalType.TEXT)
-    resetModal();
-
-  if (Context.modal === null) {
-    Context.modal = new MessageModal(ModalType.TEXT);
-    const onSuccessFromTextInput = (textMessage) => {
-      Context.message = textMessage;
-      console.log('onSuccess text message', Context.message);
-      resetModal();
-      params.onSuccess();
-    };
-    Context.modal.inject(params.showIntro, onSuccessFromTextInput);
-  }
-
-  Context.modal.show();
-};
-
-/**
- * Begin the static image capture flow (displays in modal)
- * @param {Object}  params
- * @param {captureSuccess} params.onSuccess  Callback for successful image capture
- * @param {captureFailure} params.onFailure  Callback for failed image capture
- */
-const showImageInput = (params) => {
-  if (Context.modal !== null && Context.modal.type !== ModalType.IMAGE)
-    resetModal();
-
-  if (Context.modal === null) {
-    const onSuccessFromImageSourceSelection = (imageMessageFromFile) => {
-      if (imageMessageFromFile !== null) {
-        Context.message = imageMessageFromFile;
-        console.log('onSuccess file image message', Context.message);
-        resetModal();
-        params.onSuccess();
-        return;
-      }
-
-      const onSuccessFromCamera = (imageMessageFromCamera) => {
-        Context.message = imageMessageFromCamera;
-        console.log('onSuccess camera image message', Context.message);
-        resetModal();
-        params.onSuccess();
-      };
-
-      Context.modal = new ImageWebcamModal(ModalType.IMAGE, onSuccessFromCamera, params.onFailure);
-      Context.modal.inject();
-      Context.modal.show();
-    };
-
-    Context.modal = new ImageModal(ModalType.IMAGE, Context.isMobile, onSuccessFromImageSourceSelection, params.onFailure);
-    Context.modal.inject();
-  }
-
-  Context.modal.show();
-};
 
 /**
  * Begin the phone capture flow (displays in modal)

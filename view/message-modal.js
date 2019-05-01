@@ -6,7 +6,7 @@ class MessageModal {
     this.tag = modalTag;
   }
 
-  inject(showIntro, onDone) {
+  inject(showIntro, onSuccess, onFailure) {
     dq.insert('#livecard-wrapper', this.template());
 
     if (showIntro) {
@@ -27,8 +27,11 @@ class MessageModal {
     dq.click('#submit_text_card_btn', () => {
       hide();
       const message = new MessageModel();
-      message.setContentAsText(dq.val('#textGiftMessage'));
-      onDone(message);
+      const err = message.setContentAsText(dq.val('#textGiftMessage'));
+      if (err === null)
+        onSuccess(message);
+      else
+        onFailure(err);
     });
 
     // close button

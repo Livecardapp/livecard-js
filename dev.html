@@ -40,7 +40,12 @@
       lastView = 2;
       LiveCard.showGiftTextInput({
         showIntro: true, //Client can opt out of showing our intro by passing false here
-        onSuccess: () => { collectPhoneNumber(); },
+        onFailure: (errorCode) => {
+          console.log('failed message', errorCode);
+        },
+        onSuccess: () => { 
+          collectPhoneNumber(); 
+        },
       });
     }
 

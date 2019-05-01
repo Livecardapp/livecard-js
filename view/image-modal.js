@@ -18,8 +18,12 @@ class ImageModal {
         return this.onFailure(ErrorType.NO_IMAGE_SELECTED);
 
       const message = new MessageModel();
-      message.setContentAsImageFromFiles(document.querySelector("#inputImage").files);
-      this.onSuccess(message);
+      const err = message.setContentAsImageFromFiles(document.querySelector("#inputImage").files);
+      console.log('image file', err);
+      if (err === null)
+        this.onSuccess(message);
+      else
+        this.onFailure(err);
     });
 
     if (this.isMobile) return;
