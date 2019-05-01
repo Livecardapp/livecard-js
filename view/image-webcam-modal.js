@@ -44,6 +44,10 @@ class ImageWebcamModal {
     dq.click('.livecard-modal-close', () => { remove(); });
   }
 
+  remove() {
+    this._remove(this.camera);
+  }
+
   btnRecordClick() {
     const canvas = document.getElementById("imgCanvas");
     const captureElem = document.getElementById("capture");

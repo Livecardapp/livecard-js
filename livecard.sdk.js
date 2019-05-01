@@ -54,9 +54,19 @@ const startVideoRecording = (params) => {
     const onSuccessFromVideoInput = (videoMessage) => {
       Context.message = videoMessage;
       console.log('onSuccess video message', Context.message);
+      Context.modal.remove();
+      Context.modal = null;  
       params.onSuccess();
     };
-    Context.modal = new VideoModal(ModalType.VIDEO, Context.isMobile, onSuccessFromVideoInput, params.onFailure);
+    
+    const onFailureFromVideoInput = (errorCode) => {
+      Context.modal.remove();
+      Context.modal = null;
+      console.log('onFailure video message', errorCode);
+      params.onFailure(errorCode);
+    };
+
+    Context.modal = new VideoModal(ModalType.VIDEO, Context.isMobile, onSuccessFromVideoInput, onFailureFromVideoInput);
     Context.modal.inject(params.showIntro);
   }
 

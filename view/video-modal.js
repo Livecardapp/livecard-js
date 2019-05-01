@@ -67,6 +67,10 @@ class VideoModal {
     });
   }
 
+  remove() {
+    this._remove(this.camera);
+  }
+
   btnRecordClick() {
     this.camera.start();
     dq.css("#btnRecord", 'display', "none");

@@ -25,8 +25,10 @@ const WebcamMixin = () => {
       dq.css('.livecard-spinner', 'display', 'none');
     },
 
-    remove: () => {
+    _remove: (camera) => {
       dq.insert('#livecard-wrapper', '');
+      if (typeof camera === 'undefined' || camera === null) return;
+      camera.remove();
     },
 
     template: (components, includeControls) => {
