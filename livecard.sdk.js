@@ -37,6 +37,11 @@ const ModalType = {
   UNSUPPORTED: 4,
 };
 
+const resetModal = () => {
+  Context.modal.remove();
+  Context.modal = null;
+}
+
 /**
  * Begin the video capture flow (display in modal)
  * @param {Object}  params
@@ -45,24 +50,20 @@ const ModalType = {
  * @param {captureFailure} params.onFailure  Callback for failed recording
  */
 const startVideoRecording = (params) => {
-  if (Context.modal !== null && Context.modal.type !== ModalType.VIDEO) {
-    Context.modal.remove();
-    Context.modal = null;
-  }
+  if (Context.modal !== null && Context.modal.type !== ModalType.VIDEO)
+    resetModal();
 
   if (Context.modal === null) {
     const onSuccessFromVideoInput = (videoMessage) => {
       Context.message = videoMessage;
       console.log('onSuccess video message', Context.message);
-      Context.modal.remove();
-      Context.modal = null;  
+      resetModal();
       params.onSuccess();
     };
-    
+
     const onFailureFromVideoInput = (errorCode) => {
-      Context.modal.remove();
-      Context.modal = null;
       console.log('onFailure video message', errorCode);
+      resetModal();
       params.onFailure(errorCode);
     };
 
@@ -80,16 +81,15 @@ const startVideoRecording = (params) => {
  * @param {captureSuccess} params.callback  Callback after user has entered a text gift message
  */
 const showGiftTextInput = (params) => {
-  if (Context.modal !== null && Context.modal.type !== ModalType.TEXT) {
-    Context.modal.remove();
-    Context.modal = null;
-  }
+  if (Context.modal !== null && Context.modal.type !== ModalType.TEXT)
+    resetModal();
 
   if (Context.modal === null) {
     Context.modal = new MessageModal(ModalType.TEXT);
     const onSuccessFromTextInput = (textMessage) => {
       Context.message = textMessage;
       console.log('onSuccess text message', Context.message);
+      resetModal();
       params.onSuccess();
     };
     Context.modal.inject(params.showIntro, onSuccessFromTextInput);
@@ -105,16 +105,15 @@ const showGiftTextInput = (params) => {
  * @param {captureFailure} params.onFailure  Callback for failed image capture
  */
 const showImageInput = (params) => {
-  if (Context.modal !== null && Context.modal.type !== ModalType.IMAGE) {
-    Context.modal.remove();
-    Context.modal = null;
-  }
+  if (Context.modal !== null && Context.modal.type !== ModalType.IMAGE)
+    resetModal();
 
   if (Context.modal === null) {
     const onSuccessFromImageSourceSelection = (imageMessageFromFile) => {
       if (imageMessageFromFile !== null) {
         Context.message = imageMessageFromFile;
         console.log('onSuccess file image message', Context.message);
+        resetModal();
         params.onSuccess();
         return;
       }
@@ -122,6 +121,7 @@ const showImageInput = (params) => {
       const onSuccessFromCamera = (imageMessageFromCamera) => {
         Context.message = imageMessageFromCamera;
         console.log('onSuccess camera image message', Context.message);
+        resetModal();
         params.onSuccess();
       };
 
@@ -143,21 +143,19 @@ const showImageInput = (params) => {
  * @param {captureSuccess} params.callback  Callback for successful phone capture
  */
 const showPhoneInput = (params) => {
-  if (Context.modal !== null && Context.modal.type !== ModalType.CARD) {
-    Context.modal.remove();
-    Context.modal = null;
-  }
+  if (Context.modal !== null && Context.modal.type !== ModalType.CARD)
+    resetModal();
 
   if (Context.modal === null) {
     Context.modal = new PhoneModal(ModalType.CARD);
     const onBack = () => {
-      Context.modal.remove();
-      Context.modal = null;
+      resetModal();
       params.onBack();
     };
 
     const onSuccess = (value) => {
       Context.recipientPhone = value;
+      resetModal();
       params.onSuccess();
     };
 
@@ -171,10 +169,8 @@ const showPhoneInput = (params) => {
  * Show modal informing user that video recording is not supported
  */
 const showRecordingNotSupported = (params) => {
-  if (Context.modal !== null && Context.modal.type !== ModalType.UNSUPPORTED) {
-    Context.modal.remove();
-    Context.modal = null;
-  }
+  if (Context.modal !== null && Context.modal.type !== ModalType.UNSUPPORTED)
+    resetModal();
 
   if (Context.modal === null) {
     Context.modal = new CameraUnsupportedModal(ModalType.UNSUPPORTED, params.onSuccess);
