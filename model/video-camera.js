@@ -46,6 +46,11 @@ class VideoCameraModel {
     this.recorder.reset();
   }
 
+  remove() {
+    if (this.recorder === null) return;
+    this.recorder.webcamRemove();
+  }
+
   stageVideoForUpload() {
     this.recorder.streamStop();
     return this.recorder.hasData();

@@ -2,10 +2,6 @@ import dq from './dquery';
 
 const WebcamMixin = () => {
   return {
-    remove: () => {
-      dq.insert('#livecard-wrapper', '');
-    },
-
     show: () => {
       dq.addClass('#video_gift_msg_modal', 'show');
     },

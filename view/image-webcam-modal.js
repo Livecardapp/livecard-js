@@ -40,7 +40,7 @@ class ImageWebcamModal {
       _showRecordingUI(onFailure);
     }, 400);
 
-    const remove = this.remove;
+    const remove = this.remove.bind(this);
     dq.click('.livecard-modal-close', () => { remove(); });
   }
 
