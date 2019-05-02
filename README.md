@@ -8,18 +8,18 @@ For a sample integration see https://gist.github.com/dpanzer/7bf7dc9b4f6feb7a483
 
 # LiveCard SDK Release Notes
 
+0.2.1
+
+- Turn off camera when not in use.
+- Cap image size to a default max size.
+- Cap video size to a default max size.
+
 0.2.0
 
 - Re-architectured code base to MVC format.
 - Convert from ES5 to ES6
 - Added transpilation from ES6 to ES5
 - Added packaging
-
-0.2.1
-
-- Turn off camera when not in use.
-- Cap image size to a default max size.
-- Cap video size to a default max size.
 
 # Copyright & Licensing
 
