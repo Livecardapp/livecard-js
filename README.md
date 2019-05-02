@@ -18,6 +18,8 @@ For a sample integration see https://gist.github.com/dpanzer/7bf7dc9b4f6feb7a483
 0.2.1
 
 - Turn off camera when not in use.
+- Cap image size to a default max size.
+- Cap video size to a default max size.
 
 # Copyright & Licensing
 

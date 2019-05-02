@@ -79,10 +79,7 @@ class ImageWebcamModal {
     this.camera.streamStop();
     const message = new MessageModel();
     const err = message.setContentAsImageFromCamera(canvas.toDataURL("image/jpeg"));
-    if (err === null)
-      this.onSuccess(message);
-    else
-      this.onFailure(err);
+    err === null ? this.onSuccess(message) : this.onFailure(err);
   }
 
   // PRIVATE

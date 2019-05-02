@@ -25,12 +25,14 @@
           collectPhoneNumber();
         },
         onFailure: function (errorCode) {
-          console.log('startVideoRecording failure: ' + errorCode);
+          console.log('video message failure', errorCode);
           if (errorCode === LiveCard.ErrorType.RECORDING_NOT_SUPPORTED) {
             // Client can show own UI for case of webcam recording not supported and expose some UI 
             // to choose a file from hd, which triggers LiveCard.selectVideoFile()
             // Or can use our own modal as here
             setTimeout(function () { LiveCard.showRecordingNotSupported(); }, 400);
+          } else if (errorCode === LiveCard.ErrorType.VIDEO_SIZE_TOO_LARGE) {
+            console.log('VIDEO size too large');
           }
         }
       });
@@ -41,10 +43,17 @@
       LiveCard.showGiftTextInput({
         showIntro: true, //Client can opt out of showing our intro by passing false here
         onFailure: (errorCode) => {
-          console.log('failed message', errorCode);
+          if (errorCode === LiveCard.ErrorType.RECORDING_NOT_SUPPORTED) {
+            // Client can show own UI for case of webcam recording not supported and expose some UI 
+            // to choose a file from hd, which triggers LiveCard.selectVideoFile()
+            // Or can use our own modal as here
+            setTimeout(function () { LiveCard.showRecordingNotSupported(); }, 400);
+          } else if (errorCode === LiveCard.ErrorType.IMAGE_SIZE_TOO_LARGE) {
+            console.log('IMAGE size too large');
+          }
         },
-        onSuccess: () => { 
-          collectPhoneNumber(); 
+        onSuccess: () => {
+          collectPhoneNumber();
         },
       });
     }
@@ -120,7 +129,7 @@
   <button id="submit-order" onclick="submitOrder()">Submit Order</button><br><br>
   <label id="submit-order-label" for="submit-order"></label><br><br>
   <button id="confirm-last-order" onclick="confirmLastOrder()">Confirm Order</button><br><br>
-  <label id="confirm-last-order-label" for="confirm-last-order"></label>  
+  <label id="confirm-last-order-label" for="confirm-last-order"></label>
 </body>
 
 </html>

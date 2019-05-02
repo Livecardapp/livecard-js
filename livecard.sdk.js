@@ -81,11 +81,6 @@ const showImageInput = (params) => {
     resetModal();
 
   if (Context.modal === null) {
-    const onFailureFromImageInput = (errorCode) => {
-      resetModal();
-      params.onSuccess(errorCode);
-    };
-
     const onSuccessFromImageSourceSelection = (imageMessageFromFile) => {
       if (imageMessageFromFile !== null) {
         Context.message = imageMessageFromFile;
@@ -102,12 +97,12 @@ const showImageInput = (params) => {
         params.onSuccess();
       };
 
-      Context.modal = new ImageWebcamModal(ModalType.IMAGE, onSuccessFromCamera, onFailureFromImageInput);
+      Context.modal = new ImageWebcamModal(ModalType.IMAGE, onSuccessFromCamera, params.onFailure);
       Context.modal.inject();
       Context.modal.show();
     };
 
-    Context.modal = new ImageModal(ModalType.IMAGE, Context.isMobile, onSuccessFromImageSourceSelection, onFailureFromImageInput);
+    Context.modal = new ImageModal(ModalType.IMAGE, Context.isMobile, onSuccessFromImageSourceSelection, params.onFailure);
     Context.modal.inject();
   }
 
@@ -133,13 +128,7 @@ const startVideoRecording = (params) => {
       params.onSuccess();
     };
 
-    const onFailureFromVideoInput = (errorCode) => {
-      console.log('onFailure video message', errorCode);
-      resetModal();
-      params.onFailure(errorCode);
-    };
-
-    Context.modal = new VideoModal(ModalType.VIDEO, Context.isMobile, onSuccessFromVideoInput, onFailureFromVideoInput);
+    Context.modal = new VideoModal(ModalType.VIDEO, Context.isMobile, onSuccessFromVideoInput, params.onFailure);
     Context.modal.inject(params.showIntro);
   }
 

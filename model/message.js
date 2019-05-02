@@ -4,8 +4,8 @@ const MessageModelType = {
   VIDEO: 0, IMAGE: 1, TEXT: 2
 };
 
-const MAX_IMAGE_SIZE = 50000;  // 0.5M blob
-const MAX_VIDEO_SIZE = 200000; // 2M blob
+const MAX_IMAGE_SIZE = 500000;  // 0.5M blob
+const MAX_VIDEO_SIZE = 2000000; // 2M blob
 
 class MessageModel {
   constructor() {

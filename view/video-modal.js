@@ -30,14 +30,9 @@ class VideoModal {
       dq.change("#inputVideo", () => {
         if (document.querySelector("#inputVideo").files.length === 0)
           return this.onFailure(ErrorType.NO_VIDEO_SELECTED);
-
         const message = new MessageModel();
         const err = message.setContentAsVideoFromFiles(document.querySelector("#inputVideo").files);
-
-        if (err === null)
-          this.onSuccess(message);
-        else
-          this.onFailure(err);
+        err === null ? this.onSuccess(message) : this.onFailure(err);
       });
 
       const hide = this.hide.bind(this);
@@ -117,8 +112,8 @@ class VideoModal {
     if (!this.camera.stageVideoForUpload())
       return this.onFailure(ErrorType.RECORDING_FAILED);
     const message = new MessageModel();
-    message.setContentAsVideoFromCamera(this.camera.data());
-    this.onSuccess(message);
+    const err = message.setContentAsVideoFromCamera(this.camera.data());
+    err === null ? this.onSuccess(message) : this.onFailure(err);
   }
 
   // PRIVATE

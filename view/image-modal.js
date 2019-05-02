@@ -16,14 +16,9 @@ class ImageModal {
     dq.change("#inputImage", () => {
       if (document.querySelector("#inputImage").files.length === 0)
         return this.onFailure(ErrorType.NO_IMAGE_SELECTED);
-
       const message = new MessageModel();
       const err = message.setContentAsImageFromFiles(document.querySelector("#inputImage").files);
-      console.log('image file', err);
-      if (err === null)
-        this.onSuccess(message);
-      else
-        this.onFailure(err);
+      err === null ? this.onSuccess(message) : this.onFailure(err);
     });
 
     if (this.isMobile) return;
@@ -37,8 +32,6 @@ class ImageModal {
     });
 
     dq.click('#btnImageFromDisk', () => { dq.click('#inputImage'); });
-
-    // close button
     dq.click('.livecard-modal-close', () => { remove(); });
   }
 
