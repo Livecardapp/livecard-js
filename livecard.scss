@@ -1,3 +1,5 @@
+$delay: 0.3s;
+
 button:focus {
   outline: 0;
 }
@@ -40,12 +42,14 @@ button:focus {
     pointer-events: none;
   }
 
-  .livecard-modal.fade .livecard-modal-dialog {
-    transition: -webkit-transform 0.3s ease-out;
-    transition: transform 0.3s ease-out;
-    transition: transform 0.3s ease-out, -webkit-transform 0.3s ease-out;
-    -webkit-transform: translate(0, -25%);
-    transform: translate(0, -25%);
+  .livecard-modal.fade {
+    .livecard-modal-dialog {
+      transition: -webkit-transform $delay ease-out;
+      transition: transform $delay ease-out;
+      transition: transform $delay ease-out, -webkit-transform $delay ease-out;
+      -webkit-transform: translate(0, -25%);
+      transform: translate(0, -25%);
+    }
   }
 }
 
@@ -520,14 +524,14 @@ button:focus {
     }
 
     .livecard-modal-content {
-      transition: height 0.3s ease-out;
+      transition: height $delay ease-out;
       height: 500px;
     }
 
     #video_gift_msg_modal.showing-video-container {
       .livecard-modal-dialog {
         max-width: 60%;
-        transition: transform 0.3s ease-out, max-width 0.4s ease-out;
+        transition: transform $delay ease-out, max-width $delay + 0.1 ease-out;
       }
 
       .livecard-modal-content {
@@ -543,7 +547,7 @@ button:focus {
     .livecard-modal-close {
       right: 17px;
       top: 17px;
-      transition: all 0.4s ease-out;
+      transition: all $delay + 0.1 ease-out;
     }
   }
 }
