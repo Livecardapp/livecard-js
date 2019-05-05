@@ -1,399 +1,403 @@
 button:focus {
-  outline:0;
+  outline: 0;
 }
 
 /* adapted from bootstrap modal css */
+
 .livecard-modal-open {
   overflow: hidden;
-}
 
-.livecard-modal-open .livecard-modal {
-  overflow-x: hidden;
-  overflow-y: auto;
+  .livecard-modal {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
 }
 
 #livecard-wrapper * {
   box-sizing: border-box;
 }
 
-#livecard-wrapper .text-center {
-  text-align: center;
-}
+#livecard-wrapper {
+  .text-center {
+    text-align: center;
+  }
 
-#livecard-wrapper .livecard-modal {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 1050;
-  display: none;
-  overflow: hidden;
-  outline: 0;
-}
+  .livecard-modal {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1050;
+    display: none;
+    overflow: hidden;
+    outline: 0;
+  }
 
-#livecard-wrapper .livecard-modal-dialog {
-  position: relative;
-  width: auto;
-  pointer-events: none;
-}
+  .livecard-modal-dialog {
+    position: relative;
+    width: auto;
+    pointer-events: none;
+  }
 
-#livecard-wrapper .livecard-modal.fade .livecard-modal-dialog {
-  transition: -webkit-transform 0.3s ease-out;
-  transition: transform 0.3s ease-out;
-  transition: transform 0.3s ease-out, -webkit-transform 0.3s ease-out;
-  -webkit-transform: translate(0, -25%);
-  transform: translate(0, -25%);
+  .livecard-modal.fade .livecard-modal-dialog {
+    transition: -webkit-transform 0.3s ease-out;
+    transition: transform 0.3s ease-out;
+    transition: transform 0.3s ease-out, -webkit-transform 0.3s ease-out;
+    -webkit-transform: translate(0, -25%);
+    transform: translate(0, -25%);
+  }
 }
 
 @media screen and (prefers-reduced-motion: reduce) {
-  #livecard-wrapper .livecard-modal.fade .livecard-modal-dialog {
-    transition: none;
+  #livecard-wrapper {
+    .livecard-modal.fade .livecard-modal-dialog {
+      transition: none;
+    }
   }
 }
 
-#livecard-wrapper .livecard-modal.show .livecard-modal-dialog {
-  -webkit-transform: translate(0, 0);
-  transform: translate(0, 0);
-}
+#livecard-wrapper {
+  .livecard-modal.show .livecard-modal-dialog {
+    -webkit-transform: translate(0, 0);
+    transform: translate(0, 0);
+  }
 
-#livecard-wrapper .livecard-modal-dialog-centered {
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-align: center;
-  align-items: center;
-  min-height: 100%;
-}
+  .livecard-modal-dialog-centered {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    min-height: 100%;
 
-#livecard-wrapper .livecard-modal-dialog-centered::before {
-  display: block;
-  height: 100vh;
-  content: "";
-}
+    &::before {
+      display: block;
+      height: 100vh;
+      content: "";
+    }
+  }
 
-#livecard-wrapper .livecard-modal-content {
-  position: relative;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  width: 100%;
-  pointer-events: auto;
-  background-color: #fff;
-  background-clip: padding-box;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 0.3rem;
-  outline: 0;
-}
+  .livecard-modal-content {
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    width: 100%;
+    pointer-events: auto;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 0.3rem;
+    outline: 0;
+  }
 
-/* #livecard-wrapper .livecard-modal-backdrop {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 1040;
-  background-color: #000;
-}
+  .livecard-modal-header {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: start;
+    align-items: flex-start;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    padding: 1rem;
+    border-bottom: 1px solid #e9ecef;
+    border-top-left-radius: 0.3rem;
+    border-top-right-radius: 0.3rem;
 
-#livecard-wrapper .livecard-modal-backdrop.fade {
-  opacity: 0;
-}
+    .close {
+      padding: 1rem;
+      margin: -1rem -1rem -1rem auto;
+    }
+  }
 
-#livecard-wrapper .livecard-modal-backdrop.show {
-  opacity: 0.5;
-} */
+  .livecard-modal-title {
+    margin-bottom: 0;
+    line-height: 1.5;
+  }
 
-#livecard-wrapper .livecard-modal-header {
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-align: start;
-  align-items: flex-start;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
-  padding: 1rem;
-  border-bottom: 1px solid #e9ecef;
-  border-top-left-radius: 0.3rem;
-  border-top-right-radius: 0.3rem;
-}
+  .livecard-modal-body {
+    position: relative;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    padding: 1rem;
+  }
 
-#livecard-wrapper .livecard-modal-header .close {
-  padding: 1rem;
-  margin: -1rem -1rem -1rem auto;
-}
+  .livecard-modal-footer {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-pack: end;
+    justify-content: flex-end;
+    padding: 1rem;
+    border-top: 1px solid #e9ecef;
 
-#livecard-wrapper .livecard-modal-title {
-  margin-bottom: 0;
-  line-height: 1.5;
-}
+    & > :not(:first-child) {
+      margin-left: 0.25rem;
+    }
 
-#livecard-wrapper .livecard-modal-body {
-  position: relative;
-  -ms-flex: 1 1 auto;
-  flex: 1 1 auto;
-  padding: 1rem;
-}
+    & > :not(:last-child) {
+      margin-right: 0.25rem;
+    }
+  }
 
-#livecard-wrapper .livecard-modal-footer {
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-align: center;
-  align-items: center;
-  -ms-flex-pack: end;
-  justify-content: flex-end;
-  padding: 1rem;
-  border-top: 1px solid #e9ecef;
-}
-
-#livecard-wrapper .livecard-modal-footer > :not(:first-child) {
-  margin-left: 0.25rem;
-}
-
-#livecard-wrapper .livecard-modal-footer > :not(:last-child) {
-  margin-right: 0.25rem;
-}
-
-#livecard-wrapper .livecard-modal-scrollbar-measure {
-  position: absolute;
-  top: -9999px;
-  width: 50px;
-  height: 50px;
-  overflow: scroll;
+  .livecard-modal-scrollbar-measure {
+    position: absolute;
+    top: -9999px;
+    width: 50px;
+    height: 50px;
+    overflow: scroll;
+  }
 }
 
 @media (min-width: 576px) {
-  #livecard-wrapper .livecard-modal-dialog {
-    max-width: 500px;
-    margin: 1.75rem auto;
-  }
-  #livecard-wrapper .livecard-modal-dialog-centered {
-    min-height: calc(100% - (1.75rem * 2));
-  }
-  #livecard-wrapper .livecard-modal-dialog-centered::before {
-    height: calc(100vh - (1.75rem * 2));
-  }
-  #livecard-wrapper .livecard-modal-sm {
-    max-width: 300px;
+  #livecard-wrapper {
+    .livecard-modal-dialog {
+      max-width: 500px;
+      margin: 1.75rem auto;
+    }
+
+    .livecard-modal-dialog-centered {
+      min-height: calc(100% - (1.75rem * 2));
+
+      &::before {
+        height: calc(100vh - (1.75rem * 2));
+      }
+    }
+
+    .livecard-modal-sm {
+      max-width: 300px;
+    }
   }
 }
 
 @media (min-width: 992px) {
-  #livecard-wrapper .livecard-modal-lg {
-    max-width: 800px;
+  #livecard-wrapper {
+    .livecard-modal-lg {
+      max-width: 800px;
+    }
   }
 }
 /* bootstrap modal css end */
 
-#livecard-wrapper .livecard-modal.show {
-  background-color: rgba(0, 0, 0, 0.5);
-  display: block;
-}
-
-#livecard-wrapper .livecard-hidden {
-  display: none;
-}
-
-#livecard-wrapper .livecard-fade-show-start {
-  display: block;
-  opacity: 0;
-}
-
-#livecard-wrapper .livecard-fade-show {
-  opacity: 1;
-  transition-property: opacity;
-  transition-duration: 400ms;
-}
-
-#livecard-wrapper .livecard-fade-out {
-  opacity: 0;
-  transition: opacity 400ms;
-}
-
 #livecard-wrapper {
   font-family: "Nunito", sans-serif;
   font-size: 11px;
-}
 
-#livecard-wrapper .livecard-spinner {
-  background: rgba(0, 0, 0, 0.05) url("images/Spinner-1s-120px.gif") no-repeat
-    center;
-  height: 100%;
-  left: 0;
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 100001;
-}
+  .livecard-modal.show {
+    background-color: rgba(0, 0, 0, 0.5);
+    display: block;
+  }
 
-#livecard-wrapper label {
-  color: rgb(184, 184, 184);
-  display: block;
-  font-size: 8px;
-  letter-spacing: 2px;
-  margin-bottom: 0;
-}
+  .livecard-hidden {
+    display: none;
+  }
 
-#livecard-wrapper .livecard-form-group {
-  margin-bottom: 30px;
-}
-#livecard-wrapper .livecard-form-group input[type="text"] {
-  border-width: 0;
-  border-bottom: 1px solid #dcdcdc;
-  color: rgb(77, 77, 77);
-  font-size: 16px;
-  font-weight: 300;
-  display: block;
-  width: 100%;
-}
-#livecard-wrapper .livecard-form-group input[type="text"]:focus {
-  outline: none;
-}
+  .livecard-fade-show-start {
+    display: block;
+    opacity: 0;
+  }
 
-/* #livecard-wrapper .modal-backdrop {
-  background-color: rgba(0,0,0,0.5);
-} */
+  .livecard-fade-show {
+    opacity: 1;
+    transition-property: opacity;
+    transition-duration: 400ms;
+  }
 
-#livecard-wrapper .livecard-modal-content {
-  border-radius: 0;
-  border-width: 0;
-  padding: 0;
-}
+  .livecard-fade-out {
+    opacity: 0;
+    transition: opacity 400ms;
+  }
 
-#livecard-wrapper .livecard-modal .livecard-modal-title {
-  font-size: 28px;
-  letter-spacing: 4px;
-  text-align: center;
-  font-weight: 300;
-  padding: 20px 0 0;
-  margin: 0;
-}
+  .livecard-spinner {
+    background: rgba(160, 157, 157, 0.05) url("images/Spinner-1s-120px.gif") no-repeat center;
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100001;
+  }
 
-#livecard-wrapper .livecard-modal-back-arrow {
-  left: 28px;
-  position: absolute;
-  top: 28px;
-}
-#livecard-wrapper .livecard-modal-close {
-  cursor: pointer;
-  position: absolute;
-  right: 20px;
-  top: 20px;
-}
+  label {
+    color: rgb(184, 184, 184);
+    display: block;
+    font-size: 8px;
+    letter-spacing: 2px;
+    margin-bottom: 0;
+  }
 
-#livecard-wrapper .livecard-btn-modal-submit {
-  background-color: #000;
-  border-radius: 40px;
-  color: #fff;
-  cursor: pointer;
-  display: block;
-  font-size: 16px;
-  font-weight: 300;
-  letter-spacing: 4px;
-  margin: 0;
-  padding: 0;
-  line-height: 80px;
-  text-align: center;
-}
+  .livecard-form-group {
+    margin-bottom: 30px;
 
-#livecard-wrapper .livecard-instructions .step {
-  color: rgb(145, 145, 145);
-  font-size: 16px;
-  font-weight: 300;
-  line-height: 26px;
-  text-align: center;
-}
+    input[type="text"] {
+      border-width: 0;
+      border-bottom: 1px solid #dcdcdc;
+      color: rgb(77, 77, 77);
+      font-size: 16px;
+      font-weight: 300;
+      display: block;
+      width: 100%;
+    }
 
-#livecard-wrapper .livecard-instructions .img-holder {
-  align-items: center;
-  display: flex;
-  height: 36px;
-  justify-content: center;
-}
+    input[type="text"]:focus {
+      outline: none;
+    }
+  }
 
-#livecard-wrapper #text-container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-#livecard-wrapper #text-container .livecard-form-control {
-  flex-grow: 1;
-  margin: 20px 0;
+  .livecard-modal-content {
+    border-radius: 0;
+    border-width: 0;
+    padding: 0;
+  }
+
+  .livecard-modal {
+    .livecard-modal-title {
+      font-size: 28px;
+      letter-spacing: 4px;
+      text-align: center;
+      font-weight: 300;
+      padding: 20px 0 0;
+      margin: 0;
+    }
+  }
+
+  .livecard-modal-back-arrow {
+    left: 28px;
+    position: absolute;
+    top: 28px;
+  }
+
+  .livecard-modal-close {
+    cursor: pointer;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+  }
+
+  .livecard-btn-modal-submit {
+    background-color: #000;
+    border-radius: 40px;
+    color: #fff;
+    cursor: pointer;
+    display: block;
+    font-size: 16px;
+    font-weight: 300;
+    letter-spacing: 4px;
+    margin: 0;
+    padding: 0;
+    line-height: 80px;
+    text-align: center;
+  }
+
+  .livecard-instructions {
+    .step {
+      color: rgb(145, 145, 145);
+      font-size: 16px;
+      font-weight: 300;
+      line-height: 26px;
+      text-align: center;
+    }
+
+    .img-holder {
+      align-items: center;
+      display: flex;
+      height: 36px;
+      justify-content: center;
+    }
+  }
+
+  #text-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    .livecard-form-control {
+      flex-grow: 1;
+      margin: 20px 0;
+    }
+  }
+
+  #card_created_modal {
+    text-align: center;
+
+    .livecard-modal-body {
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    label {
+      color: rgb(145, 145, 145);
+      font-size: 16px;
+      font-weight: 300;
+      letter-spacing: normal;
+      margin-bottom: 6px;
+    }
+
+    input[type="tel"] {
+      background-color: rgb(245, 245, 245);
+      border-radius: 4px;
+      border-width: 0;
+      font-size: 24px;
+      font-weight: 300;
+      letter-spacing: 2.4px;
+      line-height: 65px;
+      text-align: center;
+      width: 310px;
+    }
+
+    input[type="tel"]::placeholder {
+      color: rgba(157, 157, 157, 0.5);
+    }
+  }
+
+  #video-container {
+    position: relative;
+
+    .livecard-controls {
+      background-color: rgba(0, 0, 0, 0.5);
+      bottom: 0;
+      box-sizing: border-box;
+      left: 0;
+      padding: 5px;
+      position: absolute;
+      text-align: center;
+      width: 100%;
+    }
+
+    .icon-video-record,
+    .icon-video-stop,
+    .icon-video-play {
+      cursor: pointer;
+      height: 50px;
+    }
+  }
+
+  #btnRetake,
+  #btnUse {
+    margin: 0 10px;
+    padding: 0.1rem 0.5rem;
+    width: 70px;
+  }
+
+  #create_video_instructions {
+    height: 100%;
+  }
+
+  .livecard-instructions,
+  #noRecordingSupportMessage {
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    flex-direction: column;
+    display: flex;
+  }
 }
 
 #textGiftMessage {
-	font-size: 24pt;
-}
-
-#livecard-wrapper #card_created_modal {
-  text-align: center;
-}
-#livecard-wrapper #card_created_modal .livecard-modal-body {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-#livecard-wrapper #card_created_modal label {
-  color: rgb(145, 145, 145);
-  font-size: 16px;
-  font-weight: 300;
-  letter-spacing: normal;
-  margin-bottom: 6px;
-}
-#livecard-wrapper #card_created_modal input[type="tel"] {
-  background-color: rgb(245, 245, 245);
-  border-radius: 4px;
-  border-width: 0;
-  font-size: 24px;
-  font-weight: 300;
-  letter-spacing: 2.4px;
-  line-height: 65px;
-  text-align: center;
-  width: 310px;
-}
-
-#livecard-wrapper #card_created_modal input[type="tel"]::placeholder {
-  color: rgba(157, 157, 157, 0.5);
-}
-
-#livecard-wrapper #video-container {
-  position: relative;
-}
-
-#livecard-wrapper #video-container .livecard-controls {
-  background-color: rgba(0, 0, 0, 0.5);
-  bottom: 0;
-  box-sizing: border-box;
-  left: 0;
-  padding: 5px;
-  position: absolute;
-  text-align: center;
-  width: 100%;
-}
-#livecard-wrapper #video-container .icon-video-record,
-#livecard-wrapper #video-container .icon-video-stop,
-#livecard-wrapper #video-container .icon-video-play {
-  cursor: pointer;
-  height: 50px;
-}
-#livecard-wrapper #btnRetake,
-#btnUse {
-  margin: 0 10px;
-  padding: 0.1rem 0.5rem;
-  width: 70px;
-}
-
-#livecard-wrapper #create_video_instructions {
-  height: 100%;
-}
-
-#livecard-wrapper .livecard-instructions,
-#livecard-wrapper #noRecordingSupportMessage {
-  align-items: center;
-  justify-content: space-between;
-  height: 100%;
-  flex-direction: column;
-  display: flex;
+  font-size: 24pt;
 }
 
 [style*="--aspect-ratio"] > video,
@@ -401,6 +405,7 @@ button:focus {
 [style*="--aspect-ratio"] > #flashContent {
   width: 100%;
 }
+
 @supports (--custom: property) {
   [style*="--aspect-ratio"] {
     position: relative;
@@ -421,104 +426,124 @@ button:focus {
 }
 
 @media (max-width: 575.98px) {
-  #livecard-wrapper .livecard-modal-dialog {
-    margin-left: 0;
-    margin-right: 0;
-  }
-  #livecard-wrapper .livecard-btn-modal-submit {
-    margin: 0 auto;
-    width: 280px;
-  }
+  #livecard-wrapper {
+    .livecard-modal-dialog {
+      margin-left: 0;
+      margin-right: 0;
+    }
 
-  #livecard-wrapper .livecard-instructions .step {
-    display: flex;
-    margin-bottom: 43.5px;
-    align-items: center;
-    width: 250px;
-    text-align: left;
-  }
-  #livecard-wrapper .livecard-instructions .img-holder {
-    flex-basis: 90px;
-    flex-shrink: 0;
-    margin-right: 5px;
+    .livecard-btn-modal-submit {
+      margin: 0 auto;
+      width: 280px;
+    }
+
+    .livecard-instructions {
+      .step {
+        display: flex;
+        margin-bottom: 43.5px;
+        align-items: center;
+        width: 250px;
+        text-align: left;
+      }
+
+      .img-holder {
+        flex-basis: 90px;
+        flex-shrink: 0;
+        margin-right: 5px;
+      }
+    }
   }
 }
 
 @media (min-width: 576px) {
-  #livecard-wrapper .livecard-btn-modal-submit {
-    margin: 0 auto;
-    width: 380px;
-  }
-  #livecard-wrapper .livecard-instructions-steps {
-    display: flex;
-    flex-direction: row;
-  }
-  #livecard-wrapper .livecard-instructions-steps .step {
-    flex-basis: 0;
-    flex-grow: 1;
-  }
-  #livecard-wrapper .livecard-instructions .img-holder {
-    margin-bottom: 20px;
+  #livecard-wrapper {
+    .livecard-btn-modal-submit {
+      margin: 0 auto;
+      width: 380px;
+    }
+
+    .livecard-instructions-steps {
+      display: flex;
+      flex-direction: row;
+    }
+
+    .livecard-instructions-steps {
+      .step {
+        flex-basis: 0;
+        flex-grow: 1;
+      }
+
+      .img-holder {
+        margin-bottom: 20px;
+      }
+    }
   }
 }
 
 @media (max-width: 767.98px) {
-  #livecard-wrapper .modal-dialog {
-    height: 100%;
-    margin-top: 0;
-    margin-bottom: 0;
-  }
-  #livecard-wrapper
-    #video_gift_msg_modal.showing-video-container
-    .livecard-modal-dialog {
-    height: auto;
-  }
-  #livecard-wrapper .livecard-modal-content {
-    height: 100%;
-    position: absolute;
-  }
-  #livecard-wrapper .livecard-modal-body {
-    height: 100%;
-    padding: 50px 40px;
+  #livecard-wrapper {
+    .modal-dialog {
+      height: 100%;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    #video_gift_msg_modal.showing-video-container {
+      .livecard-modal-dialog {
+        height: auto;
+      }
+    }
+
+    .livecard-modal-content {
+      height: 100%;
+      position: absolute;
+    }
+
+    .livecard-modal-body {
+      height: 100%;
+      padding: 50px 40px;
+    }
   }
 }
 
 @media (min-width: 768px) {
-  #livecard-wrapper .livecard-modal-body {
-    height: 100%;
-    padding: 50px;
-  }
-  #livecard-wrapper .livecard-modal .livecard-modal-dialog {
-    max-width: 640px;
-  }
-  #livecard-wrapper .livecard-modal-content {
-    transition: height 0.3s ease-out;
-    height: 500px;
-  }
-  #livecard-wrapper
-    #video_gift_msg_modal.showing-video-container
-    .livecard-modal-dialog {
-    max-width: 60%;
-    transition: transform 0.3s ease-out, max-width 0.4s ease-out;
-  }
-  #livecard-wrapper
-    #video_gift_msg_modal.showing-video-container
+  #livecard-wrapper {
+    .livecard-modal-body {
+      height: 100%;
+      padding: 50px;
+    }
+
+    .livecard-modal {
+      .livecard-modal-dialog {
+        max-width: 640px;
+      }
+    }
+
     .livecard-modal-content {
-    height: auto;
-  }
-  #livecard-wrapper .livecard-modal-back-arrow {
-    left: 40px;
-    top: 40px;
-  }
-  #livecard-wrapper .livecard-modal-close {
-    right: 40px;
-    top: 40px;
-  }
-  #livecard-wrapper
-    #video_gift_msg_modal.showing-video-container
+      transition: height 0.3s ease-out;
+      height: 500px;
+    }
+
+    #video_gift_msg_modal.showing-video-container {
+      .livecard-modal-dialog {
+        max-width: 60%;
+        transition: transform 0.3s ease-out, max-width 0.4s ease-out;
+      }
+
+      .livecard-modal-content {
+        height: auto;
+      }
+    }
+
+    .livecard-modal-back-arrow {
+      left: 40px;
+      top: 40px;
+    }
+
     .livecard-modal-close {
-    right: 17px;
-    top: 17px;
-    transition: all 0.4s ease-out;
+      right: 17px;
+      top: 17px;
+      transition: all 0.4s ease-out;
+    }
   }
 }
