@@ -115,7 +115,7 @@
         </table>
 
         <dl class="details"></dl>
-        
+
         <!-- createCard -->
 
         <h4 class="name" id=".createCard"><span class="type-signature">(static) </span>createCard<span
@@ -139,1074 +139,321 @@
               <td class="type">
                 <span class="param-type">Object</span>
               </td>
-
-
-
-
-
               <td class="description last">
                 <h6>Properties</h6>
-
-
                 <table class="params">
                   <thead>
                     <tr>
-
                       <th>Name</th>
-
-
                       <th>Type</th>
-
-
-
-
-
                       <th class="last">Description</th>
                     </tr>
                   </thead>
 
                   <tbody>
-
-
                     <tr>
-
-                      <td class="name"><code>callback</code></td>
-
-
+                      <td class="name"><code>onSuccess</code></td>
                       <td class="type">
-
-
                         <span class="param-type"><a href="global.html#createSuccess">createSuccess</a></span>
-
-
-
                       </td>
-
-
-
-
-
                       <td class="description last">
                         <p>Callback after successful save of gift message record</p>
                       </td>
                     </tr>
-
-
-
                     <tr>
-
-                      <td class="name"><code>callback</code></td>
-
-
+                      <td class="name"><code>onFailure</code></td>
                       <td class="type">
-
-
                         <span class="param-type"><a href="global.html#serverFailure">serverFailure</a></span>
-
-
-
                       </td>
-
-
-
-
-
                       <td class="description last">
                         <p>Callback after failure to save gift message record</p>
                       </td>
                     </tr>
-
-
                   </tbody>
                 </table>
-
               </td>
             </tr>
-
-
           </tbody>
         </table>
 
+        <dl class="details"></dl>
 
-
-
-
-
-        <dl class="details">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        </dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        <!-- showGiftTextInput -->
 
         <h4 class="name" id=".showGiftTextInput"><span class="type-signature">(static) </span>showGiftTextInput<span
-            class="signature">(params)</span><span class="type-signature"></span></h4>
-
-
-
-
-
-
+            class="signature">(params)</span><span class="type-signature"></span>
+        </h4>
         <div class="description">
           <p>Begin text gift message capture flow (displays in modal)</p>
         </div>
-
-
-
-
-
-
-
-
-
         <h5>Parameters:</h5>
-
-
         <table class="params">
           <thead>
             <tr>
-
               <th>Name</th>
-
-
               <th>Type</th>
-
-
-
-
-
               <th class="last">Description</th>
             </tr>
           </thead>
 
           <tbody>
-
-
             <tr>
-
               <td class="name"><code>params</code></td>
-
-
               <td class="type">
-
-
                 <span class="param-type">Object</span>
-
-
-
               </td>
-
-
-
-
-
               <td class="description last">
                 <h6>Properties</h6>
-
-
                 <table class="params">
                   <thead>
                     <tr>
-
                       <th>Name</th>
-
-
                       <th>Type</th>
-
-
-
-
-
                       <th class="last">Description</th>
                     </tr>
                   </thead>
 
                   <tbody>
-
-
                     <tr>
-
                       <td class="name"><code>showIntro</code></td>
-
-
                       <td class="type">
-
-
                         <span class="param-type">boolean</span>
-
-
-
                       </td>
-
-
-
-
-
                       <td class="description last">
                         <p>Controls whether the introductory modal describing the text gift message process is shown</p>
                       </td>
                     </tr>
-
-
-
                     <tr>
-
-                      <td class="name"><code>callback</code></td>
-
-
+                      <td class="name"><code>onSuccess</code></td>
                       <td class="type">
-
-
                         <span class="param-type"><a href="global.html#captureSuccess">captureSuccess</a></span>
-
-
-
                       </td>
-
-
-
-
-
                       <td class="description last">
                         <p>Callback after user has entered a text gift message</p>
                       </td>
                     </tr>
-
-
+                    <tr>
+                      <td class="name"><code>onFailure</code></td>
+                      <td class="type">
+                        <span class="param-type"><a href="global.html#serverFailure">serverFailure</a></span>
+                      </td>
+                      <td class="description last">
+                        <p>Callback after any text modal error</p>
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
 
               </td>
             </tr>
-
-
           </tbody>
         </table>
 
+        <dl class="details"></dl>
 
-
-
-
-
-        <dl class="details">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        </dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        <!-- showImageInput -->
 
         <h4 class="name" id=".showImageInput"><span class="type-signature">(static) </span>showImageInput<span
-            class="signature">(params)</span><span class="type-signature"></span></h4>
-
-
-
-
-
-
+            class="signature">(params)</span><span class="type-signature"></span>
+        </h4>
         <div class="description">
           <p>Begin the static image capture flow (displays in modal)</p>
         </div>
-
-
-
-
-
-
-
-
-
         <h5>Parameters:</h5>
-
-
         <table class="params">
           <thead>
             <tr>
-
               <th>Name</th>
-
-
               <th>Type</th>
-
-
-
-
-
               <th class="last">Description</th>
             </tr>
           </thead>
-
           <tbody>
-
-
             <tr>
-
               <td class="name"><code>params</code></td>
-
-
               <td class="type">
-
-
                 <span class="param-type">Object</span>
-
-
-
               </td>
-
-
-
-
-
               <td class="description last">
                 <h6>Properties</h6>
-
-
                 <table class="params">
                   <thead>
                     <tr>
-
                       <th>Name</th>
-
-
                       <th>Type</th>
-
-
-
-
-
                       <th class="last">Description</th>
                     </tr>
                   </thead>
-
                   <tbody>
-
-
                     <tr>
-
                       <td class="name"><code>onSuccess</code></td>
-
-
                       <td class="type">
-
-
                         <span class="param-type"><a href="global.html#captureSuccess">captureSuccess</a></span>
-
-
-
                       </td>
-
-
-
-
-
                       <td class="description last">
                         <p>Callback for successful image capture</p>
                       </td>
                     </tr>
-
-
-
                     <tr>
-
                       <td class="name"><code>onFailure</code></td>
-
-
                       <td class="type">
-
-
                         <span class="param-type"><a href="global.html#captureFailure">captureFailure</a></span>
-
-
-
                       </td>
-
-
-
-
-
                       <td class="description last">
                         <p>Callback for failed image capture</p>
                       </td>
                     </tr>
-
-
                   </tbody>
                 </table>
-
               </td>
             </tr>
-
-
           </tbody>
         </table>
 
+        <dl class="details"></dl>
 
-
-
-
-
-        <dl class="details">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        </dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        <!-- showPhoneInput -->
 
         <h4 class="name" id=".showPhoneInput"><span class="type-signature">(static) </span>showPhoneInput<span
             class="signature">(params)</span><span class="type-signature"></span></h4>
-
-
-
-
-
-
         <div class="description">
           <p>Begin the phone capture flow (displays in modal)</p>
         </div>
-
-
-
-
-
-
-
-
-
         <h5>Parameters:</h5>
-
-
         <table class="params">
           <thead>
             <tr>
-
               <th>Name</th>
-
-
               <th>Type</th>
-
-
-
-
-
               <th class="last">Description</th>
             </tr>
           </thead>
-
           <tbody>
-
-
             <tr>
-
               <td class="name"><code>params</code></td>
-
-
               <td class="type">
-
-
                 <span class="param-type">Object</span>
-
-
-
               </td>
-
-
-
-
-
               <td class="description last">
                 <h6>Properties</h6>
-
-
                 <table class="params">
                   <thead>
                     <tr>
-
                       <th>Name</th>
-
-
                       <th>Type</th>
-
-
-
-
-
                       <th class="last">Description</th>
                     </tr>
                   </thead>
-
                   <tbody>
-
-
                     <tr>
-
-                      <td class="name"><code>callback</code></td>
-
-
+                      <td class="name"><code>onBack</code></td>
                       <td class="type">
-
-
-                        <span class="param-type"><a href="global.html#captureSuccess">captureSuccess</a></span>
-
-
-
+                        <span class="param-type"><a href="global.html#onBack">onBack</a></span>
                       </td>
-
-
-
-
-
+                      <td class="description last">
+                        <p>Callback for back button click event</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="name"><code>onSuccess</code></td>
+                      <td class="type">
+                        <span class="param-type"><a href="global.html#captureSuccess">captureSuccess</a></span>
+                      </td>
                       <td class="description last">
                         <p>Callback for successful phone capture</p>
                       </td>
                     </tr>
-
-
                   </tbody>
                 </table>
-
               </td>
             </tr>
-
-
           </tbody>
         </table>
 
+        <dl class="details"></dl>
 
-
-
-
-
-        <dl class="details">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        </dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        <!-- showRecordingNotSupported -->
 
         <h4 class="name" id=".showRecordingNotSupported"><span class="type-signature">(static)
-          </span>showRecordingNotSupported<span class="signature">()</span><span class="type-signature"></span></h4>
-
-
-
-
-
-
+          </span>showRecordingNotSupported<span class="signature">()</span><span class="type-signature"></span>
+        </h4>
         <div class="description">
           <p>Show modal informing user that video recording is not supported</p>
         </div>
 
+        <dl class="details"></dl>
 
-
-
-
-
-
-
-
-
-
-
-
-        <dl class="details">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        </dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        <!-- startVideoRecording -->
         <h4 class="name" id=".startVideoRecording"><span class="type-signature">(static) </span>startVideoRecording<span
-            class="signature">(params)</span><span class="type-signature"></span></h4>
-
-
-
-
-
-
+            class="signature">(params)</span><span class="type-signature"></span>
+        </h4>
         <div class="description">
           <p>Begin the video capture flow (display in modal)</p>
         </div>
-
-
-
-
-
-
-
-
-
         <h5>Parameters:</h5>
-
-
         <table class="params">
           <thead>
             <tr>
-
               <th>Name</th>
-
-
               <th>Type</th>
-
-
-
-
-
               <th class="last">Description</th>
             </tr>
           </thead>
-
           <tbody>
-
-
             <tr>
-
               <td class="name"><code>params</code></td>
-
-
               <td class="type">
-
-
                 <span class="param-type">Object</span>
-
-
-
               </td>
-
-
-
-
-
               <td class="description last">
                 <h6>Properties</h6>
-
-
                 <table class="params">
                   <thead>
                     <tr>
-
                       <th>Name</th>
-
-
                       <th>Type</th>
-
-
-
-
-
                       <th class="last">Description</th>
                     </tr>
                   </thead>
-
                   <tbody>
-
-
                     <tr>
-
                       <td class="name"><code>showIntro</code></td>
-
-
                       <td class="type">
-
-
                         <span class="param-type">boolean</span>
-
-
-
                       </td>
-
-
-
-
-
                       <td class="description last">
                         <p>Controls whether the introductory modal describing the video recording process is shown</p>
                       </td>
                     </tr>
-
-
-
                     <tr>
-
                       <td class="name"><code>onSuccess</code></td>
-
-
                       <td class="type">
-
-
                         <span class="param-type"><a href="global.html#captureSuccess">captureSuccess</a></span>
-
-
-
                       </td>
-
-
-
-
-
                       <td class="description last">
                         <p>Callback for successful recording</p>
                       </td>
                     </tr>
-
-
-
                     <tr>
-
                       <td class="name"><code>onFailure</code></td>
-
-
                       <td class="type">
-
-
                         <span class="param-type"><a href="global.html#captureFailure">captureFailure</a></span>
-
-
-
                       </td>
-
-
-
-
-
                       <td class="description last">
                         <p>Callback for failed recording</p>
                       </td>
                     </tr>
-
-
                   </tbody>
                 </table>
-
               </td>
             </tr>
-
-
           </tbody>
         </table>
 
-
-
-
-
-
-        <dl class="details">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        </dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        <dl class="details"></dl>
       </article>
-
     </section>
-
-
-
-
+    
   </div>
 
   <nav>
