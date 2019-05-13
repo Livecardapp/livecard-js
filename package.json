@@ -7,9 +7,9 @@
     "verbose": true
   },
   "scripts": {
-    "build": "parcel build dev.html --global LiveCard",
     "start": "parcel dev.html --global LiveCard",
     "jdoc": "jsdoc livecard.js lib/errors.js",
+    "build": "parcel build dev.html --global LiveCard",
     "test": "jest"
   },
   "repository": {
