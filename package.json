@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "description": "A desktop and mobile web library for capturing video, image, and text gift messages during checkout on e-commerce websites.",
   "main": "livecard.js",
-  "directories": {
-    "doc": "docs"
-  },
   "jest": {
     "verbose": true
   },
   "scripts": {
+    "build": "parcel build dev.html --global LiveCard",
+    "start": "parcel dev.html --global LiveCard",
+    "jdoc": "jsdoc livecard.js lib/errors.js",
     "test": "jest"
   },
   "repository": {
@@ -29,6 +29,7 @@
     "@babel/preset-env": "^7.4.3",
     "babel-jest": "^24.7.1",
     "jest": "^24.7.1",
+    "jsdoc": "^3.6.2",
     "sass": "^1.18.0"
   },
   "dependencies": {
