@@ -8,51 +8,6 @@ import CameraUnsupportedModal from './view/camera-unsupported-modal';
 import ErrorType from './lib/errors';
 import CardModel from './model/card';
 
-// ================= JSDOC GLOBAL DEFINITIONS (START) =================
-
-/**
- * @file See {@link LiveCard} for library properties and methods
- * @author LiveCard LLC
- */
-
-/**
- * LiveCard API Object
- * @namespace LiveCard
- */
-
-/**
- * Indicates successful request to create gift message
- * @callback createSuccess
- * @param {string} liveCardId   The unique identifier assigned to this gift message by LiveCard
- * @param {string} imageUrl     The direct URL to the image or video associated with this gift message
- */
-
-/**
- * Indicates successful request to confirm gift message
- * @callback confirmSuccess
- */
-
-/**
-  * Indicates failed request to create or confirm gift message
-  *
-  * @callback serverFailure
-  * @param {LiveCardError} errorCode
-  */
-
-// ================= JSDOC GLOBAL DEFINITIONS (END) ===================
-
-/**
- * Configuration settings used for the LiveCard API.
- * @type {object}
- * @memberof LiveCard
- * @property {string} licenseKey (Required) License key of your LiveCard account.
- * @property {boolean} requireRecipientPhone (Optional) Controls whether the SDK requires a recipient phone to create a card. Set to 'false' if you do not plan to collect recipient phone for SMS delivery during the checkout process.
- */
-const Settings = {
-  licenseKey: null,
-  requireRecipientPhone: true,
-};
-
 const Context = {
   isMobile: false,
   liveCardId: null,
@@ -75,12 +30,51 @@ const resetModal = () => {
   Context.modal = null;
 }
 
+// ================= JSDOC GLOBAL DEFINITIONS (START) =================
+
+/**
+ * @file See {@link LiveCard} for library properties and methods
+ * @author LiveCard LLC
+ */
+
+/**
+ * LiveCard API Object
+ * @namespace LiveCard
+ */
+
+/**
+ * Indicates successful request to confirm gift message
+ * @callback successCallback
+ */
+
+/**
+  * Indicates failed request to create or confirm gift message
+  *
+  * @callback failureCallback
+  * @param {LiveCardError} errorCode
+  */
+
+// ================= JSDOC GLOBAL DEFINITIONS (END) ===================
+
+/**
+ * Configuration settings used for the LiveCard API.
+ * @type {object}
+ * @memberof LiveCard
+ * @property {string} licenseKey (Required) License key of your LiveCard account.
+ * @property {boolean} requireRecipientPhone (Optional) Controls whether the SDK requires a recipient phone to create a card. Set to 'false' if you do not plan to collect recipient phone for SMS delivery during the checkout process.
+ */
+const Settings = {
+  licenseKey: null,
+  requireRecipientPhone: true,
+};
+
 /**
  * Begin text gift message capture flow (displays in modal)
  * @memberof LiveCard
  * @param {Object}  params
- * @param {boolean} params.showIntro        Controls whether the introductory modal describing the text gift message process is shown
- * @param {captureSuccess} params.callback  Callback after user has entered a text gift message
+ * @param {boolean} params.showIntro    Controls whether the introductory modal describing the text gift message process is shown
+ * @param {successCallback} params.onSuccess  Callback after user has entered a text gift message
+ * @param {failureCallback} params.onFailure  Callback after user has entered a text gift message
  */
 const showGiftTextInput = (params) => {
   if (Context.modal !== null && Context.modal.type !== ModalType.TEXT)
@@ -108,8 +102,8 @@ const showGiftTextInput = (params) => {
  * Begin the static image capture flow (displays in modal)
  * @memberof LiveCard
  * @param {Object}  params
- * @param {captureSuccess} params.onSuccess  Callback for successful image capture
- * @param {captureFailure} params.onFailure  Callback for failed image capture
+ * @param {successCallback} params.onSuccess  Callback for successful image capture
+ * @param {failureCallback} params.onFailure  Callback for failed image capture
  */
 const showImageInput = (params) => {
   if (Context.modal !== null && Context.modal.type !== ModalType.IMAGE)
@@ -149,8 +143,8 @@ const showImageInput = (params) => {
  * @memberof LiveCard
  * @param {Object}  params
  * @param {boolean} params.showIntro        Controls whether the introductory modal describing the video recording process is shown
- * @param {captureSuccess} params.onSuccess  Callback for successful recording
- * @param {captureFailure} params.onFailure  Callback for failed recording
+ * @param {successCallback} params.onSuccess  Callback for successful recording
+ * @param {failureCallback} params.onFailure  Callback for failed recording
  */
 const startVideoRecording = (params) => {
   if (Context.modal !== null && Context.modal.type !== ModalType.VIDEO)
@@ -172,10 +166,16 @@ const startVideoRecording = (params) => {
 }
 
 /**
+ * Indicates that the back button has been clicked
+ * @callback backNavigationCallback
+ */
+
+/**
  * Begin the phone capture flow (displays in modal)
  * @memberof LiveCard
  * @param {Object}  params
- * @param {captureSuccess} params.onSuccess  Callback for successful phone capture
+ * @param {successCallback} params.onSuccess     Callback for successful phone capture
+ * @param {backNavigationCallback} params.onBack Callback for back navigation event
  */
 const showPhoneInput = (params) => {
   if (Context.modal !== null && Context.modal.type !== ModalType.CARD)
@@ -217,11 +217,18 @@ const showRecordingNotSupported = (params) => {
 };
 
 /**
+ * Indicates successful request to create gift message
+ * @callback createCardSuccessCallback
+ * @param {string} liveCardId   The unique identifier assigned to this gift message by LiveCard
+ * @param {string} imageUrl     The direct URL to the image or video associated with this gift message
+ */
+
+/**
  * Attempt to save gift message record
  * @memberof LiveCard
- * @param {Object}  params
- * @param {createSuccess} params.callback  Callback after successful save of gift message record
- * @param {serverFailure} params.callback  Callback after failure to save gift message record
+ * @param {Object} params
+ * @param {createCardSuccessCallback} params.onSuccess  Callback after successful save of gift message record
+ * @param {failureCallback} params.onFailure            Callback after failure to save gift message record
  */
 const createCard = async (params) => {
   const card = new CardModel(Settings.licenseKey, Context.liveCardId, Settings.requireRecipientPhone);
@@ -246,8 +253,8 @@ const createCard = async (params) => {
  * Attempt to confirm gift message record when user completes checkout
  * @memberof LiveCard
  * @param {Object}  params
- * @param {confirmSuccess} params.callback  Callback after successful confirmation of gift message record
- * @param {serverFailure} params.callback  Callback after failure to confirm gift message record
+ * @param {successCallback} params.onSuccess  Callback after successful confirmation of gift message record
+ * @param {failureCallback} params.onFailure  Callback after failure to confirm gift message record
  */
 const confirmCard = async (params) => {
   try {
