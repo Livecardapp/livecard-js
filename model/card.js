@@ -105,3 +105,33 @@ class CardModel {
 }
 
 export default CardModel;
+
+// uploadFlashVideo: function(serverCardId) {
+//   var data = new FormData();
+//   data.append("card_id", serverCardId);
+//   data.append("stream_name", this.flashStreamName);
+
+//   var request = new XMLHttpRequest();
+//   request.open("POST", "https://wowzatest.live.cards/upload_video.php", true);
+  
+//   request.setRequestHeader("License-Key", this.licenseKey);
+//   request.responseType = "json";
+//   request.send(data);
+
+//   request.addEventListener("load", () => {
+//     this.debugLog("Video upload success for card id " + serverCardId);
+
+//     var videoUrl = request.response.card.video_url.replace(
+//       ".mp4",
+//       "_trans.mp4"
+//     );
+
+//     this.createCardSuccessCallback(this.liveCardId, videoUrl);
+//   });
+
+//   request.addEventListener("error", error => {
+//     this.debugLog("uploadVideo failure: ", error);
+
+//     this.createCardFailureCallback(LiveCardError.CREATE_CARD_ERROR);
+//   });
+// },

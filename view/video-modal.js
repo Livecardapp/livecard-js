@@ -27,11 +27,11 @@ class VideoModal {
     dq.click('.livecard-modal-close', () => { remove(); });
 
     if (this.isMobile) {
-      dq.change("#inputVideo", () => {
-        if (document.querySelector("#inputVideo").files.length === 0)
+      dq.change('#inputVideo', () => {
+        if (document.querySelector('#inputVideo').files.length === 0)
           return this.onFailure(ErrorType.NO_VIDEO_SELECTED);
         const message = new MessageModel();
-        const err = message.setContentAsVideoFromFiles(document.querySelector("#inputVideo").files);
+        const err = message.setContentAsVideoFromFiles(document.querySelector('#inputVideo').files);
         err === null ? this.onSuccess(message) : this.onFailure(err);
       });
 
@@ -73,41 +73,41 @@ class VideoModal {
 
   btnRecordClick() {
     this.camera.start();
-    dq.css("#btnRecord", 'display', "none");
-    dq.css("#btnStop", 'display', "inline");
+    dq.css('#btnRecord', 'display', 'none');
+    dq.css('#btnStop', 'display', 'inline');
   }
 
   btnStopClick() {
     this.camera.stop();
-    dq.css("#btnStop", 'display', "none");
-    dq.css("#btnPlay", 'display', "inline");
-    dq.css("#btnRetake", 'display', "inline");
-    dq.css("#btnUse", 'display', "inline");
+    dq.css('#btnStop', 'display', 'none');
+    dq.css('#btnPlay', 'display', 'inline');
+    dq.css('#btnRetake', 'display', 'inline');
+    dq.css('#btnUse', 'display', 'inline');
 
     // show static video
-    document.querySelector("#recorded").src = this.camera.buffer();
+    document.querySelector('#recorded').src = this.camera.buffer();
 
-    dq.css("#capture", 'display', "none");
-    dq.css("#recorded", 'display', "block");
+    dq.css('#capture', 'display', 'none');
+    dq.css('#recorded', 'display', 'block');
   }
 
   btnPlayClick() {
-    document.getElementById("recorded").play();
+    document.getElementById('recorded').play();
   }
 
   btnRetakeClick() {
     this.camera.reset();
-    dq.css("#recorded", 'display', "none");
-    dq.css("#capture", 'display', "block");
-    dq.css("#btnPlay", 'display', "none");
-    dq.css("#btnRetake", 'display', "none");
-    dq.css("#btnUse", 'display', "none");
-    dq.css("#btnRecord", 'display', "inline");
+    dq.css('#recorded', 'display', 'none');
+    dq.css('#capture', 'display', 'block');
+    dq.css('#btnPlay', 'display', 'none');
+    dq.css('#btnRetake', 'display', 'none');
+    dq.css('#btnUse', 'display', 'none');
+    dq.css('#btnRecord', 'display', 'inline');
   }
 
   btnUseClick() {
-    dq.css("#video-container", 'display', "none");
-    document.getElementById("recorded").pause();
+    dq.css('#video-container', 'display', 'none');
+    document.getElementById('recorded').pause();
     this.hide();
     if (!this.camera.stageVideoForUpload())
       return this.onFailure(ErrorType.RECORDING_FAILED);
@@ -121,10 +121,20 @@ class VideoModal {
   async _showRecordingView(onFailure) {
     try {
       this.showSpinner();
-      const result = await this.camera.init();
-      if (typeof result.stream !== 'undefined')
-        document.querySelector("#capture").srcObject = result.stream;
-      dq.addClass("#video-container", "livecard-fade-show");
+      const result = await this.camera.init('LCCapture', 'flashContent');
+      console.log('_showRecordingView', result);
+      if (result.isNative) {
+        if (typeof result.stream !== 'undefined')
+          document.querySelector('#capture').srcObject = result.stream;
+      } else {
+        dq.css('#flashContent', 'display', 'block');
+        dq.css('#flashContent', 'text-align', 'left');
+        dq.css('#LCCapture', 'position', 'absolute');
+        dq.css('#LCCapture', 'top', '0px');
+        dq.css('#LCCapture', 'left', '0px');
+      }
+
+      dq.addClass('#video-container', 'livecard-fade-show');
     } catch (error) {
       this.hideSpinner();
       onFailure(ErrorType.RECORDING_NOT_SUPPORTED);

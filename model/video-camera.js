@@ -1,59 +1,66 @@
 import { WebcamVideoRecorder } from '../lib/webcam';
+import { FlashVideoRecorder } from '../lib/flashcam';
 
 class VideoCameraModel {
   constructor() {
-    this.type = 0;
-    this.recorder = null;
+    this.isNative = true;
+    this.camera = null;
   }
 
-  async init() {
-    if (this.recorder !== null) {
+  async init(flashCameraId, flashViewId) {
+    if (this.camera !== null) {
       console.log('already initialized');
-      const result = this.type === 0 ? { stream: window.stream } : {};
+      const result = { isNative: this.isNative, stream: this.isNative ? window.stream : null };
       return Promise.resolve(result);
     }
 
     // try webcam
+
     try {
-      this.recorder = new WebcamVideoRecorder();
-      const stream = await this.recorder.init();
-      return Promise.resolve({ stream });
+      this.camera = new WebcamVideoRecorder();
+      const stream = await this.camera.init();
+      this.isNative = true;
+      return Promise.resolve({ isNative: true, stream });
     } catch (error) {
       console.log(`Failed to init webcam - ${error}`);
-      return Promise.reject();
     }
 
-    // TODO: try flash cam
+    // try flashcam
+
+    this.isNative = false;
+    this.camera = new FlashVideoRecorder(flashCameraId);
+    this.camera.init(flashViewId);
+    return Promise.resolve({ isNative: false, stream: null });
   }
 
   start() {
-    this.recorder.recordStart();
+    this.camera.recordStart();
   }
 
   stop() {
-    this.recorder.recordStop();
+    this.camera.recordStop();
   }
 
   buffer() {
-    return this.recorder.bufferVideo();
+    return this.camera.bufferVideo();
   }
 
   data() {
-    return this.recorder.blobs;
+    return this.camera.blobs;
   }
 
   reset() {
-    this.recorder.reset();
+    this.camera.reset();
   }
 
   remove() {
-    if (this.recorder === null) return;
-    this.recorder.webcamRemove();
+    if (this.camera === null) return;
+    this.camera.webcamRemove();
   }
 
   stageVideoForUpload() {
-    this.recorder.streamStop();
-    return this.recorder.hasData();
+    this.camera.streamStop();
+    return this.camera.hasData();
   }
 }
 
