@@ -1,5 +1,13 @@
 const dq = {
   insert: (id, html) => { document.querySelector(id).innerHTML = html; },
+  before: (id, html) => {
+    const anchor = document.getElementById(id);
+    anchor.insertAdjacentHTML('beforebegin', html);
+  },
+  remove: (id) => {
+    let element = document.getElementById(id);
+    element.parentNode.removeChild(element);
+  },
   change: (id, f) => { document.querySelector(id).onchange = f; },
   click: (id, f) => {
     if (typeof f === 'undefined' || f === null)

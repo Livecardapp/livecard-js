@@ -17,7 +17,7 @@ class VideoModal {
   inject(showIntro) {
     const components = this.isMobile ?
       `<input type="file" accept="video/mp4,video/x-m4v,video/webm,video/quicktime,video/*" capture="user" id="inputVideo" style="display: none;">` :
-      `<div class="livecard-spinner" style="display: none;"></div><video id="capture" autoplay muted playsinline></video><video id="recorded" style="display: none"></video>`;
+      `<div id="video-placeholder"></div>`;
 
     dq.insert('#livecard-wrapper', this.template(components, !this.isMobile));
     dq.css('#create_video_instructions', 'display', showIntro ? 'block' : 'none');
@@ -44,7 +44,6 @@ class VideoModal {
     }
 
     // controls
-    dq.on('#capture', 'loadedmetadata', () => { this.hideSpinner(); });
     dq.click('#btnRecord', () => this.btnRecordClick());
     dq.click('#btnStop', () => this.btnStopClick());
     dq.click('#btnRetake', () => this.btnRetakeClick());
@@ -122,11 +121,30 @@ class VideoModal {
     try {
       this.showSpinner();
       const result = await this.camera.init('LCCapture', 'flashContent');
-      console.log('_showRecordingView', result);
+      const vp = 'video-placeholder';
+
       if (result.isNative) {
-        if (typeof result.stream !== 'undefined')
+        if (typeof result.stream !== 'undefined') {
+          dq.before(vp, `<video id="capture" autoplay muted playsinline></video><video id="recorded" style="display: none"></video>`);
+          dq.remove(vp);
+          dq.on('#capture', 'loadedmetadata', () => { this.hideSpinner(); });
           document.querySelector('#capture').srcObject = result.stream;
+        } else {
+          throw new Error('invalid stream');
+        }
       } else {
+        const pageHost = ((document.location.protocol == "https:") ? "https://" : "http://");
+        const flashPlayer = `
+          <div id="flashContent">
+            <p>To view this page ensure that Adobe Flash Player version 16.0.0 or greater is installed.</p>
+            <a href="http://www.adobe.com/go/getflashplayer">
+              <img src='${pageHost}www.adobe.com/images/shared/download_buttons/get_flash_player.gif' alt='Get Adobe Flash player' />
+            </a>
+          </div>`;
+
+        dq.before(vp, flashPlayer);
+        dq.remove(vp);
+
         dq.css('#flashContent', 'display', 'block');
         dq.css('#flashContent', 'text-align', 'left');
         dq.css('#LCCapture', 'position', 'absolute');
