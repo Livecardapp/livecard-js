@@ -118,44 +118,43 @@ class VideoModal {
   // PRIVATE
 
   async _showRecordingView(onFailure) {
+    const vp = 'video-placeholder';
+
     try {
       this.showSpinner();
-      const result = await this.camera.init('LCCapture', 'flashContent');
-      const vp = 'video-placeholder';
-
-      if (result.isNative) {
-        if (typeof result.stream !== 'undefined') {
-          dq.before(vp, `<video id="capture" autoplay muted playsinline></video><video id="recorded" style="display: none"></video>`);
-          dq.remove(vp);
-          dq.on('#capture', 'loadedmetadata', () => { this.hideSpinner(); });
-          document.querySelector('#capture').srcObject = result.stream;
-        } else {
+      const result = await this.camera.initNative();
+      if (result.created) {
+        if (typeof result.stream === 'undefined' || result.stream === null)
           throw new Error('invalid stream');
-        }
-      } else {
-        const pageHost = ((document.location.protocol == "https:") ? "https://" : "http://");
-        const flashPlayer = `
-          <div id="flashContent">
-            <p>To view this page ensure that Adobe Flash Player version 16.0.0 or greater is installed.</p>
-            <a href="http://www.adobe.com/go/getflashplayer">
-              <img src='${pageHost}www.adobe.com/images/shared/download_buttons/get_flash_player.gif' alt='Get Adobe Flash player' />
-            </a>
-          </div>`;
+        dq.before(vp, `<video id="capture" autoplay muted playsinline></video><video id="recorded" style="display: none"></video>`);
+        dq.remove(vp);
+        dq.on('#capture', 'loadedmetadata', () => { this.hideSpinner(); });
+        document.querySelector('#capture').srcObject = result.stream;
+      }
+      dq.addClass('#video-container', 'livecard-fade-show');
+    } catch (error) {
+      try {
+        this.hideSpinner();
 
-        dq.before(vp, flashPlayer);
+        const pageHost = ((document.location.protocol == "https:") ? "https://" : "http://");
+        const html = `
+        <div id="flashContent">
+          <p>To view this page ensure that Adobe Flash Player version 16.0.0 or greater is installed.</p>
+          <a href="http://www.adobe.com/go/getflashplayer">
+            <img src='${pageHost}www.adobe.com/images/shared/download_buttons/get_flash_player.gif' alt='Get Adobe Flash player' />
+          </a>
+        </div>`;
+        dq.before(vp, html);
         dq.remove(vp);
 
-        dq.css('#flashContent', 'display', 'block');
-        dq.css('#flashContent', 'text-align', 'left');
+        this.camera.initFlash('LCCapture', 'flashContent');
+
         dq.css('#LCCapture', 'position', 'absolute');
         dq.css('#LCCapture', 'top', '0px');
         dq.css('#LCCapture', 'left', '0px');
+      } catch (error) {
+        onFailure(ErrorType.RECORDING_NOT_SUPPORTED);
       }
-
-      dq.addClass('#video-container', 'livecard-fade-show');
-    } catch (error) {
-      this.hideSpinner();
-      onFailure(ErrorType.RECORDING_NOT_SUPPORTED);
     }
   }
 
