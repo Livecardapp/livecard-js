@@ -56,7 +56,8 @@ class VideoCameraModel {
 
   remove() {
     if (this.camera === null) return;
-    this.camera.webcamRemove();
+    this.camera.remove();
+    this.camera = null;
   }
 
   stageVideoForUpload() {

@@ -74,6 +74,7 @@ class VideoModal {
     this.camera.start();
     dq.css('#btnRecord', 'display', 'none');
     dq.css('#btnStop', 'display', 'inline');
+    console.log('start stop');
   }
 
   btnStopClick() {
@@ -83,33 +84,42 @@ class VideoModal {
     dq.css('#btnRetake', 'display', 'inline');
     dq.css('#btnUse', 'display', 'inline');
 
+    if (!this.camera.isNative) return;
+
     // show static video
     document.querySelector('#recorded').src = this.camera.buffer();
-
     dq.css('#capture', 'display', 'none');
     dq.css('#recorded', 'display', 'block');
   }
 
   btnPlayClick() {
-    document.getElementById('recorded').play();
+    this.camera.isNative ? document.getElementById('recorded').play() : document.getElementById('LCCapture').playBack();
   }
 
   btnRetakeClick() {
     this.camera.reset();
-    dq.css('#recorded', 'display', 'none');
-    dq.css('#capture', 'display', 'block');
+
     dq.css('#btnPlay', 'display', 'none');
     dq.css('#btnRetake', 'display', 'none');
     dq.css('#btnUse', 'display', 'none');
     dq.css('#btnRecord', 'display', 'inline');
+
+    if (!this.camera.isNative) return;
+
+    dq.css('#recorded', 'display', 'none');
+    dq.css('#capture', 'display', 'block');
   }
 
   btnUseClick() {
+    if (!this.camera.isNative) return;
+
     dq.css('#video-container', 'display', 'none');
     document.getElementById('recorded').pause();
     this.hide();
+
     if (!this.camera.stageVideoForUpload())
       return this.onFailure(ErrorType.RECORDING_FAILED);
+
     const message = new MessageModel();
     const err = message.setContentAsVideoFromCamera(this.camera.data());
     err === null ? this.onSuccess(message) : this.onFailure(err);
@@ -123,19 +133,19 @@ class VideoModal {
     try {
       this.showSpinner();
       const result = await this.camera.initNative();
+
       if (result.created) {
-        if (typeof result.stream === 'undefined' || result.stream === null)
-          throw new Error('invalid stream');
-        dq.before(vp, `<video id="capture" autoplay muted playsinline></video><video id="recorded" style="display: none"></video>`);
+        if (typeof result.stream === 'undefined' || result.stream === null) throw new Error('invalid stream');
+        dq.before(vp, '<video id="capture" autoplay muted playsinline></video><video id="recorded" style="display: none"></video>');
         dq.remove(vp);
         dq.on('#capture', 'loadedmetadata', () => { this.hideSpinner(); });
         document.querySelector('#capture').srcObject = result.stream;
       }
+
       dq.addClass('#video-container', 'livecard-fade-show');
     } catch (error) {
+      this.hideSpinner();
       try {
-        this.hideSpinner();
-
         const pageHost = ((document.location.protocol == "https:") ? "https://" : "http://");
         const html = `
         <div id="flashContent">
@@ -157,7 +167,6 @@ class VideoModal {
       }
     }
   }
-
 }
 
 export default VideoModal;
