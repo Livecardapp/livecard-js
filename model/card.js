@@ -67,19 +67,21 @@ class CardModel {
         throw new Error(ErrorType.CREATE_CARD_ERROR);
       }
 
-      if (this.message.type !== MessageModelType.VIDEO)
-        return Promise.resolve({ liveCardId: this.liveCardId, mediaUrl: res.card.image_url });
+      if (this.message.type === MessageModelType.VIDEO) {
+        const videoRes = await this._nativeVideoUpload(domain, this.licenseKey, res.card.id, this.message.content);
+        const videoUrl = videoRes.card.video_url.replace('video.mov', 'video_trans.mp4');
+        console.log('got native video response', videoUrl);
+        return Promise.resolve({ liveCardId: this.liveCardId, mediaUrl: videoUrl });
+      }
 
-      const videoReq = new LCRequest(domain, 'videos/upload');
-      videoReq.setHeader('Accept', 'application/vnd.LiveCard+json;version=1');
-      videoReq.setHeader('License-Key', this.licenseKey);
-      videoReq.setData('video[card_id]', res.card.id);
-      videoReq.setAttachment('video[file]', this.message.content, 'video.mov');
+      if (this.message.type === MessageModelType.FLASH) {
+        const videoRes = await this._flashVideoUpload(this.licenseKey, res.card.id, this.message.content);
+        const videoUrl = videoRes.card.video_url.replace('.mp4', '_trans.mp4');
+        console.log('got flash video response', videoUrl);
+        return Promise.resolve({ liveCardId: this.liveCardId, mediaUrl: videoUrl });
+      }
 
-      const videoRes = await videoReq.post();
-      console.log('got video response', videoRes.card.video_url.replace('video.mov', 'video_trans.mp4'));
-
-      return Promise.resolve({ liveCardId: this.liveCardId, mediaUrl: videoRes.card.video_url.replace('video.mov', 'video_trans.mp4') });
+      return Promise.resolve({ liveCardId: this.liveCardId, mediaUrl: res.card.image_url });
     } catch (error) {
       console.log(error.message);
       return Promise.reject(new Error(ErrorType.CREATE_CARD_ERROR));
@@ -88,7 +90,7 @@ class CardModel {
 
   async confirmOrder() {
     const req = new LCRequest(domain, 'cards/update_order');
-    
+
     req.setHeader('Accept', 'application/vnd.LiveCard+json;version=1');
     req.setHeader('License-Key', this.licenseKey);
     req.setData('card[livecard_id]', this.liveCardId);
@@ -102,6 +104,23 @@ class CardModel {
       return Promise.reject(new Error(ErrorType.CONFIRM_CARD_ERROR));
     }
   }
+
+  async _nativeVideoUpload(domain, licenseKey, cardId, content) {
+    const req = new LCRequest(domain, 'videos/upload');
+    req.setHeader('Accept', 'application/vnd.LiveCard+json;version=1');
+    req.setHeader('License-Key', licenseKey);
+    req.setData('video[card_id]', cardId);
+    req.setAttachment('video[file]', content, 'video.mov');
+    return req.post();
+  }
+
+  async _flashVideoUpload(licenseKey, cardId, streamName) {
+    const req = new LCRequest('https://wowzatest.live.cards', 'upload_video.php');
+    req.setHeader('License-Key', licenseKey);
+    req.setData('card_id', cardId);
+    req.setData('stream_name', streamName);
+    return req.post();
+  }
 }
 
 export default CardModel;
@@ -113,7 +132,7 @@ export default CardModel;
 
 //   var request = new XMLHttpRequest();
 //   request.open("POST", "https://wowzatest.live.cards/upload_video.php", true);
-  
+
 //   request.setRequestHeader("License-Key", this.licenseKey);
 //   request.responseType = "json";
 //   request.send(data);

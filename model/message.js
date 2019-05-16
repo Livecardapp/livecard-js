@@ -1,7 +1,7 @@
 import ErrorType from '../lib/errors';
 
 const MessageModelType = {
-  VIDEO: 0, IMAGE: 1, TEXT: 2
+  VIDEO: 0, IMAGE: 1, TEXT: 2, FLASH: 3
 };
 
 const MAX_IMAGE_SIZE = 500000;  // 0.5M blob
@@ -16,6 +16,16 @@ class MessageModel {
 
   setContentAsVideoFromFiles(files) {
     return this._setContentAsBlobFromFiles(MessageModelType.VIDEO, files);
+  }
+
+  setContentAsVideoFromFlash(streamName) {
+    if (typeof streamName === 'undefined' || streamName === null)
+      return ErrorType.MISSING_VIDEO;
+
+    this.type = MessageModelType.FLASH;
+    this.content = streamName;
+    
+    return null;
   }
 
   setContentAsVideoFromCamera(recordedBlobs) {
@@ -93,6 +103,9 @@ class MessageModel {
 
     if (this.type === MessageModelType.TEXT && this.content === null)
       return ErrorType.MISSING_TEXT;
+
+    if (this.type === MessageModelType.FLASH && this.content === null)
+      return ErrorType.MISSING_VIDEO;
 
     return null;
   }

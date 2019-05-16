@@ -111,7 +111,11 @@ class VideoModal {
   }
 
   btnUseClick() {
-    if (!this.camera.isNative) return;
+    if (!this.camera.isNative) {
+      const message = new MessageModel();
+      const err = message.setContentAsVideoFromFlash(this.camera.streamName());
+      return err === null ? this.onSuccess(message) : this.onFailure(err);
+    }
 
     dq.css('#video-container', 'display', 'none');
     document.getElementById('recorded').pause();
@@ -154,6 +158,7 @@ class VideoModal {
             <img src='${pageHost}www.adobe.com/images/shared/download_buttons/get_flash_player.gif' alt='Get Adobe Flash player' />
           </a>
         </div>`;
+
         dq.before(vp, html);
         dq.remove(vp);
 

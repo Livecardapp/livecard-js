@@ -34,6 +34,10 @@ class VideoCameraModel {
     console.log('Flash webcam initialized');
   }
 
+  streamName() {
+    return this.isNative ? null : this.camera.streamName();
+  }
+
   start() {
     this.camera.recordStart();
   }
