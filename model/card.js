@@ -63,12 +63,11 @@ class CardModel {
       const res = await request.post();
       console.log('got card response', res);
 
-      if (!res.success) {
-        throw new Error(ErrorType.CREATE_CARD_ERROR);
-      }
+      if (!res.success)
+        return Promise.reject(new Error(ErrorType.CREATE_CARD_ERROR));
 
       if (this.message.type === MessageModelType.VIDEO) {
-        const videoRes = await this._nativeVideoUpload(domain, this.licenseKey, res.card.id, this.message.content);
+        const videoRes = await this._nativeVideoUpload(this.licenseKey, res.card.id, this.message.content);
         const videoUrl = videoRes.card.video_url.replace('video.mov', 'video_trans.mp4');
         console.log('got native video response', videoUrl);
         return Promise.resolve({ liveCardId: this.liveCardId, mediaUrl: videoUrl });
@@ -105,7 +104,7 @@ class CardModel {
     }
   }
 
-  async _nativeVideoUpload(domain, licenseKey, cardId, content) {
+  async _nativeVideoUpload(licenseKey, cardId, content) {
     const req = new LCRequest(domain, 'videos/upload');
     req.setHeader('Accept', 'application/vnd.LiveCard+json;version=1');
     req.setHeader('License-Key', licenseKey);
@@ -124,33 +123,3 @@ class CardModel {
 }
 
 export default CardModel;
-
-// uploadFlashVideo: function(serverCardId) {
-//   var data = new FormData();
-//   data.append("card_id", serverCardId);
-//   data.append("stream_name", this.flashStreamName);
-
-//   var request = new XMLHttpRequest();
-//   request.open("POST", "https://wowzatest.live.cards/upload_video.php", true);
-
-//   request.setRequestHeader("License-Key", this.licenseKey);
-//   request.responseType = "json";
-//   request.send(data);
-
-//   request.addEventListener("load", () => {
-//     this.debugLog("Video upload success for card id " + serverCardId);
-
-//     var videoUrl = request.response.card.video_url.replace(
-//       ".mp4",
-//       "_trans.mp4"
-//     );
-
-//     this.createCardSuccessCallback(this.liveCardId, videoUrl);
-//   });
-
-//   request.addEventListener("error", error => {
-//     this.debugLog("uploadVideo failure: ", error);
-
-//     this.createCardFailureCallback(LiveCardError.CREATE_CARD_ERROR);
-//   });
-// },
