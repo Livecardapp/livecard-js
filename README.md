@@ -8,6 +8,11 @@ For a sample integration see https://gist.github.com/dpanzer/7bf7dc9b4f6feb7a483
 
 # LiveCard SDK Release Notes
 
+0.2.2
+
+- Flash integration
+- Note: Flash dependencies are located in lib/flash. For production, need to place in static path /livecard-sdk/flash.
+
 0.2.1
 
 - Turn off camera when not in use.
