@@ -47,7 +47,7 @@ class VideoCameraModel {
   }
 
   buffer() {
-    return this.camera.bufferVideo();
+    return this.isNative ? this.camera.bufferVideo() : null;
   }
 
   data() {
@@ -65,7 +65,7 @@ class VideoCameraModel {
   }
 
   stageVideoForUpload() {
-    this.camera.streamStop();
+    if (this.isNative) this.camera.streamStop();
     return this.camera.hasData();
   }
 }
