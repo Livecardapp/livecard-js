@@ -12,6 +12,7 @@ For a sample integration see https://gist.github.com/dpanzer/7bf7dc9b4f6feb7a483
 
 - Flash integration
 - Note: Flash dependencies are located in lib/flash. For production, need to place in static path /livecard-sdk/flash.
+- Added setflash for development purposes. Before running the dev server, run 'npm run setflash'.
 
 0.2.1
 
