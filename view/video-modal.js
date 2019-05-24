@@ -168,6 +168,7 @@ class VideoModal {
         dq.css('#LCCapture', 'top', '0px');
         dq.css('#LCCapture', 'left', '0px');
       } catch (error) {
+        console.log('flash error', error);
         onFailure(ErrorType.RECORDING_NOT_SUPPORTED);
       }
     }
