@@ -10,15 +10,12 @@ class ImageWebcamModal {
     this.onSuccess = onSuccess;
     this.onFailure = onFailure;
     this.camera = new ImageCameraModel();
+    this.cameraView = new NativeCameraView();
     Object.assign(this, WebcamMixin());
   }
 
   inject() {
-    const components = `
-    <video id="capture" autoplay muted playsinline></video>
-    <video id="recorded" style="display: none"></video>
-    <canvas id="imgCanvas" style="display: none;"></canvas>`;
-    dq.insert('#livecard-wrapper', this.template(components, true));
+    dq.insert('#livecard-wrapper', this.template(this.cameraView.template(), true));
 
     // controls
     dq.on('#capture', 'loadedmetadata', () => { this.hideSpinner(); });
@@ -49,36 +46,24 @@ class ImageWebcamModal {
   }
 
   btnRecordClick() {
-    const canvas = document.getElementById("imgCanvas");
-    const captureElem = document.getElementById("capture");
-    canvas.width = captureElem.clientWidth;
-    canvas.height = captureElem.clientHeight;
-    const canvasContext = canvas.getContext("2d");
-    canvasContext.drawImage(captureElem, 0, 0, canvas.width, canvas.height);
+    this.cameraView.record();
     dq.css("#btnRecord", 'display', "none");
     dq.css("#btnRetake", 'display', "inline");
     dq.css("#btnUse", 'display', "inline");
-    dq.css("#capture", 'display', "none");
-    canvas.style.display = "block";
   }
 
   btnRetakeClick() {
-    const canvas = document.getElementById("imgCanvas");
-    const canvasContext = canvas.getContext("2d");
-    canvasContext.clearRect(0, 0, canvas.width, canvas.height);
-    canvas.style.display = "none";
-    dq.css("#capture", 'display', "block");
+    this.cameraView.retake();
     dq.css("#btnRetake", 'display', "none");
     dq.css("#btnUse", 'display', "none");
     dq.css("#btnRecord", 'display', "inline");
   }
 
   btnUseClick() {
-    const canvas = document.getElementById("imgCanvas");
     this.hide();
     this.camera.stageDataForUpload();
     const message = new MessageModel();
-    const err = message.setContentAsImageFromCamera(canvas.toDataURL("image/jpeg"));
+    const err = message.setContentAsImageFromCamera(this.cameraView.image());
     err === null ? this.onSuccess(message) : this.onFailure(err);
   }
 
@@ -96,6 +81,44 @@ class ImageWebcamModal {
       onFailure(ErrorType.RECORDING_NOT_SUPPORTED);
     }
   }
+}
+
+class NativeCameraView {
+
+  template() {
+    return `
+      <video id="capture" autoplay muted playsinline></video>
+      <video id="recorded" style="display: none"></video>
+      <canvas id="imgCanvas" style="display: none;"></canvas>`;
+  }
+
+  record() {
+    const canvas = document.getElementById("imgCanvas");
+    const captureElem = document.getElementById("capture");
+    canvas.width = captureElem.clientWidth;
+    canvas.height = captureElem.clientHeight;
+    const canvasContext = canvas.getContext("2d");
+    canvasContext.drawImage(captureElem, 0, 0, canvas.width, canvas.height);
+    canvas.style.display = "block";
+    dq.css("#capture", 'display', "none");
+  }
+
+  retake() {
+    const canvas = document.getElementById("imgCanvas");
+    const canvasContext = canvas.getContext("2d");
+    canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+    canvas.style.display = "none";
+    dq.css("#capture", 'display', "block");
+  }
+
+  image() {
+    const canvas = document.getElementById("imgCanvas");
+    return canvas.toDataURL("image/jpeg");
+  }
+
+}
+
+class FlashCameraView {
 
 }
 
