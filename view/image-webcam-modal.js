@@ -76,7 +76,7 @@ class ImageWebcamModal {
   btnUseClick() {
     const canvas = document.getElementById("imgCanvas");
     this.hide();
-    this.camera.streamStop();
+    this.camera.stageDataForUpload();
     const message = new MessageModel();
     const err = message.setContentAsImageFromCamera(canvas.toDataURL("image/jpeg"));
     err === null ? this.onSuccess(message) : this.onFailure(err);
@@ -87,10 +87,11 @@ class ImageWebcamModal {
   async _showRecordingUI(onFailure) {
     try {
       this.showSpinner();
-      const stream = await this.camera.init();
-      document.querySelector("#capture").srcObject = stream;
+      const result = await this.camera.initNative();
+      document.querySelector("#capture").srcObject = result.stream;
       dq.addClass("#video-container", "livecard-fade-show");
     } catch (error) {
+      console.log('failed to init image capture', error);
       this.hideSpinner();
       onFailure(ErrorType.RECORDING_NOT_SUPPORTED);
     }

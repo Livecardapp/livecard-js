@@ -1,22 +1,34 @@
-import { WebcamStreamMixin } from '../lib/webcam';
-
-// Note: 
-// if there is a need for flash support for image capture, then:
-// - move WebcamStreamMixin to be private in lib/webcam.js
-// - create WebcamImageRecorder class from WebcamStreamMixin (similar to ImageCameraModel).
-// - import WebcamImageRecorder into this file and use that as one of the supported image recorders.
+import { WebcamImageRecorder } from '../lib/webcam';
 
 class ImageCameraModel {
   constructor() {
-    Object.assign(this, WebcamStreamMixin());
+    this.isNative = true;
+    this.camera = null;
   }
 
-  async init() {
-    return this.webcamInit();
+  async initNative() {
+    if (this.camera !== null)
+      return Promise.resolve({ created: false, stream: this.isNative ? window.stream : null });
+
+    try {
+      this.camera = new WebcamImageRecorder();
+      const stream = await this.camera.init();
+      this.isNative = true;
+      return Promise.resolve({ created: true, stream });
+    } catch (error) {
+      console.log('Failed to init native webcam');
+      this.camera = null;
+      this.isNative = true;
+      return Promise.reject();
+    }
+  }
+
+  stageDataForUpload() {
+    this.camera.streamStop();
   }
 
   remove() {
-    this.webcamRemove();
+    this.camera.remove();
   }
 }
 

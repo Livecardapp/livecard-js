@@ -8,11 +8,9 @@ class VideoCameraModel {
   }
 
   async initNative() {
-    if (this.camera !== null) {
-      console.log('already initialized');
-      const result = { created: false, stream: this.isNative ? window.stream : null };
-      return Promise.resolve(result);
-    }
+    if (this.camera !== null)
+      return Promise.resolve({ created: false, stream: this.isNative ? window.stream : null });
+
     try {
       this.camera = new WebcamVideoRecorder();
       const stream = await this.camera.init();
@@ -64,7 +62,7 @@ class VideoCameraModel {
     this.camera = null;
   }
 
-  stageVideoForUpload() {
+  stageDataForUpload() {
     if (this.isNative) this.camera.streamStop();
     return this.camera.hasData();
   }

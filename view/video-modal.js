@@ -121,7 +121,7 @@ class VideoModal {
     document.getElementById('recorded').pause();
     this.hide();
 
-    if (!this.camera.stageVideoForUpload())
+    if (!this.camera.stageDataForUpload())
       return this.onFailure(ErrorType.RECORDING_FAILED);
 
     const message = new MessageModel();
