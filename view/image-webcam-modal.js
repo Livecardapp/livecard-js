@@ -10,15 +10,14 @@ class ImageWebcamModal {
     this.onSuccess = onSuccess;
     this.onFailure = onFailure;
     this.camera = new ImageCameraModel();
-    this.cameraView = new NativeCameraView();
+    this.cameraView = null;
     Object.assign(this, WebcamMixin());
   }
 
   inject() {
-    dq.insert('#livecard-wrapper', this.template(this.cameraView.template(), true));
+    dq.insert('#livecard-wrapper', this.template('<div id="image-placeholder"></div>', true));
 
     // controls
-    dq.on('#capture', 'loadedmetadata', () => { this.hideSpinner(); });
     dq.click('#btnRecord', () => this.btnRecordClick());
     dq.click('#btnRetake', () => this.btnRetakeClick());
     dq.click('#btnUse', () => this.btnUseClick());
@@ -71,25 +70,47 @@ class ImageWebcamModal {
 
   async _showRecordingUI(onFailure) {
     try {
+      // init native camera
       this.showSpinner();
       const result = await this.camera.initNative();
+
+      if (result.stream === null)
+        throw new Error('Native image camera cannot be initialized');
+
+      this.cameraView = new NativeCameraView();
+      this.cameraView.setView('image-placeholder', () => { this.hideSpinner(); });
       document.querySelector("#capture").srcObject = result.stream;
       dq.addClass("#video-container", "livecard-fade-show");
+
+      console.log('native image camera initialized');
     } catch (error) {
-      console.log('failed to init image capture', error);
-      this.hideSpinner();
-      onFailure(ErrorType.RECORDING_NOT_SUPPORTED);
+      try {
+        this.hideSpinner();
+        this.cameraView = new FlashCameraView('LCCapture');
+        this.setView('image-placeholder');
+        this.camera.initFlash('LCCapture', 'flashContent');
+        dq.css('#LCCapture', 'position', 'absolute');
+        dq.css('#LCCapture', 'top', '0px');
+        dq.css('#LCCapture', 'left', '0px');
+        console.log('flash image camera initialized');
+      } catch (error) {
+        console.log(error);
+        onFailure(ErrorType.RECORDING_NOT_SUPPORTED);
+      }
     }
   }
 }
 
 class NativeCameraView {
 
-  template() {
-    return `
+  setView(placeholder, loadCallback) {
+    const view = `
       <video id="capture" autoplay muted playsinline></video>
       <video id="recorded" style="display: none"></video>
       <canvas id="imgCanvas" style="display: none;"></canvas>`;
+    dq.before(placeholder, view);
+    dq.remove(placeholder);
+    dq.on('#capture', 'loadedmetadata', loadCallback);
   }
 
   record() {
@@ -119,7 +140,40 @@ class NativeCameraView {
 }
 
 class FlashCameraView {
+  constructor(cameraId) {
+    this.cameraId = cameraId;
+  }
 
+  setView(placeholder) {
+    const pageHost = ((document.location.protocol == "https:") ? "https://" : "http://");
+    const view = `
+    <div id="flashContent">
+      <p>To view this page ensure that Adobe Flash Player version 16.0.0 or greater is installed.</p>
+      <a href="http://www.adobe.com/go/getflashplayer">
+        <img src='${pageHost}www.adobe.com/images/shared/download_buttons/get_flash_player.gif' alt='Get Adobe Flash player' />
+      </a>
+    </div>`;
+    dq.before(placeholder, view);
+    dq.remove(placeholder);
+  }
+
+  record() {
+    document.getElementById(this.cameraId).captureImage();
+    document.getElementById('imgCanvas').setAttribute('src', 'data:image/jpeg;base64,' + b64String);
+  }
+
+  retake() {
+    const canvas = document.getElementById("imgCanvas");
+    const canvasContext = canvas.getContext("2d");
+    canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+    canvas.style.display = "none";
+    dq.css("#capture", 'display', "block");
+  }
+
+  image() {
+    const canvas = document.getElementById("imgCanvas");
+    return canvas.toDataURL("image/jpeg");
+  }
 }
 
 export default ImageWebcamModal;

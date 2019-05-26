@@ -23,6 +23,14 @@ class ImageCameraModel {
     }
   }
 
+  initFlash(flashCameraId, flashViewId) {
+    if (this.camera !== null) return;
+    this.isNative = false;
+    this.camera = new FlashVideoRecorder(flashCameraId);
+    this.camera.init(flashViewId);
+    console.log('Flash webcam initialized');
+  }
+
   stageDataForUpload() {
     this.camera.streamStop();
   }
