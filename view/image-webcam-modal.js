@@ -81,17 +81,14 @@ class ImageWebcamModal {
       this.cameraView.setView('image-placeholder', () => { this.hideSpinner(); });
       document.querySelector("#capture").srcObject = result.stream;
       dq.addClass("#video-container", "livecard-fade-show");
-
       console.log('native image camera initialized');
     } catch (error) {
       try {
         this.hideSpinner();
         this.cameraView = new FlashCameraView('LCCapture');
-        this.setView('image-placeholder');
+        this.cameraView.setView('image-placeholder');
         this.camera.initFlash('LCCapture', 'flashContent');
-        dq.css('#LCCapture', 'position', 'absolute');
-        dq.css('#LCCapture', 'top', '0px');
-        dq.css('#LCCapture', 'left', '0px');
+        this.cameraView.adjustView();
         console.log('flash image camera initialized');
       } catch (error) {
         console.log(error);
@@ -102,7 +99,6 @@ class ImageWebcamModal {
 }
 
 class NativeCameraView {
-
   setView(placeholder, loadCallback) {
     const view = `
       <video id="capture" autoplay muted playsinline></video>
@@ -155,6 +151,12 @@ class FlashCameraView {
     </div>`;
     dq.before(placeholder, view);
     dq.remove(placeholder);
+  }
+
+  adjustView() {
+    dq.css(`#${this.cameraId}`, 'position', 'absolute');
+    dq.css(`#${this.cameraId}`, 'top', '0px');
+    dq.css(`#${this.cameraId}`, 'left', '0px');
   }
 
   record() {

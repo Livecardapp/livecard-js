@@ -1,4 +1,5 @@
 import { WebcamImageRecorder } from '../lib/webcam';
+import { FlashImageRecorder } from '../lib/flashcam';
 
 class ImageCameraModel {
   constructor() {
@@ -26,7 +27,7 @@ class ImageCameraModel {
   initFlash(flashCameraId, flashViewId) {
     if (this.camera !== null) return;
     this.isNative = false;
-    this.camera = new FlashVideoRecorder(flashCameraId);
+    this.camera = new FlashImageRecorder(flashCameraId);
     this.camera.init(flashViewId);
     console.log('Flash webcam initialized');
   }
