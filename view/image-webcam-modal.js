@@ -161,15 +161,10 @@ class FlashCameraView {
 
   record() {
     document.getElementById(this.cameraId).captureImage();
-    document.getElementById('imgCanvas').setAttribute('src', 'data:image/jpeg;base64,' + b64String);
   }
 
   retake() {
-    const canvas = document.getElementById("imgCanvas");
-    const canvasContext = canvas.getContext("2d");
-    canvasContext.clearRect(0, 0, canvas.width, canvas.height);
-    canvas.style.display = "none";
-    dq.css("#capture", 'display', "block");
+    document.getElementById(this.cameraId).record();
   }
 
   image() {
