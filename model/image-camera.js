@@ -15,9 +15,9 @@ class ImageCameraModel {
       this.camera = new WebcamImageRecorder();
       const stream = await this.camera.init();
       this.isNative = true;
+      console.log('Native webcam initialized');
       return Promise.resolve({ created: true, stream });
     } catch (error) {
-      console.log('Failed to init native webcam');
       this.camera = null;
       this.isNative = true;
       return Promise.reject();
@@ -33,6 +33,7 @@ class ImageCameraModel {
   }
 
   stageDataForUpload() {
+    if (!this.isNative) return;
     this.camera.streamStop();
   }
 

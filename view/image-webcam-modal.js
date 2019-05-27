@@ -129,8 +129,7 @@ class NativeCameraView {
   }
 
   image() {
-    const canvas = document.getElementById("imgCanvas");
-    return canvas.toDataURL("image/jpeg");
+    return document.getElementById("imgCanvas").toDataURL("image/jpeg");
   }
 
 }
@@ -138,6 +137,7 @@ class NativeCameraView {
 class FlashCameraView {
   constructor(cameraId) {
     this.cameraId = cameraId;
+    this.imageString = null;
   }
 
   setView(placeholder) {
@@ -148,9 +148,14 @@ class FlashCameraView {
       <a href="http://www.adobe.com/go/getflashplayer">
         <img src='${pageHost}www.adobe.com/images/shared/download_buttons/get_flash_player.gif' alt='Get Adobe Flash player' />
       </a>
-    </div>`;
+    </div>
+    <canvas id="imgCanvas" style="display: none;"></canvas>`;
     dq.before(placeholder, view);
     dq.remove(placeholder);
+
+    // temporary
+    gotStaticImage = this._setImage.bind(this);
+    // temporary
   }
 
   adjustView() {
@@ -168,9 +173,12 @@ class FlashCameraView {
   }
 
   image() {
-    const canvas = document.getElementById("imgCanvas");
-    return canvas.toDataURL("image/jpeg");
+    return this.imageString;
   }
+
+  // temporary
+  _setImage(imageString) { this.imageString = `data:image/jpeg;base64,${imageString}`; }
+  // temporary
 }
 
 export default ImageWebcamModal;
