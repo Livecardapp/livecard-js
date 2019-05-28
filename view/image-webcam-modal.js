@@ -152,10 +152,6 @@ class FlashCameraView {
     <canvas id="imgCanvas" style="display: none;"></canvas>`;
     dq.before(placeholder, view);
     dq.remove(placeholder);
-
-    // temporary
-    gotStaticImage = this._setImage.bind(this);
-    // temporary
   }
 
   adjustView() {
@@ -165,7 +161,8 @@ class FlashCameraView {
   }
 
   record() {
-    document.getElementById(this.cameraId).captureImage();
+    const capturedImage = document.getElementById(this.cameraId).captureImage();
+    this.imageString = `data:image/jpeg;base64,${capturedImage}`;
   }
 
   retake() {
@@ -175,10 +172,6 @@ class FlashCameraView {
   image() {
     return this.imageString;
   }
-
-  // temporary
-  _setImage(imageString) { this.imageString = `data:image/jpeg;base64,${imageString}`; }
-  // temporary
 }
 
 export default ImageWebcamModal;
