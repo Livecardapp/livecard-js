@@ -30,6 +30,9 @@
             // to choose a file from hd, which triggers LiveCard.selectVideoFile()
             // Or can use our own modal as here
             setTimeout(function () { LiveCard.showRecordingNotSupported(); }, 400);
+          } else if (errorCode === LiveCard.ErrorType.WEBCAM_NOT_AUTHORIZED) {
+            console.log('VIDEO camera access denied');
+            setTimeout(function () { LiveCard.showRecordingNotSupported(); }, 400);
           } else if (errorCode === LiveCard.ErrorType.VIDEO_SIZE_TOO_LARGE) {
             console.log('VIDEO size too large');
           }
@@ -42,14 +45,7 @@
       LiveCard.showGiftTextInput({
         showIntro: true, //Client can opt out of showing our intro by passing false here
         onFailure: (errorCode) => {
-          if (errorCode === LiveCard.ErrorType.RECORDING_NOT_SUPPORTED) {
-            // Client can show own UI for case of webcam recording not supported and expose some UI 
-            // to choose a file from hd, which triggers LiveCard.selectVideoFile()
-            // Or can use our own modal as here
-            setTimeout(function () { LiveCard.showRecordingNotSupported(); }, 400);
-          } else if (errorCode === LiveCard.ErrorType.IMAGE_SIZE_TOO_LARGE) {
-            console.log('IMAGE size too large');
-          }
+          console.log('failed image', errorCode);
         },
         onSuccess: () => {
           collectPhoneNumber();
@@ -60,8 +56,19 @@
     function createImageMessage() {
       lastView = 3;
       LiveCard.showImageInput({
-        onFailure: () => {
-          console.log('failed image');
+        onFailure: (errorCode) => {
+          console.log('IMAGE message failure', errorCode);
+          if (errorCode === LiveCard.ErrorType.RECORDING_NOT_SUPPORTED) {
+            // Client can show own UI for case of webcam recording not supported and expose some UI 
+            // to choose a file from hd, which triggers LiveCard.selectVideoFile()
+            // Or can use our own modal as here
+            setTimeout(function () { LiveCard.showRecordingNotSupported(); }, 400);
+          } else if (errorCode === LiveCard.ErrorType.WEBCAM_NOT_AUTHORIZED) {
+            console.log('IMAGE camera access denied');
+            setTimeout(function () { LiveCard.showRecordingNotSupported(); }, 400);
+          } else if (errorCode === LiveCard.ErrorType.IMAGE_SIZE_TOO_LARGE) {
+            console.log('IMAGE size too large');
+          }
         },
         onSuccess: () => {
           collectPhoneNumber();

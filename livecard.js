@@ -15,6 +15,8 @@ const Context = {
   debug: false,
   modal: null,
   message: null,
+  onFlashWebcamNotInstalled: () => { },
+  onFlashWebcamNotAuthorized: () => { },
 };
 
 const ModalType = {
@@ -28,7 +30,20 @@ const ModalType = {
 const resetModal = () => {
   Context.modal.remove();
   Context.modal = null;
-}
+};
+
+const noWebcamInstalled = () => { Context.onFlashWebcamNotInstalled(); };
+const webcamNotAuthorized = () => { Context.onFlashWebcamNotAuthorized(); };
+const setFlashcamErrorHandling = (onFailure) => {
+  Context.onFlashWebcamNotInstalled = () => {
+    resetModal();
+    onFailure(ErrorType.RECORDING_NOT_SUPPORTED);
+  };
+  Context.onFlashWebcamNotAuthorized = () => {
+    resetModal();
+    onFailure(ErrorType.WEBCAM_NOT_AUTHORIZED);
+  };
+};
 
 // ================= JSDOC GLOBAL DEFINITIONS (START) =================
 
@@ -119,6 +134,8 @@ const showImageInput = (params) => {
         return;
       }
 
+      setFlashcamErrorHandling(params.onFailure);
+
       const onSuccessFromCamera = (imageMessageFromCamera) => {
         Context.message = imageMessageFromCamera;
         console.log('onSuccess camera image message', Context.message);
@@ -157,6 +174,8 @@ const startVideoRecording = (params) => {
       resetModal();
       params.onSuccess();
     };
+
+    setFlashcamErrorHandling(params.onFailure);
 
     Context.modal = new VideoModal(ModalType.VIDEO, Context.isMobile, onSuccessFromVideoInput, params.onFailure);
     Context.modal.inject(params.showIntro);
@@ -204,12 +223,12 @@ const showPhoneInput = (params) => {
  * Show modal informing user that video recording is not supported
  * @memberof LiveCard
  */
-const showRecordingNotSupported = (params) => {
+const showRecordingNotSupported = () => {
   if (Context.modal !== null && Context.modal.type !== ModalType.UNSUPPORTED)
     resetModal();
 
   if (Context.modal === null) {
-    Context.modal = new CameraUnsupportedModal(ModalType.UNSUPPORTED, params.onSuccess);
+    Context.modal = new CameraUnsupportedModal(ModalType.UNSUPPORTED);
     Context.modal.inject();
   }
 
@@ -276,6 +295,8 @@ export {
   showRecordingNotSupported,
   createCard,
   confirmCard,
+  noWebcamInstalled,
+  webcamNotAuthorized,
 };
 
 // =======================
