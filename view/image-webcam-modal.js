@@ -1,6 +1,7 @@
 import dq from './dquery';
 import WebcamMixin from './webcam-mixin';
 import ImageCameraModel from '../model/image-camera';
+import FlashCamera from '../model/flashcam';
 import { MessageModel } from '../model/message';
 import ErrorType from '../lib/errors';
 
@@ -9,7 +10,6 @@ class ImageWebcamModal {
     this.tag = tag;
     this.onSuccess = onSuccess;
     this.onFailure = onFailure;
-    this.camera = new ImageCameraModel();
     this.cameraView = null;
     Object.assign(this, WebcamMixin());
   }
@@ -41,7 +41,8 @@ class ImageWebcamModal {
   }
 
   remove() {
-    this._remove(this.camera);
+    this._remove(this.cameraView.camera);
+    this.cameraView.camera = null;
   }
 
   btnRecordClick() {
@@ -60,7 +61,6 @@ class ImageWebcamModal {
 
   btnUseClick() {
     this.hide();
-    this.camera.stageDataForUpload();
     const message = new MessageModel();
     const err = message.setContentAsImageFromCamera(this.cameraView.image());
     err === null ? this.onSuccess(message) : this.onFailure(err);
@@ -69,36 +69,39 @@ class ImageWebcamModal {
   // PRIVATE
 
   async _showRecordingUI(onFailure) {
-    try {
-      // init native camera
-      this.showSpinner();
-      const result = await this.camera.initNative();
+    // try {
+    //   // init native camera
+    //   this.showSpinner();
+    //   const camera = new ImageCameraModel();
+    //   const result = await camera.initNative();
 
-      if (result.stream === null)
-        throw new Error('Native image camera cannot be initialized');
+    //   if (result.stream === null)
+    //     throw new Error('Native image camera cannot be initialized');
 
-      this.cameraView = new NativeCameraView();
-      this.cameraView.setView('image-placeholder', () => { this.hideSpinner(); });
-      document.querySelector("#capture").srcObject = result.stream;
-      dq.addClass("#video-container", "livecard-fade-show");
-      console.log('native image camera initialized');
-    } catch (error) {
+    //   this.cameraView = new NativeCameraView(camera);
+    //   this.cameraView.setView('image-placeholder', () => { this.hideSpinner(); });
+    //   document.querySelector("#capture").srcObject = result.stream;
+    //   dq.addClass("#video-container", "livecard-fade-show");
+    //   console.log('native image camera initialized');
+    // } catch (error) {
       try {
         this.hideSpinner();
         this.cameraView = new FlashCameraView('LCCapture');
         this.cameraView.setView('image-placeholder');
-        this.camera.initFlash('LCCapture', 'flashContent');
-        this.cameraView.adjustView();
         console.log('flash image camera initialized');
       } catch (error) {
         console.log(error);
         onFailure(ErrorType.RECORDING_NOT_SUPPORTED);
       }
-    }
+    // }
   }
 }
 
 class NativeCameraView {
+  constructor(camera) {
+    this.camera = camera;
+  }
+
   setView(placeholder, loadCallback) {
     const view = `
       <video id="capture" autoplay muted playsinline></video>
@@ -129,6 +132,7 @@ class NativeCameraView {
   }
 
   image() {
+    this.camera.stageDataForUpload();
     return document.getElementById("imgCanvas").toDataURL("image/jpeg");
   }
 
@@ -137,6 +141,7 @@ class NativeCameraView {
 class FlashCameraView {
   constructor(cameraId) {
     this.cameraId = cameraId;
+    this.camera = new FlashCamera(cameraId);
     this.imageString = null;
   }
 
@@ -152,9 +157,7 @@ class FlashCameraView {
     <canvas id="imgCanvas" style="display: none;"></canvas>`;
     dq.before(placeholder, view);
     dq.remove(placeholder);
-  }
-
-  adjustView() {
+    this.camera.init('flashContent');
     dq.css(`#${this.cameraId}`, 'position', 'absolute');
     dq.css(`#${this.cameraId}`, 'top', '0px');
     dq.css(`#${this.cameraId}`, 'left', '0px');

@@ -1,5 +1,6 @@
 import dq from './dquery';
 import VideoCameraModel from '../model/video-camera';
+import FlashCamera from '../model/flashcam';
 import WebcamMixin from './webcam-mixin';
 import ErrorType from '../lib/errors';
 import { MessageModel } from '../model/message';
@@ -111,10 +112,10 @@ class VideoModal {
 
   async _showRecordingView(onFailure) {
     const vp = 'video-placeholder';
-    const camera = new VideoCameraModel();
 
     try {
       this.showSpinner();
+      const camera = new VideoCameraModel();
       const result = await camera.initNative();
 
       if (typeof result.stream === 'undefined' || result.stream === null)
@@ -128,10 +129,8 @@ class VideoModal {
     } catch (error) {
       try {
         this.hideSpinner();
-        this.cameraView = new FlashVideoView('LCCapture', camera);
+        this.cameraView = new FlashVideoView('LCCapture');
         this.cameraView.setView(vp);
-        camera.initFlash('LCCapture', 'flashContent');
-        this.cameraView.adjustView();
       } catch (error) {
         console.log('flash error', error);
         onFailure(ErrorType.RECORDING_NOT_SUPPORTED);
@@ -181,9 +180,9 @@ class NativeVideoView {
 }
 
 class FlashVideoView {
-  constructor(cameraId, camera) {
+  constructor(cameraId) {
     this.cameraId = cameraId;
-    this.camera = camera;
+    this.camera = new FlashCamera(cameraId);
     this.recordStarted = false;
     this.recordEnded = false;
   }
@@ -199,9 +198,7 @@ class FlashVideoView {
     </div>`;
     dq.before(placeholder, html);
     dq.remove(placeholder);
-  }
-
-  adjustView() {
+    this.camera.init('flashContent');
     dq.css(`#${this.cameraId}`, 'position', 'absolute');
     dq.css(`#${this.cameraId}`, 'top', '0px');
     dq.css(`#${this.cameraId}`, 'left', '0px');
