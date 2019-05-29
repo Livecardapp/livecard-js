@@ -8,6 +8,12 @@ For a sample integration see https://gist.github.com/dpanzer/7bf7dc9b4f6feb7a483
 
 # LiveCard SDK Release Notes
 
+0.2.4
+
+- Simplfied flash image and video code structure.
+- Implemented flash access denial handling.
+- Implemented flash no camera present handling.
+
 0.2.3
 
 - Flash image integration
