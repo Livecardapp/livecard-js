@@ -1,5 +1,5 @@
 import { WebcamVideoRecorder } from '../lib/webcam';
-import { FlashCamera } from '../lib/flashcam';
+import FlashCamera from '../lib/flashcam';
 
 class VideoCameraModel {
   constructor() {
