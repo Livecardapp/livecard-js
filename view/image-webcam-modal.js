@@ -69,21 +69,21 @@ class ImageWebcamModal {
   // PRIVATE
 
   async _showRecordingUI(onFailure) {
-    // try {
-    //   // init native camera
-    //   this.showSpinner();
-    //   const camera = new ImageCameraModel();
-    //   const result = await camera.initNative();
+    try {
+      // init native camera
+      this.showSpinner();
+      const camera = new ImageCameraModel();
+      const result = await camera.initNative();
 
-    //   if (result.stream === null)
-    //     throw new Error('Native image camera cannot be initialized');
+      if (result.stream === null)
+        throw new Error('Native image camera cannot be initialized');
 
-    //   this.cameraView = new NativeCameraView(camera);
-    //   this.cameraView.setView('image-placeholder', () => { this.hideSpinner(); });
-    //   document.querySelector("#capture").srcObject = result.stream;
-    //   dq.addClass("#video-container", "livecard-fade-show");
-    //   console.log('native image camera initialized');
-    // } catch (error) {
+      this.cameraView = new NativeCameraView(camera);
+      this.cameraView.setView('image-placeholder', () => { this.hideSpinner(); });
+      document.querySelector("#capture").srcObject = result.stream;
+      dq.addClass("#video-container", "livecard-fade-show");
+      console.log('native image camera initialized');
+    } catch (error) {
       try {
         this.hideSpinner();
         this.cameraView = new FlashCameraView('LCCapture');
@@ -93,7 +93,7 @@ class ImageWebcamModal {
         console.log(error);
         onFailure(ErrorType.RECORDING_NOT_SUPPORTED);
       }
-    // }
+    }
   }
 }
 
