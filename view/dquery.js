@@ -15,7 +15,10 @@ const dq = {
     else
       document.querySelector(id).addEventListener('click', f);
   },
-  css: (id, attribute, value) => { document.querySelector(id).style[attribute] = value; },
+  css: (id, attribute, value) => { 
+    if (document.querySelector(id))
+      document.querySelector(id).style[attribute] = value; 
+  },
   addClass: (id, cls) => { document.querySelector(id).classList.add(cls); },
   removeClass: (id, cls) => { document.querySelector(id).classList.remove(cls); },
   val: (id) => { return document.querySelector(id).value; },

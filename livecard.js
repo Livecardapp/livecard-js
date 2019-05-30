@@ -99,7 +99,6 @@ const showGiftTextInput = (params) => {
     Context.modal = new MessageModal(ModalType.TEXT);
     const onSuccessFromTextInput = (textMessage) => {
       Context.message = textMessage;
-      console.log('onSuccess text message', Context.message);
       resetModal();
       params.onSuccess();
     };
@@ -128,7 +127,6 @@ const showImageInput = (params) => {
     const onSuccessFromImageSourceSelection = (imageMessageFromFile) => {
       if (imageMessageFromFile !== null) {
         Context.message = imageMessageFromFile;
-        console.log('onSuccess file image message', Context.message);
         resetModal();
         params.onSuccess();
         return;
@@ -138,7 +136,6 @@ const showImageInput = (params) => {
 
       const onSuccessFromCamera = (imageMessageFromCamera) => {
         Context.message = imageMessageFromCamera;
-        console.log('onSuccess camera image message', Context.message);
         resetModal();
         params.onSuccess();
       };
@@ -170,7 +167,6 @@ const startVideoRecording = (params) => {
   if (Context.modal === null) {
     const onSuccessFromVideoInput = (videoMessage) => {
       Context.message = videoMessage;
-      console.log('onSuccess video message', Context.message);
       resetModal();
       params.onSuccess();
     };

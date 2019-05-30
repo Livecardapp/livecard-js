@@ -68,6 +68,7 @@ class VideoModal {
   }
 
   remove() {
+    if (typeof this.cameraView === 'undefined' || this.cameraView === null) return;
     this._remove(this.cameraView.camera);
     this.cameraView.camera = null;
   }
@@ -119,7 +120,7 @@ class VideoModal {
       const stream = await camera.init();
 
       if (typeof stream === 'undefined' || stream === null)
-        throw new Error('invalid stream');
+        throw new Error('Native video camera cannot be initialized');
 
       this.cameraView = new NativeVideoView(camera);
       this.cameraView.setView(vp, () => { this.hideSpinner(); });
@@ -127,8 +128,12 @@ class VideoModal {
 
       dq.addClass('#video-container', 'livecard-fade-show');
     } catch (error) {
+      this.hideSpinner();
+
+      if (error.name === 'NotAllowedError')
+        return onFailure(ErrorType.WEBCAM_NOT_AUTHORIZED);
+
       try {
-        this.hideSpinner();
         this.cameraView = new FlashVideoView('LCCapture');
         this.cameraView.setView(vp);
       } catch (error) {

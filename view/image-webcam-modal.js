@@ -41,6 +41,7 @@ class ImageWebcamModal {
   }
 
   remove() {
+    if (typeof this.cameraView === 'undefined' || this.cameraView === null) return;
     this._remove(this.cameraView.camera);
     this.cameraView.camera = null;
   }
@@ -84,8 +85,12 @@ class ImageWebcamModal {
       dq.addClass("#video-container", "livecard-fade-show");
       console.log('native image camera initialized');
     } catch (error) {
+      this.hideSpinner();
+
+      if (error.name === 'NotAllowedError')
+        return onFailure(ErrorType.WEBCAM_NOT_AUTHORIZED);
+
       try {
-        this.hideSpinner();
         this.cameraView = new FlashCameraView('LCCapture');
         this.cameraView.setView('image-placeholder');
         console.log('flash image camera initialized');

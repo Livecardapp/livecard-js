@@ -17,7 +17,7 @@ class VideoWebcam {
 
     return new Promise(async (resolve, reject) => {
       if (typeof window.MediaRecorder === 'undefined')
-        return reject();
+        return reject(new Error('No media recorder'));
 
       let fileType = null;
       if (MediaRecorder.isTypeSupported("video/webm;codecs=vp9"))
@@ -28,9 +28,16 @@ class VideoWebcam {
         fileType = "video/webm";
 
       if (fileType === null)
-        return reject();
+        return reject(new Error('Video file format not supported'));
+    
+      let stream = null;
+      
+      try {
+        stream = await initCamera();
+      } catch(err) {
+        return reject(err);
+      }
 
-      const stream = await initCamera();
       const error = _setRecorder(stream, fileType);
 
       if (error === null)
@@ -110,7 +117,7 @@ const WebcamStreamMixin = () => {
         return Promise.resolve(stream);
       } catch (error) {
         console.log('initCamera', error);
-        return Promise.reject();
+        return Promise.reject(error);
       }
     },
     streamStop: () => {
