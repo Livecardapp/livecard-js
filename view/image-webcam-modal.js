@@ -1,6 +1,6 @@
 import dq from './dquery';
 import WebcamMixin from './webcam-mixin';
-import ImageCameraModel from '../model/image-camera';
+import { ImageWebcam } from '../model/webcam';
 import FlashCamera from '../model/flashcam';
 import { MessageModel } from '../model/message';
 import ErrorType from '../lib/errors';
@@ -72,15 +72,15 @@ class ImageWebcamModal {
     try {
       // init native camera
       this.showSpinner();
-      const camera = new ImageCameraModel();
-      const result = await camera.initNative();
+      const camera = new ImageWebcam();
+      const stream = await camera.initialize();
 
-      if (result.stream === null)
+      if (typeof stream === 'undefined' || stream === null)
         throw new Error('Native image camera cannot be initialized');
 
       this.cameraView = new NativeCameraView(camera);
       this.cameraView.setView('image-placeholder', () => { this.hideSpinner(); });
-      document.querySelector("#capture").srcObject = result.stream;
+      document.querySelector("#capture").srcObject = stream;
       dq.addClass("#video-container", "livecard-fade-show");
       console.log('native image camera initialized');
     } catch (error) {
@@ -132,7 +132,7 @@ class NativeCameraView {
   }
 
   image() {
-    this.camera.stageDataForUpload();
+    this.camera.streamStop();
     return document.getElementById("imgCanvas").toDataURL("image/jpeg");
   }
 

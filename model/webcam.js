@@ -1,18 +1,10 @@
-class WebcamImageRecorder {
+class ImageWebcam {
   constructor() {
     Object.assign(this, WebcamStreamMixin());
   }
-
-  async init() {
-    return this.webcamInit();
-  }
-
-  remove() {
-    this.webcamRemove();
-  }
 }
 
-class WebcamVideoRecorder {
+class VideoWebcam {
   constructor() {
     this.blobs = [];
     this.recorder = null;
@@ -20,7 +12,7 @@ class WebcamVideoRecorder {
   }
 
   async init() {
-    const webcamInit = this.webcamInit;
+    const initCamera = this.initialize;
     const _setRecorder = this._setRecorder.bind(this);
 
     return new Promise(async (resolve, reject) => {
@@ -38,7 +30,7 @@ class WebcamVideoRecorder {
       if (fileType === null)
         return reject();
 
-      const stream = await webcamInit();
+      const stream = await initCamera();
       const error = _setRecorder(stream, fileType);
 
       if (error === null)
@@ -48,33 +40,34 @@ class WebcamVideoRecorder {
     });
   }
 
-  recordStart() {
+  start() {
     if (this.recorder === null) return false;
     this.blobs = [];
     // collect 10ms of data
     this.recorder.start(10);
   }
 
-  recordStop() {
+  stop() {
     if (this.recorder === null) return;
     this.recorder.stop();
   }
 
-  bufferVideo() {
+  buffer() {
     const buffer = new Blob(this.blobs, { type: "video/webm" });
     return window.URL.createObjectURL(buffer);
   }
 
-  hasData() {
+  data() {
+    return this.blobs;
+  }
+
+  stageDataForUpload() {
+    this.streamStop();
     return this.blobs.length > 0;
   }
 
   reset() {
     this.blobs = [];
-  }
-
-  remove() {
-    this.webcamRemove();
   }
 
   // PRIVATE
@@ -98,7 +91,7 @@ class WebcamVideoRecorder {
 
 const WebcamStreamMixin = () => {
   return {
-    webcamInit: async () => {
+    initialize: async () => {
 
       if (typeof navigator.mediaDevices === 'undefined' || navigator.mediaDevices === null)
         return Promise.reject();
@@ -116,14 +109,14 @@ const WebcamStreamMixin = () => {
         window.stream = stream;
         return Promise.resolve(stream);
       } catch (error) {
-        console.log('webcamInit', error);
+        console.log('initCamera', error);
         return Promise.reject();
       }
     },
     streamStop: () => {
       window.stream.getTracks().forEach(function (curTrack) { curTrack.stop(); });
     },
-    webcamRemove: () => {
+    remove: () => {
       if (typeof window.stream === 'undefined' || window.stream === null) return;
       window.stream.getTracks().forEach(function (curTrack) { curTrack.stop(); });
       window.stream = null;
@@ -131,4 +124,4 @@ const WebcamStreamMixin = () => {
   };
 };
 
-export { WebcamImageRecorder, WebcamVideoRecorder };
+export { ImageWebcam, VideoWebcam };

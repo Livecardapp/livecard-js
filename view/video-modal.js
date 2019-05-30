@@ -1,5 +1,5 @@
 import dq from './dquery';
-import VideoCameraModel from '../model/video-camera';
+import { VideoWebcam } from '../model/webcam';
 import FlashCamera from '../model/flashcam';
 import WebcamMixin from './webcam-mixin';
 import ErrorType from '../lib/errors';
@@ -115,15 +115,15 @@ class VideoModal {
 
     try {
       this.showSpinner();
-      const camera = new VideoCameraModel();
-      const result = await camera.initNative();
+      const camera = new VideoWebcam();
+      const stream = await camera.init();
 
-      if (typeof result.stream === 'undefined' || result.stream === null)
+      if (typeof stream === 'undefined' || stream === null)
         throw new Error('invalid stream');
 
       this.cameraView = new NativeVideoView(camera);
       this.cameraView.setView(vp, () => { this.hideSpinner(); });
-      document.getElementById('capture').srcObject = result.stream;
+      document.getElementById('capture').srcObject = stream;
 
       dq.addClass('#video-container', 'livecard-fade-show');
     } catch (error) {
