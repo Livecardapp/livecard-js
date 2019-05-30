@@ -13,6 +13,9 @@ For a sample integration see https://gist.github.com/dpanzer/7bf7dc9b4f6feb7a483
 - Simplfied flash image and video code structure.
 - Implemented flash access denial handling.
 - Implemented flash no camera present handling.
+- Simplfied native image and video code structure.
+- Implemented native access denial handling.
+- Implemented native no camera present handling.
 
 0.2.3
 
