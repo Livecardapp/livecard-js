@@ -1,5 +1,5 @@
 import dq from './dquery';
-import { VideoWebcam } from '../model/webcam';
+import { WebstreamVideo } from '../model/webstream';
 import FlashCamera from '../model/flashcam';
 import WebcamMixin from './webcam-mixin';
 import ErrorType from '../lib/errors';
@@ -116,7 +116,7 @@ class VideoModal {
 
     try {
       this.showSpinner();
-      const camera = new VideoWebcam();
+      const camera = new WebstreamVideo();
       const stream = await camera.init();
 
       if (typeof stream === 'undefined' || stream === null)

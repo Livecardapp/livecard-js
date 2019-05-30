@@ -1,6 +1,6 @@
 import dq from './dquery';
 import WebcamMixin from './webcam-mixin';
-import { ImageWebcam } from '../model/webcam';
+import { WebstreamImage } from '../model/webstream';
 import FlashCamera from '../model/flashcam';
 import { MessageModel } from '../model/message';
 import ErrorType from '../lib/errors';
@@ -73,7 +73,7 @@ class ImageWebcamModal {
     try {
       // init native camera
       this.showSpinner();
-      const camera = new ImageWebcam();
+      const camera = new WebstreamImage();
       const stream = await camera.initialize();
 
       if (typeof stream === 'undefined' || stream === null)

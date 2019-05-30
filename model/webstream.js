@@ -1,14 +1,14 @@
-class ImageWebcam {
+export class WebstreamImage {
   constructor() {
-    Object.assign(this, WebcamStreamMixin());
+    Object.assign(this, WebcamStreamMixin(false, true));
   }
 }
 
-class VideoWebcam {
+export class WebstreamVideo {
   constructor() {
     this.blobs = [];
     this.recorder = null;
-    Object.assign(this, WebcamStreamMixin());
+    Object.assign(this, WebcamStreamMixin(true, true));
   }
 
   async init() {
@@ -29,12 +29,12 @@ class VideoWebcam {
 
       if (fileType === null)
         return reject(new Error('Video file format not supported'));
-    
+
       let stream = null;
-      
+
       try {
         stream = await initCamera();
-      } catch(err) {
+      } catch (err) {
         return reject(err);
       }
 
@@ -96,19 +96,18 @@ class VideoWebcam {
   }
 }
 
-const WebcamStreamMixin = () => {
+const WebcamStreamMixin = (hasAudio, hasVideo) => {
   return {
     initialize: async () => {
 
       if (typeof navigator.mediaDevices === 'undefined' || navigator.mediaDevices === null)
         return Promise.reject();
 
+      console.log(`stream: hasAudio ${hasAudio}, hasVideo ${hasVideo}`);
+      
       const constraints = {
-        audio: true,
-        video: {
-          width: { ideal: 1920, min: 1280 },
-          height: { ideal: 1080, min: 720 }
-        }
+        audio: hasAudio,
+        video: hasVideo ? { width: { ideal: 1920, min: 1280 }, height: { ideal: 1080, min: 720 } } : false,
       };
 
       try {
@@ -130,5 +129,3 @@ const WebcamStreamMixin = () => {
     },
   };
 };
-
-export { ImageWebcam, VideoWebcam };
