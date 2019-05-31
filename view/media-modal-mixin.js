@@ -1,34 +1,37 @@
 import dq from './dquery';
 
-const WebcamMixin = () => {
-  return {
-    show: () => {
-      dq.addClass('#video_gift_msg_modal', 'show');
-    },
+const MediaModalMixin = (instance) => {
+  const mixin = {};
+  
+  mixin.show = () => {
+    dq.addClass('#video_gift_msg_modal', 'show');
+  };
 
-    hide: () => {
-      dq.removeClass('#video_gift_msg_modal', 'show');
-      dq.removeClass('#video_gift_msg_modal', 'showing-video-container');
-      dq.css('#create_video_instructions', 'display', 'block');
-      dq.css('#video-container', 'display', 'none');
-    },
+  mixin.hide = () => {
+    dq.removeClass('#video_gift_msg_modal', 'show');
+    dq.removeClass('#video_gift_msg_modal', 'showing-video-container');
+    dq.css('#create_video_instructions', 'display', 'block');
+    dq.css('#video-container', 'display', 'none');
+  };
 
-    showSpinner: () => {
-      dq.css('.livecard-spinner', 'display', 'block');
-    },
+  mixin.showSpinner = () => {
+    dq.css('.livecard-spinner', 'display', 'block');
+  };
 
-    hideSpinner: () => {
-      dq.css('.livecard-spinner', 'display', 'none');
-    },
+  mixin.hideSpinner = () => {
+    dq.css('.livecard-spinner', 'display', 'none');
+  };
 
-    _remove: (camera) => {
-      dq.insert('#livecard-wrapper', '');
-      if (typeof camera === 'undefined' || camera === null) return;
-      camera.remove();
-    },
+  mixin.remove = () => {
+    dq.insert('#livecard-wrapper', '');
+    if (typeof instance.cameraView === 'undefined' || instance.cameraView === null) return;
+    if (typeof instance.cameraView.camera === 'undefined' || instance.cameraView.camera === null) return;
+    instance.cameraView.camera.remove();
+    instance.cameraView.camera = null;
+  };
 
-    template: (components, includeControls) => {
-      const controls = includeControls ? `
+  mixin.template = (components, includeControls) => {
+    const controls = includeControls ? `
       <div class="livecard-controls">
         <img src="https://retailer.live.cards/checkout/livecard-sdk/images/video-record.png" class="icon-video-record" id="btnRecord" />
         <img src="https://retailer.live.cards/checkout/livecard-sdk/images/video-stop.png" class="icon-video-stop" style="display: none;" id="btnStop" />
@@ -37,7 +40,7 @@ const WebcamMixin = () => {
         <button id="btnUse" style="display: none;">Use</button>
       </div>` : '';
 
-      return `
+    return `
       <div class="livecard-modal fade" id="video_gift_msg_modal" tabindex="-1" role="dialog" aria-labelledby="video_gift_msg_modal_label" aria-hidden="true">
         <div class="livecard-modal-dialog livecard-modal-dialog-centered" role="document">
           <div class="livecard-modal-content">
@@ -80,8 +83,9 @@ const WebcamMixin = () => {
           </div>
         </div>
       </div>`;
-    },
-  }
+  };
+
+  return mixin;
 };
 
-export default WebcamMixin;
+export default MediaModalMixin;

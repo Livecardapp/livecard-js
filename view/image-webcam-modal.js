@@ -1,5 +1,5 @@
 import dq from './dquery';
-import WebcamMixin from './webcam-mixin';
+import MediaModalMixin from './media-modal-mixin';
 import { WebstreamImage } from '../model/webstream';
 import FlashCamera from '../model/flashcam';
 import { MessageModel } from '../model/message';
@@ -11,7 +11,7 @@ class ImageWebcamModal {
     this.onSuccess = onSuccess;
     this.onFailure = onFailure;
     this.cameraView = null;
-    Object.assign(this, WebcamMixin());
+    Object.assign(this, MediaModalMixin(this));
   }
 
   inject() {
@@ -38,12 +38,6 @@ class ImageWebcamModal {
 
     const remove = this.remove.bind(this);
     dq.click('.livecard-modal-close', () => { remove(); });
-  }
-
-  remove() {
-    if (typeof this.cameraView === 'undefined' || this.cameraView === null) return;
-    this._remove(this.cameraView.camera);
-    this.cameraView.camera = null;
   }
 
   btnRecordClick() {
