@@ -16,9 +16,22 @@
     let cardId = null;
     let lastView = 0;
 
-    function createVideoMessage() {
-      let lastView = 1;
-      LiveCard.startVideoRecording({
+    function createTextMessage() {
+      lastView = 1;
+      LiveCard.showGiftTextInput({
+        showIntro: true, //Client can opt out of showing our intro by passing false here
+        onFailure: (errorCode) => {
+          console.log('failed image', errorCode);
+        },
+        onSuccess: () => {
+          collectPhoneNumber();
+        },
+      });
+    }
+
+    function createAudioMessage() {
+      let lastView = 2;
+      LiveCard.startAudioRecording({
         showIntro: true, //Client can opt out of showing our intro by passing false here
         onSuccess: function () {
           collectPhoneNumber();
@@ -37,19 +50,6 @@
             console.log('VIDEO size too large');
           }
         }
-      });
-    }
-
-    function createGiftMessage() {
-      lastView = 2;
-      LiveCard.showGiftTextInput({
-        showIntro: true, //Client can opt out of showing our intro by passing false here
-        onFailure: (errorCode) => {
-          console.log('failed image', errorCode);
-        },
-        onSuccess: () => {
-          collectPhoneNumber();
-        },
       });
     }
 
@@ -76,6 +76,30 @@
       });
     }
 
+    function createVideoMessage() {
+      let lastView = 4;
+      LiveCard.startVideoRecording({
+        showIntro: true, //Client can opt out of showing our intro by passing false here
+        onSuccess: function () {
+          collectPhoneNumber();
+        },
+        onFailure: function (errorCode) {
+          console.log('video message failure', errorCode);
+          if (errorCode === LiveCard.ErrorType.RECORDING_NOT_SUPPORTED) {
+            // Client can show own UI for case of webcam recording not supported and expose some UI 
+            // to choose a file from hd, which triggers LiveCard.selectVideoFile()
+            // Or can use our own modal as here
+            setTimeout(function () { LiveCard.showRecordingNotSupported(); }, 400);
+          } else if (errorCode === LiveCard.ErrorType.WEBCAM_NOT_AUTHORIZED) {
+            console.log('VIDEO camera access denied');
+            setTimeout(function () { LiveCard.showRecordingNotSupported(); }, 400);
+          } else if (errorCode === LiveCard.ErrorType.VIDEO_SIZE_TOO_LARGE) {
+            console.log('VIDEO size too large');
+          }
+        }
+      });
+    }
+
     function collectPhoneNumber() {
       //Client can collect phone with own UI and set directly like here or use our modal as below
       //LiveCard.recipientPhone = '1234567890';
@@ -83,13 +107,16 @@
         onBack: () => {
           switch (lastView) {
             case 1:
-              createVideoMessage();
+              createTextMessage();
               break;
             case 2:
-              createGiftMessage();
+              createAudioMessage();
               break;
             case 3:
               createImageMessage();
+              break;
+            case 4:
+              createVideoMessage();
               break;
             default:
               break;
@@ -133,9 +160,10 @@
 </head>
 
 <body>
-  <button onclick="createVideoMessage()">Create Video Message</button><br><br>
-  <button onclick="createGiftMessage()">Create Gift Message</button><br><br>
+  <button onclick="createTextMessage()">Create Gift Message</button><br><br>
+  <button onclick="createAudioMessage()">Create Audio Message</button><br><br>
   <button onclick="createImageMessage()">Create Image Message</button><br><br>
+  <button onclick="createVideoMessage()">Create Video Message</button><br><br>
   <button id="submit-order" onclick="submitOrder()">Submit Order</button><br><br>
   <label id="submit-order-label" for="submit-order"></label><br><br>
   <button id="confirm-last-order" onclick="confirmLastOrder()">Confirm Order</button><br><br>

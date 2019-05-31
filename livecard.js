@@ -7,6 +7,7 @@ import PhoneModal from './view/phone-modal';
 import CameraUnsupportedModal from './view/camera-unsupported-modal';
 import ErrorType from './lib/errors';
 import CardModel from './model/card';
+import AudioModal from './view/audio-modal';
 
 const Context = {
   isMobile: false,
@@ -111,6 +112,34 @@ const showGiftTextInput = (params) => {
 
   Context.modal.show();
 };
+
+/**
+ * Begin the audio capture flow (display in modal)
+ * @memberof LiveCard
+ * @param {Object}  params
+ * @param {boolean} params.showIntro        Controls whether the introductory modal describing the video recording process is shown
+ * @param {successCallback} params.onSuccess  Callback for successful recording
+ * @param {failureCallback} params.onFailure  Callback for failed recording
+ */
+const startAudioRecording = (params) => {
+  if (Context.modal !== null && Context.modal.type !== ModalType.VIDEO)
+    resetModal();
+
+  if (Context.modal === null) {
+    const onSuccessFromVideoInput = (videoMessage) => {
+      Context.message = videoMessage;
+      resetModal();
+      params.onSuccess();
+    };
+
+    setFlashcamErrorHandling(params.onFailure);
+
+    Context.modal = new AudioModal(ModalType.VIDEO, Context.isMobile, onSuccessFromVideoInput, params.onFailure);
+    Context.modal.inject(params.showIntro);
+  }
+
+  Context.modal.show();
+}
 
 /**
  * Begin the static image capture flow (displays in modal)
@@ -284,9 +313,10 @@ const confirmCard = async (params) => {
 export {
   ErrorType,
   Settings,
-  startVideoRecording,
   showGiftTextInput,
+  startAudioRecording,
   showImageInput,
+  startVideoRecording,
   showPhoneInput,
   showRecordingNotSupported,
   createCard,
