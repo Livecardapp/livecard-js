@@ -21,11 +21,7 @@ const Context = {
 };
 
 const ModalType = {
-  VIDEO: 0,
-  IMAGE: 1,
-  TEXT: 2,
-  CARD: 3,
-  UNSUPPORTED: 4,
+  TEXT: 0, AUDIO: 1, IMAGE: 2, VIDEO: 3, CARD: 4, UNSUPPORTED: 5,
 };
 
 const resetModal = () => {
@@ -122,19 +118,19 @@ const showGiftTextInput = (params) => {
  * @param {failureCallback} params.onFailure  Callback for failed recording
  */
 const startAudioRecording = (params) => {
-  if (Context.modal !== null && Context.modal.type !== ModalType.VIDEO)
+  if (Context.modal !== null && Context.modal.type !== ModalType.AUDIO)
     resetModal();
 
   if (Context.modal === null) {
-    const onSuccessFromVideoInput = (videoMessage) => {
-      Context.message = videoMessage;
+    const onSuccessFromAudioInput = (audioMessage) => {
+      Context.message = audioMessage;
       resetModal();
       params.onSuccess();
     };
 
     setFlashcamErrorHandling(params.onFailure);
 
-    Context.modal = new AudioModal(ModalType.VIDEO, Context.isMobile, onSuccessFromVideoInput, params.onFailure);
+    Context.modal = new AudioModal(ModalType.AUDIO, Context.isMobile, onSuccessFromAudioInput, params.onFailure);
     Context.modal.inject(params.showIntro);
   }
 

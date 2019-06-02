@@ -19,7 +19,7 @@ class AudioModal {
       `<input type="file" accept="audio/mp3,audio/webm,audio/wav,audio/*" capture="user" id="inputVideo" style="display: none;">` :
       `<div id="audio-placeholder"></div>`;
 
-    dq.insert('#livecard-wrapper', this.template(components, !this.isMobile));
+    dq.insert('#livecard-wrapper', this.template(components, !this.isMobile, 'audio'));
     dq.css('#create_video_instructions', 'display', showIntro ? 'block' : 'none');
 
     // close button
@@ -31,7 +31,7 @@ class AudioModal {
         if (document.querySelector('#inputVideo').files.length === 0)
           return this.onFailure(ErrorType.NO_VIDEO_SELECTED);
         const message = new MessageModel();
-        const err = message.setContentAsVideoFromFiles(document.querySelector('#inputVideo').files);
+        const err = message.setContentAsAudioFromFiles(document.querySelector('#inputVideo').files);
         err === null ? this.onSuccess(message) : this.onFailure(err);
       });
 
@@ -95,10 +95,8 @@ class AudioModal {
   btnUseClick() {
     const data = this.cameraView.data();
     const message = new MessageModel();
-    const err = data.isNative ?
-      message.setContentAsVideoFromCamera(data.content) :
-      message.setContentAsVideoFromFlash(data.content);
     this.hide();
+    const err = message.setContentAsAudioFromMic(data.content);
     err === null ? this.onSuccess(message) : this.onFailure(err);
   }
 
@@ -163,7 +161,7 @@ class NativeAudioView {
     dq.css('#video-container', 'display', 'none');
     document.getElementById('recorded').pause();
     if (!this.camera.stageDataForUpload()) return null;
-    return { isNative: true, content: this.camera.data() };
+    return { content: this.camera.data() };
   }
 }
 

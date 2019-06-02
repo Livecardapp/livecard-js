@@ -20,7 +20,7 @@ class VideoModal {
       `<input type="file" accept="video/mp4,video/x-m4v,video/webm,video/quicktime,video/*" capture="user" id="inputVideo" style="display: none;">` :
       `<div id="video-placeholder"></div>`;
 
-    dq.insert('#livecard-wrapper', this.template(components, !this.isMobile));
+    dq.insert('#livecard-wrapper', this.template(components, !this.isMobile, 'video'));
     dq.css('#create_video_instructions', 'display', showIntro ? 'block' : 'none');
 
     // close button

@@ -30,7 +30,7 @@ const MediaModalMixin = (instance) => {
     instance.cameraView.camera = null;
   };
 
-  mixin.template = (components, includeControls) => {
+  mixin.template = (components, includeControls, type) => {
     const controls = includeControls ? `
       <div class="livecard-controls">
         <img src="https://retailer.live.cards/checkout/livecard-sdk/images/video-record.png" class="icon-video-record" id="btnRecord" />
@@ -40,6 +40,9 @@ const MediaModalMixin = (instance) => {
         <button id="btnUse" style="display: none;">Use</button>
       </div>` : '';
 
+    const upper = type.toUpperCase();
+    const title = type.charAt(0).toUpperCase() + type.slice(1);
+
     return `
       <div class="livecard-modal fade" id="video_gift_msg_modal" tabindex="-1" role="dialog" aria-labelledby="video_gift_msg_modal_label" aria-hidden="true">
         <div class="livecard-modal-dialog livecard-modal-dialog-centered" role="document">
@@ -48,13 +51,13 @@ const MediaModalMixin = (instance) => {
               <img src="https://retailer.live.cards/checkout/livecard-sdk/images/dismiss.png" alt="x" class="livecard-modal-close" aria-label="Close" />
               <div id="create_video_instructions">
                 <div class="livecard-instructions">
-                  <h2 class="livecard-modal-title text-center" id="video_gift_msg_modal_label">VIDEO GIFT MESSAGE</h2>
+                  <h2 class="livecard-modal-title text-center" id="video_gift_msg_modal_label">${upper} GIFT MESSAGE</h2>
                   <div class="livecard-instructions-steps">
                     <div class="step">
                       <div class="img-holder">
                         <img src="https://retailer.live.cards/checkout/livecard-sdk/images/video-gift-message.png" alt="" />
                       </div>
-                      Create Video Card Below
+                      Create ${title} Card Below
                     </div>
                     <div class="step">
                       <div class="img-holder">
@@ -66,11 +69,11 @@ const MediaModalMixin = (instance) => {
                       <div class="img-holder">
                         <img src="https://retailer.live.cards/checkout/livecard-sdk/images/video-text-gift.png" alt="" />
                       </div>
-                      Video is sent via Text to gift recipient
+                      ${title} is sent via Text to gift recipient
                     </div>
                   </div>
                   <button type="button" class="btn livecard-btn-modal-submit" id="create_video_card_btn">
-                    CREATE VIDEO<span class="d-none d-sm-inline"> CARD</span>
+                    CREATE ${upper}<span class="d-none d-sm-inline"> CARD</span>
                   </button>
                 </div>
               </div>

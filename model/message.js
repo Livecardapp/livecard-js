@@ -1,45 +1,49 @@
 import ErrorType from '../lib/errors';
 
-const MessageModelType = {
-  VIDEO: 0, IMAGE: 1, TEXT: 2, FLASH: 3
-};
-
+const MAX_AUDIO_SIZE = 2000000; // 2M blob
 const MAX_IMAGE_SIZE = 500000;  // 0.5M blob
 const MAX_VIDEO_SIZE = 2000000; // 2M blob
 
-class MessageModel {
+export const MessageModelType = {
+  TEXT: 0, AUDIO: 1, IMAGE: 2, VIDEO: 3, FLASH: 4
+};
+
+export class MessageModel {
   constructor() {
     // always have some setting for type
     this.type = MessageModelType.TEXT;
     this.content = null;
   }
 
-  setContentAsVideoFromFiles(files) {
-    return this._setContentAsBlobFromFiles(MessageModelType.VIDEO, files);
-  }
+  // TEXT
+  setContentAsText(text) {
+    if (typeof text !== 'string' || text === null)
+      return ErrorType.MISSING_TEXT;
 
-  setContentAsVideoFromFlash(streamName) {
-    if (typeof streamName === 'undefined' || streamName === null)
-      return ErrorType.MISSING_VIDEO;
+    this.content = text;
+    this.type = MessageModelType.TEXT;
 
-    this.type = MessageModelType.FLASH;
-    this.content = streamName;
-    
     return null;
   }
 
-  setContentAsVideoFromCamera(recordedBlobs) {
-    const blob = new Blob(recordedBlobs, { type: 'video/webm' });
+  // AUDIO
+  setContentAsAudioFromFiles(files) {
+    return this._setContentAsBlobFromFiles(MessageModelType.AUDIO, files);
+  }
 
-    if (blob.size > MAX_VIDEO_SIZE)
-      return ErrorType.VIDEO_SIZE_TOO_LARGE;
+  setContentAsAudioFromMic(recordedBlobs) {
+    const blob = new Blob(recordedBlobs, { type: 'audio/webm' });
+
+    if (blob.size > MAX_AUDIO_SIZE)
+      return ErrorType.AUDIO_SIZE_TOO_LARGE;
 
     this.content = blob;
-    this.type = MessageModelType.VIDEO;
+    this.type = MessageModelType.AUDIO;
 
     return null;
   }
 
+  // IMAGE
   setContentAsImageFromFiles(files) {
     return this._setContentAsBlobFromFiles(MessageModelType.IMAGE, files);
   }
@@ -84,25 +88,46 @@ class MessageModel {
     return null;
   }
 
-  setContentAsText(text) {
-    if (typeof text !== 'string' || text === null)
-      return ErrorType.MISSING_TEXT;
+  // VIDEO
+  setContentAsVideoFromFiles(files) {
+    return this._setContentAsBlobFromFiles(MessageModelType.VIDEO, files);
+  }
 
-    this.content = text;
-    this.type = MessageModelType.TEXT;
+  setContentAsVideoFromCamera(recordedBlobs) {
+    const blob = new Blob(recordedBlobs, { type: 'video/webm' });
+
+    if (blob.size > MAX_VIDEO_SIZE)
+      return ErrorType.VIDEO_SIZE_TOO_LARGE;
+
+    this.content = blob;
+    this.type = MessageModelType.VIDEO;
+
+    return null;
+  }
+
+  // FLASH
+  setContentAsVideoFromFlash(streamName) {
+    if (typeof streamName === 'undefined' || streamName === null)
+      return ErrorType.MISSING_VIDEO;
+
+    this.type = MessageModelType.FLASH;
+    this.content = streamName;
 
     return null;
   }
 
   validate() {
-    if (this.type === MessageModelType.VIDEO && this.content === null)
-      return ErrorType.MISSING_VIDEO;
+    if (this.type === MessageModelType.TEXT && this.content === null)
+      return ErrorType.MISSING_TEXT;
+
+    if (this.type === MessageModelType.AUDIO && this.content === null)
+      return ErrorType.MISSING_AUDIO;
 
     if (this.type === MessageModelType.IMAGE && this.content === null)
       return ErrorType.MISSING_IMAGE;
 
-    if (this.type === MessageModelType.TEXT && this.content === null)
-      return ErrorType.MISSING_TEXT;
+    if (this.type === MessageModelType.VIDEO && this.content === null)
+      return ErrorType.MISSING_VIDEO;
 
     if (this.type === MessageModelType.FLASH && this.content === null)
       return ErrorType.MISSING_VIDEO;
@@ -111,10 +136,20 @@ class MessageModel {
   }
 
   _setContentAsBlobFromFiles(type, files) {
-    if (files.length === 0)
-      return type === MessageModelType.IMAGE ? ErrorType.MISSING_IMAGE : ErrorType.MISSING_VIDEO;
+    if (files.length === 0) {
+      if (type === MessageModelType.AUDIO)
+        return ErrorType.MISSING_AUDIO;
+
+      if (type === MessageModelType.IMAGE)
+        return ErrorType.MISSING_IMAGE;
+
+      return ErrorType.MISSING_VIDEO;
+    }
 
     const blob = files[0];
+
+    if (type === MessageModelType.AUDIO && blob.size > MAX_AUDIO_SIZE)
+      return ErrorType.AUDIO_SIZE_TOO_LARGE;
 
     if (type === MessageModelType.IMAGE && blob.size > MAX_IMAGE_SIZE)
       return ErrorType.IMAGE_SIZE_TOO_LARGE;
@@ -128,8 +163,3 @@ class MessageModel {
     return null;
   }
 }
-
-export {
-  MessageModelType,
-  MessageModel,
-};

@@ -15,7 +15,7 @@ class ImageWebcamModal {
   }
 
   inject() {
-    dq.insert('#livecard-wrapper', this.template('<div id="image-placeholder"></div>', true));
+    dq.insert('#livecard-wrapper', this.template('<div id="image-placeholder"></div>', true, 'image'));
 
     // controls
     dq.click('#btnRecord', () => this.btnRecordClick());
