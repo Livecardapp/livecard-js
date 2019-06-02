@@ -7,39 +7,61 @@ export class WebstreamImage {
 export class WebstreamAudio {
   constructor() {
     this.bars = [];
+
+    this.context = null;
+    this.input = null;
+    this.analyser = null;
+    this.processor = null;
+
     const mimeTypes = ['audio/webm', 'audio/webm\;codecs=opus'];
     Object.assign(this, StreamMixin(true, false), RecorderMixin(this, mimeTypes));
   }
 
   startVisuals(callback) {
-    // Handle the incoming audio stream
-    const audioContext = new AudioContext();
-    const input = audioContext.createMediaStreamSource(window.stream);
-    const analyser = audioContext.createAnalyser();
+    if (this.processor === null) {
+      // Handle the incoming audio stream
+      this.context = new AudioContext();
+      this.input = this.context.createMediaStreamSource(window.stream);
+      this.analyser = this.context.createAnalyser();
 
-    const _renderBars = this._renderBars.bind(this);
-    const scriptProcessor = audioContext.createScriptProcessor();
-    scriptProcessor.onaudioprocess = audioProcessingEvent => {
-      const tempArray = new Uint8Array(analyser.frequencyBinCount);
-      analyser.getByteFrequencyData(tempArray);
-      callback(_renderBars(tempArray));
-    };
+      const _renderBars = this._renderBars.bind(this);
+      const getByteFrequencyData = this.analyser.getByteFrequencyData.bind(this.analyser);
 
-    // Some analyser setup
-    analyser.smoothingTimeConstant = 0.3;
-    analyser.fftSize = 1024;
+      this.processor = this.context.createScriptProcessor();
+      this.processor.onaudioprocess = () => {
+        const a = new Uint8Array(analyser.frequencyBinCount);
+        getByteFrequencyData(a);
+        callback(_renderBars(a));
+      };
 
-    input.connect(analyser);
-    analyser.connect(scriptProcessor);
-    scriptProcessor.connect(audioContext.destination);
+      // Some analyser setup
+      this.analyser.smoothingTimeConstant = 0.3;
+      this.analyser.fftSize = 1024;
+    }
+
+    this.input.connect(this.analyser);
+    this.analyser.connect(this.processor);
+    this.processor.connect(this.context.destination);
   }
 
   stopVisuals() {
-    // todo
+    if (this.processor === null) return;
+    
+    this.input.disconnect();
+    this.analyser.disconnect();
+    this.processor.disconnect();
+    
+    this.input.connect(this.context.destination);
+
+    this.input = null;
+    this.analyser = null;
+    this.context = null;
+    this.processor = null;
   }
 
   resetVisuals() {
     // todo
+    this.bars = [];
   }
 
   _renderBars(buffer) {
