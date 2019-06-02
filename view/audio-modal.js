@@ -10,7 +10,7 @@ class AudioModal {
     this.isMobile = isMobile;
     this.onSuccess = onSuccess;
     this.onFailure = onFailure;
-    this.cameraView = null;
+    this.mediaView = null;
     Object.assign(this, MediaModalMixin(this));
   }
 
@@ -67,13 +67,13 @@ class AudioModal {
   }
 
   btnRecordClick() {
-    this.cameraView.start();
+    this.mediaView.start();
     dq.css('#btnRecord', 'display', 'none');
     dq.css('#btnStop', 'display', 'inline');
   }
 
   btnStopClick() {
-    this.cameraView.stop();
+    this.mediaView.stop();
     dq.css('#btnStop', 'display', 'none');
     dq.css('#btnPlay', 'display', 'inline');
     dq.css('#btnRetake', 'display', 'inline');
@@ -81,11 +81,11 @@ class AudioModal {
   }
 
   btnPlayClick() {
-    this.cameraView.play();
+    this.mediaView.play();
   }
 
   btnRetakeClick() {
-    this.cameraView.retake();
+    this.mediaView.retake();
     dq.css('#btnPlay', 'display', 'none');
     dq.css('#btnRetake', 'display', 'none');
     dq.css('#btnUse', 'display', 'none');
@@ -93,7 +93,7 @@ class AudioModal {
   }
 
   btnUseClick() {
-    const data = this.cameraView.data();
+    const data = this.mediaView.data();
     const message = new MessageModel();
     this.hide();
     const err = message.setContentAsAudioFromMic(data.content);
@@ -107,14 +107,14 @@ class AudioModal {
 
     try {
       this.showSpinner();
-      const camera = new WebstreamAudio();
-      const stream = await camera.init();
+      const mic = new WebstreamAudio();
+      const stream = await mic.init();
 
       if (typeof stream === 'undefined' || stream === null)
-        throw new Error('Native video camera cannot be initialized');
+        throw new Error('Native video mic cannot be initialized');
 
-      this.cameraView = new NativeAudioView(camera);
-      this.cameraView.setView(vp, () => { this.hideSpinner(); });
+      this.mediaView = new NativeAudioView(mic);
+      this.mediaView.setView(vp, () => { this.hideSpinner(); });
       document.getElementById('capture').srcObject = stream;
 
       dq.addClass('#video-container', 'livecard-fade-show');
@@ -126,8 +126,8 @@ class AudioModal {
 }
 
 class NativeAudioView {
-  constructor(camera) {
-    this.camera = camera;
+  constructor(device) {
+    this.device = device;
   }
 
   setView(placeholder, loadCallback) {
@@ -137,12 +137,14 @@ class NativeAudioView {
   }
 
   start() {
-    this.camera.start();
+    this.device.start();
+    // this.device.startVisuals(this._processBars);
   }
 
   stop() {
-    this.camera.stop();
-    document.querySelector('#recorded').src = this.camera.buffer();
+    this.device.stop();
+    // this.device.stopVisuals();
+    document.querySelector('#recorded').src = this.device.buffer();
     dq.css('#capture', 'display', 'none');
     dq.css('#recorded', 'display', 'block');
   }
@@ -152,7 +154,8 @@ class NativeAudioView {
   }
 
   retake() {
-    this.camera.reset();
+    this.device.reset();
+    // this.device.resetVisuals();
     dq.css('#recorded', 'display', 'none');
     dq.css('#capture', 'display', 'block');
   }
@@ -160,8 +163,12 @@ class NativeAudioView {
   data() {
     dq.css('#video-container', 'display', 'none');
     document.getElementById('recorded').pause();
-    if (!this.camera.stageDataForUpload()) return null;
-    return { content: this.camera.data() };
+    if (!this.device.stageDataForUpload()) return null;
+    return { content: this.device.data() };
+  }
+
+  _processBars(bars) {
+    console.log(`we got bars ${JSON.stringify(bars)}`);
   }
 }
 

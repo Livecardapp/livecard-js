@@ -11,7 +11,7 @@ class VideoModal {
     this.isMobile = isMobile;
     this.onSuccess = onSuccess;
     this.onFailure = onFailure;
-    this.cameraView = null;
+    this.mediaView = null;
     Object.assign(this, MediaModalMixin(this));
   }
 
@@ -68,13 +68,13 @@ class VideoModal {
   }
 
   btnRecordClick() {
-    this.cameraView.start();
+    this.mediaView.start();
     dq.css('#btnRecord', 'display', 'none');
     dq.css('#btnStop', 'display', 'inline');
   }
 
   btnStopClick() {
-    this.cameraView.stop();
+    this.mediaView.stop();
     dq.css('#btnStop', 'display', 'none');
     dq.css('#btnPlay', 'display', 'inline');
     dq.css('#btnRetake', 'display', 'inline');
@@ -82,11 +82,11 @@ class VideoModal {
   }
 
   btnPlayClick() {
-    this.cameraView.play();
+    this.mediaView.play();
   }
 
   btnRetakeClick() {
-    this.cameraView.retake();
+    this.mediaView.retake();
     dq.css('#btnPlay', 'display', 'none');
     dq.css('#btnRetake', 'display', 'none');
     dq.css('#btnUse', 'display', 'none');
@@ -94,7 +94,7 @@ class VideoModal {
   }
 
   btnUseClick() {
-    const data = this.cameraView.data();
+    const data = this.mediaView.data();
     const message = new MessageModel();
     const err = data.isNative ?
       message.setContentAsVideoFromCamera(data.content) :
@@ -116,8 +116,8 @@ class VideoModal {
       if (typeof stream === 'undefined' || stream === null)
         throw new Error('Native video camera cannot be initialized');
 
-      this.cameraView = new NativeVideoView(camera);
-      this.cameraView.setView(vp, () => { this.hideSpinner(); });
+      this.mediaView = new NativeVideoView(camera);
+      this.mediaView.setView(vp, () => { this.hideSpinner(); });
       document.getElementById('capture').srcObject = stream;
 
       dq.addClass('#video-container', 'livecard-fade-show');
@@ -128,8 +128,8 @@ class VideoModal {
         return onFailure(ErrorType.WEBCAM_NOT_AUTHORIZED);
 
       try {
-        this.cameraView = new FlashVideoView('LCCapture');
-        this.cameraView.setView(vp);
+        this.mediaView = new FlashVideoView('LCCapture');
+        this.mediaView.setView(vp);
       } catch (error) {
         console.log('flash error', error);
         onFailure(ErrorType.RECORDING_NOT_SUPPORTED);
@@ -139,8 +139,8 @@ class VideoModal {
 }
 
 class NativeVideoView {
-  constructor(camera) {
-    this.camera = camera;
+  constructor(device) {
+    this.device = device;
   }
 
   setView(placeholder, loadCallback) {
@@ -150,12 +150,12 @@ class NativeVideoView {
   }
 
   start() {
-    this.camera.start();
+    this.device.start();
   }
 
   stop() {
-    this.camera.stop();
-    document.querySelector('#recorded').src = this.camera.buffer();
+    this.device.stop();
+    document.querySelector('#recorded').src = this.device.buffer();
     dq.css('#capture', 'display', 'none');
     dq.css('#recorded', 'display', 'block');
   }
@@ -165,7 +165,7 @@ class NativeVideoView {
   }
 
   retake() {
-    this.camera.reset();
+    this.device.reset();
     dq.css('#recorded', 'display', 'none');
     dq.css('#capture', 'display', 'block');
   }
@@ -173,15 +173,15 @@ class NativeVideoView {
   data() {
     dq.css('#video-container', 'display', 'none');
     document.getElementById('recorded').pause();
-    if (!this.camera.stageDataForUpload()) return null;
-    return { isNative: true, content: this.camera.data() };
+    if (!this.device.stageDataForUpload()) return null;
+    return { isNative: true, content: this.device.data() };
   }
 }
 
 class FlashVideoView {
   constructor(cameraId) {
     this.cameraId = cameraId;
-    this.camera = new FlashCamera(cameraId);
+    this.device = new FlashCamera(cameraId);
     this.recordStarted = false;
     this.recordEnded = false;
   }
@@ -197,7 +197,7 @@ class FlashVideoView {
     </div>`;
     dq.before(placeholder, html);
     dq.remove(placeholder);
-    this.camera.init('flashContent');
+    this.device.init('flashContent');
     dq.css(`#${this.cameraId}`, 'position', 'absolute');
     dq.css(`#${this.cameraId}`, 'top', '0px');
     dq.css(`#${this.cameraId}`, 'left', '0px');
@@ -225,7 +225,7 @@ class FlashVideoView {
 
   data() {
     const d = { isNative: false };
-    d.content = this.recordStarted && this.recordEnded ? this.camera.streamName() : null;
+    d.content = this.recordStarted && this.recordEnded ? this.device.streamName() : null;
     return d;
   }
 }

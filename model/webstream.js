@@ -6,8 +6,54 @@ export class WebstreamImage {
 
 export class WebstreamAudio {
   constructor() {
+    this.bars = [];
     const mimeTypes = ['audio/webm', 'audio/webm\;codecs=opus'];
     Object.assign(this, StreamMixin(true, false), RecorderMixin(this, mimeTypes));
+  }
+
+  startVisuals(callback) {
+    // Handle the incoming audio stream
+    const audioContext = new AudioContext();
+    const input = audioContext.createMediaStreamSource(window.stream);
+    const analyser = audioContext.createAnalyser();
+
+    const _renderBars = this._renderBars.bind(this);
+    const scriptProcessor = audioContext.createScriptProcessor();
+    scriptProcessor.onaudioprocess = audioProcessingEvent => {
+      const tempArray = new Uint8Array(analyser.frequencyBinCount);
+      analyser.getByteFrequencyData(tempArray);
+      callback(_renderBars(tempArray));
+    };
+
+    // Some analyser setup
+    analyser.smoothingTimeConstant = 0.3;
+    analyser.fftSize = 1024;
+
+    input.connect(analyser);
+    analyser.connect(scriptProcessor);
+    scriptProcessor.connect(audioContext.destination);
+  }
+
+  stopVisuals() {
+    // todo
+  }
+
+  resetVisuals() {
+    // todo
+  }
+
+  _renderBars(buffer) {
+    this.bars.push(this._getAverageVolume(buffer));
+    return this.bars;
+  }
+
+  _getAverageVolume(array) {
+    const length = array.length;
+    let values = 0;
+    for (let i = 0; i < length; i++) {
+      values += array[i];
+    }
+    return values / length;
   }
 }
 

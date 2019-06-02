@@ -24,10 +24,10 @@ const MediaModalMixin = (instance) => {
 
   mixin.remove = () => {
     dq.insert('#livecard-wrapper', '');
-    if (typeof instance.cameraView === 'undefined' || instance.cameraView === null) return;
-    if (typeof instance.cameraView.camera === 'undefined' || instance.cameraView.camera === null) return;
-    instance.cameraView.camera.remove();
-    instance.cameraView.camera = null;
+    if (typeof instance.mediaView === 'undefined' || instance.mediaView === null) return;
+    if (typeof instance.mediaView.device === 'undefined' || instance.mediaView.device === null) return;
+    instance.mediaView.device.remove();
+    instance.mediaView.device = null;
   };
 
   mixin.template = (components, includeControls, type) => {
