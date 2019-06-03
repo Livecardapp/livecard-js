@@ -22,11 +22,12 @@ export class WebstreamAudio {
 
       const getByteFrequencyData = this.analyser.getByteFrequencyData.bind(this.analyser);
       const binCount = this.analyser.frequencyBinCount;
+      const _getAvgVolume = this._getAverageVolume;
       this.processor = this.context.createScriptProcessor();
       this.processor.onaudioprocess = () => {
         const a = new Uint8Array(binCount);
         getByteFrequencyData(a)
-        callback(a);
+        callback(_getAvgVolume(a));
       };
 
       this.analyser.fftSize = 1024;

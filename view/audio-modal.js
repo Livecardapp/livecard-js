@@ -131,14 +131,19 @@ class NativeAudioView {
   }
 
   setView(placeholder, loadCallback) {
-    dq.before(placeholder, '<audio id="capture" autoplay muted playsinline></audio><audio id="recorded" style="display: none"></audio>');
+    // https://www.flaticon.com/free-icon/voice-recorder_254014
+    // <img src="/livecard-sdk/images/voice-recorder.png" alt="voice-recorder.png" width="175" height="175" />
+    const template =
+      `<audio id="capture" autoplay muted playsinline></audio>
+      <audio id="recorded" style="display: none"></audio>`;
+    dq.before(placeholder, template);
     dq.remove(placeholder);
     dq.on('#capture', 'loadedmetadata', loadCallback);
   }
 
   start() {
     this.device.start();
-    this.device.startVisuals(this._processBars);
+    this.device.startVisuals(this._visualizeAudioData);
   }
 
   stop() {
@@ -166,8 +171,8 @@ class NativeAudioView {
     return { content: this.device.data() };
   }
 
-  _processBars(bars) {
-    console.log(`binCount ${bars.length}, bars ${bars}`);
+  _visualizeAudioData(data) {
+    console.log(`volume: ${data}`);
   }
 }
 
