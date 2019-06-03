@@ -6,39 +6,34 @@ export class WebstreamImage {
 
 export class WebstreamAudio {
   constructor() {
-    this.bars = [];
-
     this.context = null;
     this.input = null;
     this.analyser = null;
     this.processor = null;
-
     const mimeTypes = ['audio/webm', 'audio/webm\;codecs=opus'];
     Object.assign(this, StreamMixin(true, false), RecorderMixin(this, mimeTypes));
   }
 
   startVisuals(callback) {
     if (this.processor === null) {
-      // Handle the incoming audio stream
-      this.context = new AudioContext();
-      this.input = this.context.createMediaStreamSource(window.stream);
+      this.context = new (window.AudioContext || window.webkitAudioContext)();
       this.analyser = this.context.createAnalyser();
+      this.input = this.context.createMediaStreamSource(window.stream);
 
-      const _renderBars = this._renderBars.bind(this);
       const getByteFrequencyData = this.analyser.getByteFrequencyData.bind(this.analyser);
-
+      const binCount = this.analyser.frequencyBinCount;
       this.processor = this.context.createScriptProcessor();
       this.processor.onaudioprocess = () => {
-        const a = new Uint8Array(analyser.frequencyBinCount);
-        getByteFrequencyData(a);
-        callback(_renderBars(a));
+        const a = new Uint8Array(binCount);
+        getByteFrequencyData(a)
+        callback(a);
       };
 
-      // Some analyser setup
-      this.analyser.smoothingTimeConstant = 0.3;
       this.analyser.fftSize = 1024;
+      this.analyser.minDecibels = -90;
+      this.analyser.maxDecibels = -10;
+      this.analyser.smoothingTimeConstant = 0.85;
     }
-
     this.input.connect(this.analyser);
     this.analyser.connect(this.processor);
     this.processor.connect(this.context.destination);
@@ -46,27 +41,9 @@ export class WebstreamAudio {
 
   stopVisuals() {
     if (this.processor === null) return;
-    
     this.input.disconnect();
     this.analyser.disconnect();
     this.processor.disconnect();
-    
-    this.input.connect(this.context.destination);
-
-    this.input = null;
-    this.analyser = null;
-    this.context = null;
-    this.processor = null;
-  }
-
-  resetVisuals() {
-    // todo
-    this.bars = [];
-  }
-
-  _renderBars(buffer) {
-    this.bars.push(this._getAverageVolume(buffer));
-    return this.bars;
   }
 
   _getAverageVolume(array) {

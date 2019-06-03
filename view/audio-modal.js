@@ -138,12 +138,12 @@ class NativeAudioView {
 
   start() {
     this.device.start();
-    // this.device.startVisuals(this._processBars);
+    this.device.startVisuals(this._processBars);
   }
 
   stop() {
     this.device.stop();
-    // this.device.stopVisuals();
+    this.device.stopVisuals();
     document.querySelector('#recorded').src = this.device.buffer();
     dq.css('#capture', 'display', 'none');
     dq.css('#recorded', 'display', 'block');
@@ -155,7 +155,6 @@ class NativeAudioView {
 
   retake() {
     this.device.reset();
-    // this.device.resetVisuals();
     dq.css('#recorded', 'display', 'none');
     dq.css('#capture', 'display', 'block');
   }
@@ -168,7 +167,7 @@ class NativeAudioView {
   }
 
   _processBars(bars) {
-    console.log(`we got bars ${JSON.stringify(bars)}`);
+    console.log(`binCount ${bars.length}, bars ${bars}`);
   }
 }
 
