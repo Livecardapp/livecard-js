@@ -132,9 +132,9 @@ class NativeAudioView {
 
   setView(placeholder, loadCallback) {
     // https://www.flaticon.com/free-icon/voice-recorder_254014
-    // <img src="/livecard-sdk/images/voice-recorder.png" alt="voice-recorder.png" width="175" height="175" />
-    const template =
-      `<audio id="capture" autoplay muted playsinline></audio>
+    const template = `
+      <img src="/livecard-sdk/images/voice-recorder.png" alt="voice-recorder.png" class="icon-microphone" />
+      <audio id="capture" autoplay muted playsinline></audio>
       <audio id="recorded" style="display: none"></audio>`;
     dq.before(placeholder, template);
     dq.remove(placeholder);
