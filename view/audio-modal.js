@@ -173,16 +173,15 @@ class NativeAudioView {
     return { content: this.device.data() };
   }
 
-  _visualizeAudioData(data) {
+  _visualizeAudioData(volume) {
     const id = 'mic-vol';
+    const maxVolume = 20;
     const recorderControlBarHeight = 30; // value is constant at 30px
     const sizePercentageBuffer = 0.9;
-
     const box = document.getElementById(id).parentElement;
-    const size = parseInt(Math.min(box.offsetWidth, box.offsetHeight - recorderControlBarHeight) * sizePercentageBuffer);
-
+    const maxSize = Math.min(box.offsetWidth, box.offsetHeight - recorderControlBarHeight) * sizePercentageBuffer;
+    const size = volume >= maxVolume ? parseInt(maxSize) : parseInt(maxSize * (volume/maxVolume));
     this._resizeVolume(id, size, recorderControlBarHeight);
-    console.log(`volume: ${data}, max size of volume indicator: ${size}`);
   }
 
   _resizeVolume(id, size, barheight) {
