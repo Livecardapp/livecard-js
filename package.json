@@ -7,8 +7,8 @@
     "verbose": true
   },
   "scripts": {
+    "setdev": "node --experimental-modules scripts/setdev.mjs",
     "start": "parcel dev.html --global LiveCard",
-    "setflash": "node lib/flash/dev-script.js",
     "jdoc": "jsdoc livecard.js lib/errors.js",
     "build": "parcel build dev.html --global LiveCard",
     "test": "jest"
