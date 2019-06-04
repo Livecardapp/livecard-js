@@ -144,7 +144,7 @@ class NativeAudioView {
 
   start() {
     this.device.start();
-    this.device.startVisuals(this._visualizeAudioData);
+    this.device.startVisuals(this._visualizeAudioData.bind(this));
   }
 
   stop() {
@@ -153,6 +153,7 @@ class NativeAudioView {
     document.querySelector('#recorded').src = this.device.buffer();
     dq.css('#capture', 'display', 'none');
     dq.css('#recorded', 'display', 'block');
+    this._resizeVolume('mic-vol', 0, 0);
   }
 
   play() {
@@ -173,12 +174,23 @@ class NativeAudioView {
   }
 
   _visualizeAudioData(data) {
-    const volume = document.getElementById('mic-vol');
+    const id = 'mic-vol';
     const recorderControlBarHeight = 30; // value is constant at 30px
     const sizePercentageBuffer = 0.9;
-    const box = volume.parentElement;
+
+    const box = document.getElementById(id).parentElement;
     const size = parseInt(Math.min(box.offsetWidth, box.offsetHeight - recorderControlBarHeight) * sizePercentageBuffer);
+
+    this._resizeVolume(id, size, recorderControlBarHeight);
     console.log(`volume: ${data}, max size of volume indicator: ${size}`);
+  }
+
+  _resizeVolume(id, size, barheight) {
+    const offset = parseInt(size / 2);
+    dq.css(`#${id}`, 'width', `${size}px`);
+    dq.css(`#${id}`, 'height', `${size}px`);
+    dq.css(`#${id}`, 'margin-top', `-${offset + barheight}px`);
+    dq.css(`#${id}`, 'margin-left', `-${offset}px`);
   }
 }
 
