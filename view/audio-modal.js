@@ -133,8 +133,8 @@ class NativeAudioView {
   setView(placeholder, loadCallback) {
     // https://www.flaticon.com/free-icon/voice-recorder_254014
     const template = `
-      <div class="mic-vol"></div>
-      <img src="/livecard-sdk/images/voice-recorder.png" alt="voice-recorder.png" class="icon-microphone" />
+      <div id="mic-vol"></div>
+      <img id="icon-microphone" src="/livecard-sdk/images/voice-recorder.png" alt="voice-recorder.png" />
       <audio id="capture" autoplay muted playsinline></audio>
       <audio id="recorded" style="display: none"></audio>`;
     dq.before(placeholder, template);
@@ -173,7 +173,12 @@ class NativeAudioView {
   }
 
   _visualizeAudioData(data) {
-    console.log(`volume: ${data}`);
+    const volume = document.getElementById('mic-vol');
+    const recorderControlBarHeight = 30; // value is constant at 30px
+    const sizePercentageBuffer = 0.9;
+    const box = volume.parentElement;
+    const size = parseInt(Math.min(box.offsetWidth, box.offsetHeight - recorderControlBarHeight) * sizePercentageBuffer);
+    console.log(`volume: ${data}, max size of volume indicator: ${size}`);
   }
 }
 
