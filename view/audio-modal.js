@@ -1,5 +1,6 @@
 import dq from './dquery';
 import { WebstreamAudio } from '../model/webstream';
+import FlashStream from '../model/flashstream';
 import MediaModalMixin from './media-modal-mixin';
 import ErrorType from '../lib/errors';
 import { MessageModel } from '../model/message';
@@ -96,7 +97,9 @@ class AudioModal {
     const data = this.mediaView.data();
     const message = new MessageModel();
     this.hide();
-    const err = message.setContentAsAudioFromMic(data.content);
+    const err = data.isNative ?
+      message.setContentAsAudioFromMic(data.content) :
+      message.setContentAsAudioFromFlash(data.content)
     err === null ? this.onSuccess(message) : this.onFailure(err);
   }
 
@@ -124,8 +127,13 @@ class AudioModal {
       if (error.name === 'NotAllowedError')
         return onFailure(ErrorType.RECORDING_UNAUTHROIZED);
 
-      // todo: flash audio view
-      onFailure(ErrorType.RECORDING_NOT_SUPPORTED);
+      try {
+        this.mediaView = new FlashAudioView('LCCapture');
+        this.mediaView.setView(vp);
+      } catch (error) {
+        console.log('flash error', error);
+        onFailure(ErrorType.RECORDING_NOT_SUPPORTED);
+      }
     }
   }
 }
@@ -195,6 +203,58 @@ class NativeAudioView {
     dq.css(`#${id}`, 'height', `${size}px`);
     dq.css(`#${id}`, 'margin-top', `-${offset + barheight}px`);
     dq.css(`#${id}`, 'margin-left', `-${offset}px`);
+  }
+}
+
+class FlashAudioView {
+  constructor(cameraId) {
+    this.cameraId = cameraId;
+    this.device = new FlashStream(cameraId);
+    this.recordStarted = false;
+    this.recordEnded = false;
+  }
+
+  setView(placeholder) {
+    const pageHost = ((document.location.protocol == "https:") ? "https://" : "http://");
+    const html = `
+    <div id="flashContent">
+      <p>To view this page ensure that Adobe Flash Player version 16.0.0 or greater is installed.</p>
+      <a href="http://www.adobe.com/go/getflashplayer">
+        <img src='${pageHost}www.adobe.com/images/shared/download_buttons/get_flash_player.gif' alt='Get Adobe Flash player' />
+      </a>
+    </div>`;
+    dq.before(placeholder, html);
+    dq.remove(placeholder);
+    this.device.init('flashContent');
+    dq.css(`#${this.cameraId}`, 'position', 'absolute');
+    dq.css(`#${this.cameraId}`, 'top', '0px');
+    dq.css(`#${this.cameraId}`, 'left', '0px');
+  }
+
+  start() {
+    document.getElementById(this.cameraId).startRecording();
+    this.recordStarted = true;
+  }
+
+  stop() {
+    document.getElementById(this.cameraId).stopRecording();
+    this.recordEnded = true;
+  }
+
+  play() {
+    document.getElementById(this.cameraId).playBack();
+  }
+
+  retake() {
+    this.recordStarted = false;
+    this.recordEnded = false;
+    document.getElementById(this.cameraId).record();
+  }
+
+  data() {
+    const d = { isNative: false };
+    d.content = this.recordStarted && this.recordEnded ? this.device.streamName() : null;
+    return d;
   }
 }
 

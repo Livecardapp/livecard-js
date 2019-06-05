@@ -116,6 +116,11 @@ export class MessageModel {
     return null;
   }
 
+  setContentAsAudioFromFlash(streamName) {
+    // todo
+    return null;
+  }
+
   validate() {
     if (this.type === MessageModelType.TEXT && this.content === null)
       return ErrorType.MISSING_TEXT;
