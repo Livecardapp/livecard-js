@@ -120,6 +120,11 @@ class AudioModal {
       dq.addClass('#video-container', 'livecard-fade-show');
     } catch (error) {
       this.hideSpinner();
+
+      if (error.name === 'NotAllowedError')
+        return onFailure(ErrorType.RECORDING_UNAUTHROIZED);
+
+      // todo: flash audio view
       onFailure(ErrorType.RECORDING_NOT_SUPPORTED);
     }
   }
@@ -180,7 +185,7 @@ class NativeAudioView {
     const sizePercentageBuffer = 0.9;
     const box = document.getElementById(id).parentElement;
     const maxSize = Math.min(box.offsetWidth, box.offsetHeight - recorderControlBarHeight) * sizePercentageBuffer;
-    const size = volume >= maxVolume ? parseInt(maxSize) : parseInt(maxSize * (volume/maxVolume));
+    const size = volume >= maxVolume ? parseInt(maxSize) : parseInt(maxSize * (volume / maxVolume));
     this._resizeVolume(id, size, recorderControlBarHeight);
   }
 

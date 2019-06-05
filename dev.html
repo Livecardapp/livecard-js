@@ -44,7 +44,7 @@
             // to choose a file from hd, which triggers LiveCard.selectVideoFile()
             // Or can use our own modal as here
             setTimeout(function () { LiveCard.showRecordingNotSupported(); }, 400);
-          } else if (errorCode === LiveCard.ErrorType.WEBCAM_NOT_AUTHORIZED) {
+          } else if (errorCode === LiveCard.ErrorType.RECORDING_UNAUTHROIZED) {
             console.log('VIDEO camera access denied');
             setTimeout(function () { LiveCard.showRecordingNotSupported(); }, 400);
           } else if (errorCode === LiveCard.ErrorType.VIDEO_SIZE_TOO_LARGE) {
@@ -64,7 +64,7 @@
             // to choose a file from hd, which triggers LiveCard.selectVideoFile()
             // Or can use our own modal as here
             setTimeout(function () { LiveCard.showRecordingNotSupported(); }, 400);
-          } else if (errorCode === LiveCard.ErrorType.WEBCAM_NOT_AUTHORIZED) {
+          } else if (errorCode === LiveCard.ErrorType.RECORDING_UNAUTHROIZED) {
             console.log('IMAGE camera access denied');
             setTimeout(function () { LiveCard.showRecordingNotSupported(); }, 400);
           } else if (errorCode === LiveCard.ErrorType.IMAGE_SIZE_TOO_LARGE) {
@@ -91,7 +91,7 @@
             // to choose a file from hd, which triggers LiveCard.selectVideoFile()
             // Or can use our own modal as here
             setTimeout(function () { LiveCard.showRecordingNotSupported(); }, 400);
-          } else if (errorCode === LiveCard.ErrorType.WEBCAM_NOT_AUTHORIZED) {
+          } else if (errorCode === LiveCard.ErrorType.RECORDING_UNAUTHROIZED) {
             console.log('VIDEO camera access denied');
             setTimeout(function () { LiveCard.showRecordingNotSupported(); }, 400);
           } else if (errorCode === LiveCard.ErrorType.VIDEO_SIZE_TOO_LARGE) {

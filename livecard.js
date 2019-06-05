@@ -38,7 +38,7 @@ const setFlashcamErrorHandling = (onFailure) => {
   };
   Context.onFlashWebcamNotAuthorized = () => {
     resetModal();
-    onFailure(ErrorType.WEBCAM_NOT_AUTHORIZED);
+    onFailure(ErrorType.RECORDING_UNAUTHROIZED);
   };
 };
 

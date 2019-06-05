@@ -567,7 +567,7 @@ $mediaControlHeight: 30px;
 
     #mic-vol {
       position: absolute;
-      background-image: radial-gradient(circle, grey, white);
+      background-image: radial-gradient(circle, lightgrey, white);
       border-radius: 50%;
       top: 50%;
       left: 50%;
@@ -575,6 +575,7 @@ $mediaControlHeight: 30px;
       height: 0;
       margin-top: 0;
       margin-left: 0;
+      border: none;
     }
   }
 }

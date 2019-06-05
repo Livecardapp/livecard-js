@@ -1,7 +1,7 @@
 import dq from './dquery';
 import MediaModalMixin from './media-modal-mixin';
 import { WebstreamImage } from '../model/webstream';
-import FlashCamera from '../model/flashcam';
+import FlashStream from '../model/flashstream';
 import { MessageModel } from '../model/message';
 import ErrorType from '../lib/errors';
 
@@ -82,7 +82,7 @@ class ImageWebcamModal {
       this.hideSpinner();
 
       if (error.name === 'NotAllowedError')
-        return onFailure(ErrorType.WEBCAM_NOT_AUTHORIZED);
+        return onFailure(ErrorType.RECORDING_UNAUTHROIZED);
 
       try {
         this.mediaView = new FlashCameraView('LCCapture');
@@ -140,7 +140,7 @@ class NativeCameraView {
 class FlashCameraView {
   constructor(cameraId) {
     this.cameraId = cameraId;
-    this.device = new FlashCamera(cameraId);
+    this.device = new FlashStream(cameraId);
     this.imageString = null;
   }
 
