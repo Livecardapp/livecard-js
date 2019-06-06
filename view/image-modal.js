@@ -54,7 +54,7 @@ class ImageModal {
       <div class="livecard-modal-dialog livecard-modal-dialog-centered" role="document">
         <div class="livecard-modal-content">
           <div class="livecard-modal-body" id="chooseImageMessage">
-            <img src="https://retailer.live.cards/checkout/livecard-sdk/images/dismiss.png" alt="x" class="livecard-modal-close" aria-label="Close" />
+            <img src="/livecard-sdk/images/dismiss.png" alt="x" class="livecard-modal-close" aria-label="Close" />
             <h2 class="livecard-modal-title text-center" id="choose_image_modal_label">CHOOSE IMAGE</h2>
             <p class="lead text-center">You can either snap a picture using your webcam or choose an image from your hard drive</p>
             <br><br>

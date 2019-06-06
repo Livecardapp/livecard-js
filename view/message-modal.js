@@ -59,25 +59,25 @@ class MessageModal {
       <div class="livecard-modal-dialog livecard-modal-dialog-centered" role="document">
         <div class="livecard-modal-content">
           <div class="livecard-modal-body">
-            <img src="https://retailer.live.cards/checkout/livecard-sdk/images/dismiss.png" alt="x" class="livecard-modal-close" aria-label="Close" />
+            <img src="/livecard-sdk/images/dismiss.png" alt="x" class="livecard-modal-close" aria-label="Close" />
             <div class="livecard-instructions" id="create_text_instructions">
               <h2 class="modal-title text-center" id="gift_msg_modal_label">GIFT MESSAGE</h2>
               <div class="livecard-instructions-steps">
                 <div class="step">
                   <div class="img-holder">
-                    <img src="https://retailer.live.cards/checkout/livecard-sdk/images/gift-message.png" alt="" />
+                    <img src="/livecard-sdk/images/gift-message.png" alt="" />
                   </div>
                   Create message below
                 </div>
                 <div class="step">
                   <div class="img-holder">
-                    <img src="https://retailer.live.cards/checkout/livecard-sdk/images/van.png" alt="" />
+                    <img src="/livecard-sdk/images/van.png" alt="" />
                   </div>
                   Gift is delivered to recipient
                 </div>
                 <div class="step">
                   <div class="img-holder">
-                    <img src="https://retailer.live.cards/checkout/livecard-sdk/images/video-text-gift.png" alt="" />
+                    <img src="/livecard-sdk/images/video-text-gift.png" alt="" />
                   </div>
                   Message sent via Text to gift recipient
                 </div>

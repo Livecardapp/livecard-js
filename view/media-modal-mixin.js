@@ -33,10 +33,10 @@ const MediaModalMixin = (instance) => {
   mixin.template = (components, includeControls, type) => {
     const controls = includeControls ? `
       <div class="livecard-controls">
-        <img src="https://retailer.live.cards/checkout/livecard-sdk/images/video-record.png" class="icon-video-record" id="btnRecord" />
-        <img src="https://retailer.live.cards/checkout/livecard-sdk/images/video-stop.png" class="icon-video-stop" style="display: none;" id="btnStop" />
+        <img src="/livecard-sdk/images/video-record.png" class="icon-video-record" id="btnRecord" />
+        <img src="/livecard-sdk/images/video-stop.png" class="icon-video-stop" style="display: none;" id="btnStop" />
         <button id="btnRetake" style="display: none;">Retake</button>
-        <img src="https://retailer.live.cards/checkout/livecard-sdk/images/video-play.png" class="icon-video-play" style="display: none;" id="btnPlay" />
+        <img src="/livecard-sdk/images/video-play.png" class="icon-video-play" style="display: none;" id="btnPlay" />
         <button id="btnUse" style="display: none;">Use</button>
       </div>` : '';
 
@@ -48,26 +48,26 @@ const MediaModalMixin = (instance) => {
         <div class="livecard-modal-dialog livecard-modal-dialog-centered" role="document">
           <div class="livecard-modal-content">
             <div class="livecard-modal-body">
-              <img src="https://retailer.live.cards/checkout/livecard-sdk/images/dismiss.png" alt="x" class="livecard-modal-close" aria-label="Close" />
+              <img src="/livecard-sdk/images/dismiss.png" alt="x" class="livecard-modal-close" aria-label="Close" />
               <div id="create_video_instructions">
                 <div class="livecard-instructions">
                   <h2 class="livecard-modal-title text-center" id="video_gift_msg_modal_label">${upper} GIFT MESSAGE</h2>
                   <div class="livecard-instructions-steps">
                     <div class="step">
                       <div class="img-holder">
-                        <img src="https://retailer.live.cards/checkout/livecard-sdk/images/video-gift-message.png" alt="" />
+                        <img src="/livecard-sdk/images/video-gift-message.png" alt="" />
                       </div>
                       Create ${title} Card Below
                     </div>
                     <div class="step">
                       <div class="img-holder">
-                        <img src="https://retailer.live.cards/checkout/livecard-sdk/images/van.png" alt="" />
+                        <img src="/livecard-sdk/images/van.png" alt="" />
                       </div>
                       Gift is delivered to recipient
                     </div>
                     <div class="step">
                       <div class="img-holder">
-                        <img src="https://retailer.live.cards/checkout/livecard-sdk/images/video-text-gift.png" alt="" />
+                        <img src="/livecard-sdk/images/video-text-gift.png" alt="" />
                       </div>
                       ${title} is sent via Text to gift recipient
                     </div>

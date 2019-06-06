@@ -27,7 +27,7 @@ class CameraUnsupportedModal {
       <div class="livecard-modal-dialog livecard-modal-dialog-centered" role="document">
         <div class="livecard-modal-content">
           <div class="livecard-modal-body" id="noRecordingSupportMessage">
-            <img src="https://retailer.live.cards/checkout/livecard-sdk/images/dismiss.png" alt="x" class="livecard-modal-close" aria-label="Close" />
+            <img src="/livecard-sdk/images/dismiss.png" alt="x" class="livecard-modal-close" aria-label="Close" />
             <h2 class="livecard-modal-title text-center" id="capture_not_supported_modal_label">VIDEO CAPTURE NOT SUPPORTED</h2>
             <p class="lead">It looks like your browser doesn't support video capture or you don't have a webcam configured. Please click below to choose a video file from your hard drive.</p>
             <button type="button" class="btn livecard-btn-modal-submit" id="btnChooseVideo">Choose Video</button>
