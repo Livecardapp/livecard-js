@@ -5,7 +5,7 @@ const MAX_IMAGE_SIZE = 500000;  // 0.5M blob
 const MAX_VIDEO_SIZE = 2000000; // 2M blob
 
 export const MessageModelType = {
-  TEXT: 0, AUDIO: 1, IMAGE: 2, VIDEO: 3, FLASH: 4
+  TEXT: 0, AUDIO: 1, IMAGE: 2, VIDEO: 3, FLASH_AUDIO: 4, FLASH_VIDEO: 5,
 };
 
 export class MessageModel {
@@ -110,14 +110,19 @@ export class MessageModel {
     if (typeof streamName === 'undefined' || streamName === null)
       return ErrorType.MISSING_VIDEO;
 
-    this.type = MessageModelType.FLASH;
+    this.type = MessageModelType.FLASH_VIDEO;
     this.content = streamName;
 
     return null;
   }
 
   setContentAsAudioFromFlash(streamName) {
-    // todo
+    if (typeof streamName === 'undefined' || streamName === null)
+      return ErrorType.MISSING_AUDIO;
+
+    this.type = MessageModelType.FLASH_AUDIO;
+    this.content = streamName;
+
     return null;
   }
 
@@ -134,7 +139,10 @@ export class MessageModel {
     if (this.type === MessageModelType.VIDEO && this.content === null)
       return ErrorType.MISSING_VIDEO;
 
-    if (this.type === MessageModelType.FLASH && this.content === null)
+    if (this.type === MessageModelType.FLASH_AUDIO && this.content === null)
+      return ErrorType.MISSING_AUDIO;
+
+    if (this.type === MessageModelType.FLASH_VIDEO && this.content === null)
       return ErrorType.MISSING_VIDEO;
 
     return null;
