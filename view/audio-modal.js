@@ -1,6 +1,6 @@
 import dq from './dquery';
 import { WebstreamAudio } from '../model/webstream';
-import FlashStream from '../model/flashstream';
+import { FlashAudio } from '../model/flashstream';
 import MediaModalMixin from './media-modal-mixin';
 import ErrorType from '../lib/errors';
 import { MessageModel } from '../model/message';
@@ -209,7 +209,7 @@ class NativeAudioView {
 class FlashAudioView {
   constructor(cameraId) {
     this.cameraId = cameraId;
-    this.device = new FlashStream(cameraId);
+    this.device = new FlashAudio(cameraId);
     this.recordStarted = false;
     this.recordEnded = false;
   }

@@ -1,7 +1,7 @@
 import dq from './dquery';
 import MediaModalMixin from './media-modal-mixin';
 import { WebstreamImage } from '../model/webstream';
-import FlashStream from '../model/flashstream';
+import { FlashImage } from '../model/flashstream';
 import { MessageModel } from '../model/message';
 import ErrorType from '../lib/errors';
 
@@ -140,7 +140,7 @@ class NativeCameraView {
 class FlashCameraView {
   constructor(cameraId) {
     this.cameraId = cameraId;
-    this.device = new FlashStream(cameraId);
+    this.device = new FlashImage(cameraId);
     this.imageString = null;
   }
 

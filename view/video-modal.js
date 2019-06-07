@@ -1,6 +1,6 @@
 import dq from './dquery';
 import { WebstreamVideo } from '../model/webstream';
-import FlashStream from '../model/flashstream';
+import { FlashVideo } from '../model/flashstream';
 import MediaModalMixin from './media-modal-mixin';
 import ErrorType from '../lib/errors';
 import { MessageModel } from '../model/message';
@@ -181,7 +181,7 @@ class NativeVideoView {
 class FlashVideoView {
   constructor(cameraId) {
     this.cameraId = cameraId;
-    this.device = new FlashStream(cameraId);
+    this.device = new FlashVideo(cameraId);
     this.recordStarted = false;
     this.recordEnded = false;
   }
