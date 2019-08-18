@@ -57,6 +57,8 @@ class CardModel {
       request.setData('card[gift_message]', this.message.content);
     } else if (this.message.type === MessageModelType.IMAGE) {
       request.setAttachment('card[file]', this.message.content);
+    } else if (this.message.type === MessageModelType.AUDIO) {
+      request.setAttachment('card[file]', this.message.content, 'audio.ogg');
     }
 
     try {
