@@ -183,7 +183,7 @@ class NativeAudioView {
     dq.css('#video-container', 'display', 'none');
     document.getElementById('recorded').pause();
     if (!this.device.stageDataForUpload()) return null;
-    return { content: this.device.data() };
+    return { isNative: true, content: this.device.data() };
   }
 
   _visualizeAudioData(volume) {

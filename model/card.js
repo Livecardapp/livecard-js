@@ -89,7 +89,13 @@ class CardModel {
         return Promise.resolve({ liveCardId: this.liveCardId, mediaUrl: audioUrl });
       }
 
-      return Promise.resolve({ liveCardId: this.liveCardId, mediaUrl: res.card.image_url });
+      if (this.message.type === MessageModelType.IMAGE)
+        return Promise.resolve({ liveCardId: this.liveCardId, mediaUrl: res.card.image_url });
+
+      if (this.message.type === MessageModelType.AUDIO)
+        return Promise.resolve({ liveCardId: this.liveCardId, mediaUrl: res.card.audio_url });
+
+      throw new Error('Invalid MessageModelType');
     } catch (error) {
       console.log(error.message);
       return Promise.reject(new Error(ErrorType.CREATE_CARD_ERROR));
@@ -131,7 +137,6 @@ class CardModel {
   }
 
   async _flashAudioUpload(licenseKey, cardId, streamName) {
-    // todo
     // const req = new LCRequest('https://wowzatest.live.cards', 'upload_video.php');
     // req.setHeader('License-Key', licenseKey);
     // req.setData('card_id', cardId);
