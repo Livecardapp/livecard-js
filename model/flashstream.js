@@ -43,7 +43,10 @@ const FlashMixin = (type, recorderId) => {
     video_width: 320,
     video_height: 240,
     video_quality: 95,
-    stream_name: flashStreamName
+    stream_name: flashStreamName,
+    video_ratio: '4:3', /* '4:3', '16:9' */
+    audio_mode: type === 'audio' ? 'true' : 'false',
+    video_auto: type === 'audio' ? 'true' : 'false',
   };
 
   const params = { quality: 'high', bgcolor: '#000000', allowscriptaccess: 'sameDomain', allowfullscreen: 'true' };
