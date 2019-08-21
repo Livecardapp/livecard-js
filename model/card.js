@@ -89,15 +89,15 @@ class CardModel {
       }
 
       if (this.message.type === MessageModelType.FLASH_VIDEO) {
-        const videoRes = await this._flashVideoUpload(this.licenseKey, res.card.id, this.message.content);
+        const videoRes = await this._flashUpload(this.licenseKey, res.card.id, this.message.content, false);
         const videoUrl = videoRes.card.video_url.replace('.mp4', '_trans.mp4');
         console.log('got flash video response', videoUrl);
         return Promise.resolve({ liveCardId: this.liveCardId, mediaUrl: videoUrl });
       }
 
       if (this.message.type === MessageModelType.FLASH_AUDIO) {
-        const audioRes = await this._flashAudioUpload(this.licenseKey, res.card.id, this.message.content);
-        const audioUrl = audioRes.card.audio_url.replace('.mp3', '_trans.mp3');
+        const audioRes = await this._flashUpload(this.licenseKey, res.card.id, this.message.content, true);
+        const audioUrl = audioRes.card.video_url.replace('.ogg', '_trans.mp4');
         console.log('got flash audio response', audioUrl);
         return Promise.resolve({ liveCardId: this.liveCardId, mediaUrl: audioUrl });
       }
@@ -141,21 +141,13 @@ class CardModel {
     return req.post();
   }
 
-  async _flashVideoUpload(licenseKey, cardId, streamName) {
+  async _flashUpload(licenseKey, cardId, streamName, isAudio) {
     const req = new LCRequest('https://wowzatest.live.cards', 'upload_video.php');
     req.setHeader('License-Key', licenseKey);
     req.setData('card_id', cardId);
     req.setData('stream_name', streamName);
+    if (isAudio) req.setData('audio', '1');
     return req.post();
-  }
-
-  async _flashAudioUpload(licenseKey, cardId, streamName) {
-    // const req = new LCRequest('https://wowzatest.live.cards', 'upload_video.php');
-    // req.setHeader('License-Key', licenseKey);
-    // req.setData('card_id', cardId);
-    // req.setData('stream_name', streamName);
-    // return req.post();
-    return { card: { audio_url: 'https://www.audio-response-url.com/test.mp3' } };
   }
 
 }
