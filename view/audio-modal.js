@@ -97,10 +97,14 @@ class AudioModal {
     const data = this.mediaView.data();
     const message = new MessageModel();
     this.hide();
-    const err = data.isNative ?
-      message.setContentAsAudioFromMic(data.content) :
-      message.setContentAsAudioFromFlash(data.content)
+    const err = this.mediaView.isNative() ? message.setContentAsAudioFromMic(data) : message.setContentAsAudioFromFlash(data);
     err === null ? this.onSuccess(message) : this.onFailure(err);
+  }
+
+  onFlashMicLevelUpdated(event) {
+    // if (this.mediaView.isNative()) return;
+    console.log('onFlashMicLevelUpdated', event);
+    // this.mediaView.visualizeAudioData(event);
   }
 
   // PRIVATE
@@ -155,6 +159,10 @@ class NativeAudioView {
     dq.on('#capture', 'loadedmetadata', loadCallback);
   }
 
+  isNative() {
+    return true;
+  }
+
   start() {
     this.device.start();
     this.device.startVisuals(this._visualizeAudioData.bind(this));
@@ -183,7 +191,7 @@ class NativeAudioView {
     dq.css('#video-container', 'display', 'none');
     document.getElementById('recorded').pause();
     if (!this.device.stageDataForUpload()) return null;
-    return { isNative: true, content: this.device.data() };
+    return this.device.data();
   }
 
   _visualizeAudioData(volume) {
@@ -231,6 +239,10 @@ class FlashAudioView {
     dq.css(`#${this.cameraId}`, 'left', '0px');
   }
 
+  isNative() {
+    return false;
+  }
+
   start() {
     document.getElementById(this.cameraId).startRecording();
     this.recordStarted = true;
@@ -252,9 +264,11 @@ class FlashAudioView {
   }
 
   data() {
-    const d = { isNative: false };
-    d.content = this.recordStarted && this.recordEnded ? this.device.streamName() : null;
-    return d;
+    return this.recordStarted && this.recordEnded ? this.device.streamName() : null;
+  }
+
+  visualizeAudioData(event) {
+    console.log('updateMicLevel: ' + event);
   }
 }
 

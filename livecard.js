@@ -19,7 +19,7 @@ const Context = {
   onFlashWebcamNotInstalled: () => { },
   onFlashWebcamNotAuthorized: () => { },
   onFlashMicNotInstalled: () => { console.log('No microphone installed'); },
-  onFlashMicLevelUpdated: (event) => { console.log('updateMicLevel: ' + event); },
+  onFlashMicLevelUpdated: (event) => { },
 };
 
 const ModalType = {
@@ -46,6 +46,10 @@ const setFlashcamErrorHandling = (onFailure) => {
   Context.onFlashWebcamNotAuthorized = () => {
     resetModal();
     onFailure(ErrorType.RECORDING_UNAUTHROIZED);
+  };
+  Context.onFlashMicNotInstalled = () => {
+    resetModal();
+    onFailure(ErrorType.RECORDING_NOT_SUPPORTED);
   };
 };
 
@@ -134,12 +138,19 @@ const startAudioRecording = (params) => {
     const onSuccessFromAudioInput = (audioMessage) => {
       Context.message = audioMessage;
       resetModal();
+      Context.onFlashMicLevelUpdated = (event) => { };
       params.onSuccess();
     };
 
     setFlashcamErrorHandling(params.onFailure);
 
-    Context.modal = new AudioModal(ModalType.AUDIO, Context.isMobile, onSuccessFromAudioInput, params.onFailure);
+    const onFailureFromAudioInput = (errorCode) => {
+      Context.onFlashMicLevelUpdated = (event) => { };
+      params.onFailure(errorCode);
+    };
+
+    Context.modal = new AudioModal(ModalType.AUDIO, Context.isMobile, onSuccessFromAudioInput, onFailureFromAudioInput);
+    Context.onFlashMicLevelUpdated = Context.modal.onFlashMicLevelUpdated;
     Context.modal.inject(params.showIntro);
   }
 

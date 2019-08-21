@@ -38,17 +38,17 @@
           collectPhoneNumber();
         },
         onFailure: function (errorCode) {
-          console.log('video message failure', errorCode);
+          console.log('AUDIO message failure', errorCode);
           if (errorCode === LiveCard.ErrorType.RECORDING_NOT_SUPPORTED) {
             // Client can show own UI for case of webcam recording not supported and expose some UI 
             // to choose a file from hd, which triggers LiveCard.selectVideoFile()
             // Or can use our own modal as here
             setTimeout(function () { LiveCard.showRecordingNotSupported(); }, 400);
           } else if (errorCode === LiveCard.ErrorType.RECORDING_UNAUTHROIZED) {
-            console.log('VIDEO camera access denied');
+            console.log('AUDIO access denied');
             setTimeout(function () { LiveCard.showRecordingNotSupported(); }, 400);
-          } else if (errorCode === LiveCard.ErrorType.VIDEO_SIZE_TOO_LARGE) {
-            console.log('VIDEO size too large');
+          } else if (errorCode === LiveCard.ErrorType.AUDIO_SIZE_TOO_LARGE) {
+            console.log('AUDIO size too large');
           }
         }
       });
