@@ -18,6 +18,8 @@ const Context = {
   message: null,
   onFlashWebcamNotInstalled: () => { },
   onFlashWebcamNotAuthorized: () => { },
+  onFlashMicNotInstalled: () => { console.log('No microphone installed'); },
+  onFlashMicLevelUpdated: (event) => { console.log('updateMicLevel: ' + event); },
 };
 
 const ModalType = {
@@ -29,8 +31,13 @@ const resetModal = () => {
   Context.modal = null;
 };
 
-const noWebcamInstalled = () => { Context.onFlashWebcamNotInstalled(); };
-const webcamNotAuthorized = () => { Context.onFlashWebcamNotAuthorized(); };
+// ================= LIVECARD FLASH CALLBACKS (START) =================
+
+const noCameraInstalled = () => { Context.onFlashWebcamNotInstalled(); };
+const cameraDenied = () => { Context.onFlashWebcamNotAuthorized(); };
+const noMicrophoneInstalled = () => { Context.onFlashMicNotInstalled(); };
+const updateMicLevel = (event) => { Context.onFlashMicLevelUpdated(event); };
+
 const setFlashcamErrorHandling = (onFailure) => {
   Context.onFlashWebcamNotInstalled = () => {
     resetModal();
@@ -41,6 +48,8 @@ const setFlashcamErrorHandling = (onFailure) => {
     onFailure(ErrorType.RECORDING_UNAUTHROIZED);
   };
 };
+
+// ================= LIVECARD FLASH CALLBACKS (END) ===================
 
 // ================= JSDOC GLOBAL DEFINITIONS (START) =================
 
@@ -317,8 +326,10 @@ export {
   showRecordingNotSupported,
   createCard,
   confirmCard,
-  noWebcamInstalled,
-  webcamNotAuthorized,
+  noCameraInstalled,
+  cameraDenied,
+  noMicrophoneInstalled,
+  updateMicLevel,
 };
 
 // =======================
