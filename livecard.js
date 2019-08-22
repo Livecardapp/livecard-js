@@ -20,6 +20,8 @@ const Context = {
   onFlashWebcamNotAuthorized: () => { },
   onFlashMicNotInstalled: () => { console.log('No microphone installed'); },
   onFlashMicLevelUpdated: (event) => { },
+  staticRoot: '/',
+  staticVersion: 'livecard-sdk/',
 };
 
 const ModalType = {
@@ -149,7 +151,9 @@ const startAudioRecording = (params) => {
       params.onFailure(errorCode);
     };
 
-    Context.modal = new AudioModal(ModalType.AUDIO, Context.isMobile, onSuccessFromAudioInput, onFailureFromAudioInput);
+    // https://www.flaticon.com/free-icon/voice-recorder_254014
+    const icon = `${Context.staticRoot}${Context.staticVersion}images/voice-recorder.png`;
+    Context.modal = new AudioModal(ModalType.AUDIO, icon, Context.isMobile, onSuccessFromAudioInput, onFailureFromAudioInput);
     Context.onFlashMicLevelUpdated = Context.modal.onFlashMicLevelUpdated.bind(Context.modal);
     Context.modal.inject(params.showIntro);
   }

@@ -6,8 +6,9 @@ import ErrorType from '../lib/errors';
 import { MessageModel } from '../model/message';
 
 class AudioModal {
-  constructor(tag, isMobile, onSuccess, onFailure) {
+  constructor(tag, micIcon, isMobile, onSuccess, onFailure) {
     this.tag = tag;
+    this.micIcon = micIcon;
     this.isMobile = isMobile;
     this.onSuccess = onSuccess;
     this.onFailure = onFailure;
@@ -70,8 +71,10 @@ class AudioModal {
   btnRecordClick() {
     if (this.mediaView.isNative())
       this.mediaView.start(this._visualizeAudioData.bind(this))
-    else
+    else {
       this.mediaView.start();
+      this.mediaView.setIcon(this.micIcon);
+    }
     dq.css('#btnRecord', 'display', 'none');
     dq.css('#btnStop', 'display', 'inline');
   }
@@ -125,7 +128,7 @@ class AudioModal {
         throw new Error('Native video mic cannot be initialized');
 
       this.mediaView = new NativeAudioView(mic);
-      this.mediaView.setView(vp, () => { this.hideSpinner(); });
+      this.mediaView.setView(this.micIcon, vp, () => { this.hideSpinner(); });
       document.getElementById('capture').srcObject = stream;
 
       dq.addClass('#video-container', 'livecard-fade-show');
@@ -170,11 +173,10 @@ class NativeAudioView {
     this.device = device;
   }
 
-  setView(placeholder, loadCallback) {
-    // https://www.flaticon.com/free-icon/voice-recorder_254014
+  setView(icon, placeholder, loadCallback) {
     const template = `
       <div id="mic-vol"></div>
-      <img id="icon-microphone" src="/livecard-sdk/images/voice-recorder.png" alt="voice-recorder.png" />
+      <img id="icon-microphone" src="${icon}" alt="voice-recorder.png" />
       <audio id="capture" autoplay muted playsinline></audio>
       <audio id="recorded" style="display: none"></audio>`;
     dq.before(placeholder, template);
@@ -242,6 +244,17 @@ class FlashAudioView {
     dq.css(`#${this.cameraId}`, 'left', '0px');
   }
 
+  setIcon(icon) {
+    if (dq.exists('#mic-vol')) return;
+    const html = `
+    <div id="mic-vol"></div>
+    <img id="icon-microphone" src="${icon}" alt="voice-recorder.png" />
+    <audio id="capture" autoplay muted playsinline></audio>
+    <audio id="recorded" style="display: none"></audio>`;
+    dq.before('LCCapture', html);
+    dq.css('#mic-vol', 'z-index', 1);
+  }
+
   isNative() {
     return false;
   }
@@ -249,14 +262,6 @@ class FlashAudioView {
   start() {
     document.getElementById(this.cameraId).startRecording();
     this.recordStarted = true;
-    if (dq.exists('#mic-vol')) return;
-    const html = `
-    <div id="mic-vol"></div>
-    <img id="icon-microphone" src="/livecard-sdk/images/voice-recorder.png" alt="voice-recorder.png" />
-    <audio id="capture" autoplay muted playsinline></audio>
-    <audio id="recorded" style="display: none"></audio>`;
-    dq.before('LCCapture', html);
-    dq.css('#mic-vol', 'z-index', 1);
   }
 
   stop() {
