@@ -27,6 +27,7 @@ const dq = {
       document.querySelector(id).onloadedmetadata = f;
     }
   },
+  exists: (id) => { document.querySelector(id) === null ? false : true; },
 };
 
 export default dq;

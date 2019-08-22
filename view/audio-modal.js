@@ -102,9 +102,8 @@ class AudioModal {
   }
 
   onFlashMicLevelUpdated(event) {
-    // if (this.mediaView.isNative()) return;
-    console.log('onFlashMicLevelUpdated', event);
-    // this.mediaView.visualizeAudioData(event);
+    if (this.mediaView.isNative()) return;
+    this.mediaView.visualizeAudioData(event);
   }
 
   // PRIVATE
@@ -246,6 +245,14 @@ class FlashAudioView {
   start() {
     document.getElementById(this.cameraId).startRecording();
     this.recordStarted = true;
+    if (dq.exists('#mic-vol')) return;
+    const html = `
+    <div id="mic-vol"></div>
+    <img id="icon-microphone" src="/livecard-sdk/images/voice-recorder.png" alt="voice-recorder.png" />
+    <audio id="capture" autoplay muted playsinline></audio>
+    <audio id="recorded" style="display: none"></audio>`;
+    dq.before('LCCapture', html);
+    dq.css('#mic-vol', 'z-index', 1);
   }
 
   stop() {
@@ -267,9 +274,25 @@ class FlashAudioView {
     return this.recordStarted && this.recordEnded ? this.device.streamName() : null;
   }
 
-  visualizeAudioData(event) {
-    console.log('updateMicLevel: ' + event);
+  visualizeAudioData(volume) {
+    const id = 'mic-vol';
+    const maxVolume = 20;
+    const recorderControlBarHeight = 30; // value is constant at 30px
+    const sizePercentageBuffer = 0.9;
+    const box = document.getElementById(id).parentElement;
+    const maxSize = Math.min(box.offsetWidth, box.offsetHeight - recorderControlBarHeight) * sizePercentageBuffer;
+    const size = volume >= maxVolume ? parseInt(maxSize) : parseInt(maxSize * (volume / maxVolume));
+    this._resizeVolume(id, size, recorderControlBarHeight);
   }
+
+  _resizeVolume(id, size, barheight) {
+    const offset = parseInt(size / 2);
+    dq.css(`#${id}`, 'width', `${size}px`);
+    dq.css(`#${id}`, 'height', `${size}px`);
+    dq.css(`#${id}`, 'margin-top', `-${offset + barheight}px`);
+    dq.css(`#${id}`, 'margin-left', `-${offset}px`);
+  }
+
 }
 
 export default AudioModal;

@@ -49,7 +49,8 @@ const FlashMixin = (type, recorderId) => {
     video_auto: type === 'audio' ? 'true' : 'false',
   };
 
-  const params = { quality: 'high', bgcolor: '#000000', allowscriptaccess: 'sameDomain', allowfullscreen: 'true' };
+  const bgColor = type === 'audio' ? '#ffffff' : '#000000';
+  const params = { quality: 'high', bgcolor: bgColor, allowscriptaccess: 'sameDomain', allowfullscreen: 'true' };
   const attributes = { id: recorderId, name: recorderId };
   const swfUrlStr = `${path}LCCapture.swf?cb=${(new Date()).getTime()}`;
 
