@@ -68,13 +68,18 @@ class AudioModal {
   }
 
   btnRecordClick() {
-    this.mediaView.start();
+    if (this.mediaView.isNative())
+      this.mediaView.start(this._visualizeAudioData.bind(this))
+    else
+      this.mediaView.start();
     dq.css('#btnRecord', 'display', 'none');
     dq.css('#btnStop', 'display', 'inline');
   }
 
   btnStopClick() {
     this.mediaView.stop();
+    if (this.mediaView.isNative())
+      this._resizeVolume('mic-vol', 0, 0);
     dq.css('#btnStop', 'display', 'none');
     dq.css('#btnPlay', 'display', 'inline');
     dq.css('#btnRetake', 'display', 'inline');
@@ -103,7 +108,7 @@ class AudioModal {
 
   onFlashMicLevelUpdated(event) {
     if (this.mediaView.isNative()) return;
-    this.mediaView.visualizeAudioData(event);
+    this._visualizeAudioData(event);
   }
 
   // PRIVATE
@@ -139,6 +144,25 @@ class AudioModal {
       }
     }
   }
+
+  _visualizeAudioData(volume) {
+    const id = 'mic-vol';
+    const maxVolume = 20;
+    const recorderControlBarHeight = 30; // value is constant at 30px
+    const sizePercentageBuffer = 0.9;
+    const box = document.getElementById(id).parentElement;
+    const maxSize = Math.min(box.offsetWidth, box.offsetHeight - recorderControlBarHeight) * sizePercentageBuffer;
+    const size = volume >= maxVolume ? parseInt(maxSize) : parseInt(maxSize * (volume / maxVolume));
+    this._resizeVolume(id, size, recorderControlBarHeight);
+  }
+
+  _resizeVolume(id, size, barheight) {
+    const offset = parseInt(size / 2);
+    dq.css(`#${id}`, 'width', `${size}px`);
+    dq.css(`#${id}`, 'height', `${size}px`);
+    dq.css(`#${id}`, 'margin-top', `-${offset + barheight}px`);
+    dq.css(`#${id}`, 'margin-left', `-${offset}px`);
+  }
 }
 
 class NativeAudioView {
@@ -162,9 +186,9 @@ class NativeAudioView {
     return true;
   }
 
-  start() {
+  start(visualizer) {
     this.device.start();
-    this.device.startVisuals(this._visualizeAudioData.bind(this));
+    this.device.startVisuals(visualizer);
   }
 
   stop() {
@@ -173,7 +197,6 @@ class NativeAudioView {
     document.querySelector('#recorded').src = this.device.buffer();
     dq.css('#capture', 'display', 'none');
     dq.css('#recorded', 'display', 'block');
-    this._resizeVolume('mic-vol', 0, 0);
   }
 
   play() {
@@ -191,25 +214,6 @@ class NativeAudioView {
     document.getElementById('recorded').pause();
     if (!this.device.stageDataForUpload()) return null;
     return this.device.data();
-  }
-
-  _visualizeAudioData(volume) {
-    const id = 'mic-vol';
-    const maxVolume = 20;
-    const recorderControlBarHeight = 30; // value is constant at 30px
-    const sizePercentageBuffer = 0.9;
-    const box = document.getElementById(id).parentElement;
-    const maxSize = Math.min(box.offsetWidth, box.offsetHeight - recorderControlBarHeight) * sizePercentageBuffer;
-    const size = volume >= maxVolume ? parseInt(maxSize) : parseInt(maxSize * (volume / maxVolume));
-    this._resizeVolume(id, size, recorderControlBarHeight);
-  }
-
-  _resizeVolume(id, size, barheight) {
-    const offset = parseInt(size / 2);
-    dq.css(`#${id}`, 'width', `${size}px`);
-    dq.css(`#${id}`, 'height', `${size}px`);
-    dq.css(`#${id}`, 'margin-top', `-${offset + barheight}px`);
-    dq.css(`#${id}`, 'margin-left', `-${offset}px`);
   }
 }
 
@@ -273,26 +277,6 @@ class FlashAudioView {
   data() {
     return this.recordStarted && this.recordEnded ? this.device.streamName() : null;
   }
-
-  visualizeAudioData(volume) {
-    const id = 'mic-vol';
-    const maxVolume = 20;
-    const recorderControlBarHeight = 30; // value is constant at 30px
-    const sizePercentageBuffer = 0.9;
-    const box = document.getElementById(id).parentElement;
-    const maxSize = Math.min(box.offsetWidth, box.offsetHeight - recorderControlBarHeight) * sizePercentageBuffer;
-    const size = volume >= maxVolume ? parseInt(maxSize) : parseInt(maxSize * (volume / maxVolume));
-    this._resizeVolume(id, size, recorderControlBarHeight);
-  }
-
-  _resizeVolume(id, size, barheight) {
-    const offset = parseInt(size / 2);
-    dq.css(`#${id}`, 'width', `${size}px`);
-    dq.css(`#${id}`, 'height', `${size}px`);
-    dq.css(`#${id}`, 'margin-top', `-${offset + barheight}px`);
-    dq.css(`#${id}`, 'margin-left', `-${offset}px`);
-  }
-
 }
 
 export default AudioModal;
