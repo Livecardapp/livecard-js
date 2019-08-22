@@ -8,6 +8,10 @@ For a sample integration see https://gist.github.com/dpanzer/7bf7dc9b4f6feb7a483
 
 # LiveCard SDK Release Notes
 
+0.3.1
+
+- Added script to npm start to enable swfobject.js in dev mode.
+
 0.3.0
 
 - Implemented native audio capture & visualization.
