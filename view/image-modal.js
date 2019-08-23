@@ -3,8 +3,9 @@ import ErrorType from '../lib/errors';
 import { MessageModel } from '../model/message';
 
 class ImageModal {
-  constructor(tag, isMobile, onSuccess, onFailure) {
+  constructor(tag, dismissIcon, isMobile, onSuccess, onFailure) {
     this.tag = tag;
+    this.dismissIcon = dismissIcon;
     this.isMobile = isMobile;
     this.onSuccess = onSuccess;
     this.onFailure = onFailure;
@@ -54,7 +55,7 @@ class ImageModal {
       <div class="livecard-modal-dialog livecard-modal-dialog-centered" role="document">
         <div class="livecard-modal-content">
           <div class="livecard-modal-body" id="chooseImageMessage">
-            <img src="/livecard-sdk/images/dismiss.png" alt="x" class="livecard-modal-close" aria-label="Close" />
+            <img src="${this.dismissIcon}" alt="x" class="livecard-modal-close" aria-label="Close" />
             <h2 class="livecard-modal-title text-center" id="choose_image_modal_label">CHOOSE IMAGE</h2>
             <p class="lead text-center">You can either snap a picture using your webcam or choose an image from your hard drive</p>
             <br><br>

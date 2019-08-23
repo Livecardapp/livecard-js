@@ -196,7 +196,7 @@ const showImageInput = (params) => {
       Context.modal.show();
     };
 
-    Context.modal = new ImageModal(ModalType.IMAGE, Context.isMobile, onSuccessFromImageSourceSelection, params.onFailure);
+    Context.modal = new ImageModal(ModalType.IMAGE, Context.assets.iconDismiss(), Context.isMobile, onSuccessFromImageSourceSelection, params.onFailure);
     Context.modal.inject();
   }
 
@@ -275,7 +275,7 @@ const showRecordingNotSupported = () => {
     resetModal();
 
   if (Context.modal === null) {
-    Context.modal = new CameraUnsupportedModal(ModalType.UNSUPPORTED);
+    Context.modal = new CameraUnsupportedModal(ModalType.UNSUPPORTED, Context.assets.iconDismiss());
     Context.modal.inject();
   }
 
