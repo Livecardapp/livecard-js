@@ -246,7 +246,9 @@ const showPhoneInput = (params) => {
     resetModal();
 
   if (Context.modal === null) {
-    Context.modal = new PhoneModal(ModalType.CARD);
+    const backIcon = `${Context.staticRoot}${Context.staticVersion}images/back.png`;
+    const dismissIcon = `${Context.staticRoot}${Context.staticVersion}images/dismiss.png`;
+    Context.modal = new PhoneModal(ModalType.CARD, backIcon, dismissIcon);
     const onBack = () => {
       resetModal();
       params.onBack();

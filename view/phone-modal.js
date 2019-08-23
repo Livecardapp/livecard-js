@@ -2,8 +2,10 @@ import dq from './dquery';
 import IMask from 'imask';
 
 class PhoneModal {
-  constructor(modalTag) {
+  constructor(modalTag, backIcon, dismissIcon) {
     this.tag = modalTag;
+    this.backIcon = backIcon;
+    this.dismissIcon = dismissIcon;
   }
 
   inject(onBack, onDone) {
@@ -50,8 +52,8 @@ class PhoneModal {
       <div class="livecard-modal-dialog livecard-modal-dialog-centered" role="document">
         <div class="livecard-modal-content">
           <div class="livecard-modal-body">
-            <img src="/livecard-sdk/images/back.png" alt="" class="livecard-modal-back-arrow" />
-            <img src="/livecard-sdk/images/dismiss.png" alt="x" class="livecard-modal-close" aria-label="Close" />
+            <img src="${this.backIcon}" alt="" class="livecard-modal-back-arrow" />
+            <img src="${this.dismissIcon}" alt="x" class="livecard-modal-close" aria-label="Close" />
             <h2 class="livecard-modal-title text-center" id="card_created_modal_label">VIDEO CARD CREATED</h2>
             <div class="livecard-form-group">
               <label>Gift recipient phone number</label>
