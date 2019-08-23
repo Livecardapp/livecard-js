@@ -8,6 +8,7 @@ import CameraUnsupportedModal from './view/camera-unsupported-modal';
 import ErrorType from './lib/errors';
 import CardModel from './model/card';
 import AudioModal from './view/audio-modal';
+import Asset from './model/asset';
 
 const Context = {
   isMobile: false,
@@ -20,8 +21,7 @@ const Context = {
   onFlashWebcamNotAuthorized: () => { },
   onFlashMicNotInstalled: () => { console.log('No microphone installed'); },
   onFlashMicLevelUpdated: (event) => { },
-  staticRoot: '/',
-  staticVersion: 'livecard-sdk/',
+  assets: new Asset(),
 };
 
 const ModalType = {
@@ -151,9 +151,7 @@ const startAudioRecording = (params) => {
       params.onFailure(errorCode);
     };
 
-    // https://www.flaticon.com/free-icon/voice-recorder_254014
-    const icon = `${Context.staticRoot}${Context.staticVersion}images/voice-recorder.png`;
-    Context.modal = new AudioModal(ModalType.AUDIO, icon, Context.isMobile, onSuccessFromAudioInput, onFailureFromAudioInput);
+    Context.modal = new AudioModal(ModalType.AUDIO, Context.assets.iconMic(), Context.isMobile, onSuccessFromAudioInput, onFailureFromAudioInput);
     Context.onFlashMicLevelUpdated = Context.modal.onFlashMicLevelUpdated.bind(Context.modal);
     Context.modal.inject(params.showIntro);
   }
@@ -246,9 +244,7 @@ const showPhoneInput = (params) => {
     resetModal();
 
   if (Context.modal === null) {
-    const backIcon = `${Context.staticRoot}${Context.staticVersion}images/back.png`;
-    const dismissIcon = `${Context.staticRoot}${Context.staticVersion}images/dismiss.png`;
-    Context.modal = new PhoneModal(ModalType.CARD, backIcon, dismissIcon);
+    Context.modal = new PhoneModal(ModalType.CARD, Context.assets.iconBack(), Context.assets.iconDismiss());
     const onBack = () => {
       resetModal();
       params.onBack();
