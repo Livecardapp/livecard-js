@@ -2,12 +2,12 @@ import dq from './dquery';
 import { MessageModel } from '../model/message';
 
 class MessageModal {
-  constructor(modalTag, dismissIcon, giftIcon, vanIcon, textBubbleIcon) {
+  constructor(modalTag, asset) {
     this.tag = modalTag;
-    this.dismissIcon = dismissIcon;
-    this.giftIcon = giftIcon;
-    this.vanIcon = vanIcon;
-    this.textBubbleIcon = textBubbleIcon;
+    this.dismissIcon = asset.iconDismiss();
+    this.giftIcon = asset.iconGift();
+    this.vanIcon = asset.iconVan();
+    this.textBubbleIcon = asset.iconTextBubble();
   }
 
   inject(showIntro, onSuccess, onFailure) {

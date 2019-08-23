@@ -6,9 +6,9 @@ import ErrorType from '../lib/errors';
 import { MessageModel } from '../model/message';
 
 class AudioModal {
-  constructor(tag, micIcon, asset, isMobile, onSuccess, onFailure) {
+  constructor(tag, asset, isMobile, onSuccess, onFailure) {
     this.tag = tag;
-    this.micIcon = micIcon;
+    this.micIcon = asset.iconMic();
     this.isMobile = isMobile;
     this.onSuccess = onSuccess;
     this.onFailure = onFailure;

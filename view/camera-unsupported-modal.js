@@ -1,9 +1,9 @@
 import dq from './dquery';
 
 class CameraUnsupportedModal {
-  constructor(tag, dismissIcon) {
+  constructor(tag, asset) {
     this.tag = tag;
-    this.dismissIcon = dismissIcon;
+    this.dismissIcon = asset.iconDismiss();
   }
 
   inject() {

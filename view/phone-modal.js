@@ -2,10 +2,10 @@ import dq from './dquery';
 import IMask from 'imask';
 
 class PhoneModal {
-  constructor(modalTag, backIcon, dismissIcon) {
+  constructor(modalTag, asset) {
     this.tag = modalTag;
-    this.backIcon = backIcon;
-    this.dismissIcon = dismissIcon;
+    this.backIcon = asset.iconBack();
+    this.dismissIcon = asset.iconDismiss();
   }
 
   inject(onBack, onDone) {

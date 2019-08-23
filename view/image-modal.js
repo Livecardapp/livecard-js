@@ -3,9 +3,9 @@ import ErrorType from '../lib/errors';
 import { MessageModel } from '../model/message';
 
 class ImageModal {
-  constructor(tag, dismissIcon, isMobile, onSuccess, onFailure) {
+  constructor(tag, asset, isMobile, onSuccess, onFailure) {
     this.tag = tag;
-    this.dismissIcon = dismissIcon;
+    this.dismissIcon = asset.iconDismiss();
     this.isMobile = isMobile;
     this.onSuccess = onSuccess;
     this.onFailure = onFailure;
