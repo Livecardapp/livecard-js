@@ -108,7 +108,11 @@ const showGiftTextInput = (params) => {
     resetModal();
 
   if (Context.modal === null) {
-    Context.modal = new MessageModal(ModalType.TEXT);
+    const dismiss = Context.assets.iconDismiss();
+    const gift = Context.assets.iconGift();
+    const van = Context.assets.iconVan();
+    const textBubble = Context.assets.iconTextBubble();
+    Context.modal = new MessageModal(ModalType.TEXT, dismiss, gift, van, textBubble);
     const onSuccessFromTextInput = (textMessage) => {
       Context.message = textMessage;
       resetModal();
