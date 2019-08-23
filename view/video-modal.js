@@ -6,13 +6,13 @@ import ErrorType from '../lib/errors';
 import { MessageModel } from '../model/message';
 
 class VideoModal {
-  constructor(tag, isMobile, onSuccess, onFailure) {
+  constructor(tag, asset, isMobile, onSuccess, onFailure) {
     this.tag = tag;
     this.isMobile = isMobile;
     this.onSuccess = onSuccess;
     this.onFailure = onFailure;
     this.mediaView = null;
-    Object.assign(this, MediaModalMixin(this));
+    Object.assign(this, MediaModalMixin(this, asset));
   }
 
   inject(showIntro) {

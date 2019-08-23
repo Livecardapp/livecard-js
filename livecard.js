@@ -155,7 +155,10 @@ const startAudioRecording = (params) => {
       params.onFailure(errorCode);
     };
 
-    Context.modal = new AudioModal(ModalType.AUDIO, Context.assets.iconMic(), Context.isMobile, onSuccessFromAudioInput, onFailureFromAudioInput);
+    const micIcon = Context.assets.iconMic();
+    const asset = Context.assets;
+    const isMobile = Context.isMobile;
+    Context.modal = new AudioModal(ModalType.AUDIO, micIcon, asset, isMobile, onSuccessFromAudioInput, onFailureFromAudioInput);
     Context.onFlashMicLevelUpdated = Context.modal.onFlashMicLevelUpdated.bind(Context.modal);
     Context.modal.inject(params.showIntro);
   }
@@ -191,7 +194,7 @@ const showImageInput = (params) => {
         params.onSuccess();
       };
 
-      Context.modal = new ImageWebcamModal(ModalType.IMAGE, onSuccessFromCamera, params.onFailure);
+      Context.modal = new ImageWebcamModal(ModalType.IMAGE, Context.assets, onSuccessFromCamera, params.onFailure);
       Context.modal.inject();
       Context.modal.show();
     };
@@ -224,7 +227,7 @@ const startVideoRecording = (params) => {
 
     setFlashcamErrorHandling(params.onFailure);
 
-    Context.modal = new VideoModal(ModalType.VIDEO, Context.isMobile, onSuccessFromVideoInput, params.onFailure);
+    Context.modal = new VideoModal(ModalType.VIDEO, Context.assets, Context.isMobile, onSuccessFromVideoInput, params.onFailure);
     Context.modal.inject(params.showIntro);
   }
 

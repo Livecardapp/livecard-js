@@ -10,6 +10,9 @@ class Asset {
   iconGift(ver) { return `${root}/${typeof ver === 'undefined' ? version : ver}/images/gift-message.png`; }
   iconVan(ver) { return `${root}/${typeof ver === 'undefined' ? version : ver}/images/van.png`; }
   iconTextBubble(ver) { return `${root}/${typeof ver === 'undefined' ? version : ver}/images/video-text-gift.png`; }
+  iconRecord(ver) { return `${root}/${typeof ver === 'undefined' ? version : ver}/images/video-record.png`; }
+  iconStop(ver) { return `${root}/${typeof ver === 'undefined' ? version : ver}/images/video-stop.png`; }
+  iconPlay(ver) { return `${root}/${typeof ver === 'undefined' ? version : ver}/images/video-play.png`; }
 };
 
 export default Asset;

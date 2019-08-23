@@ -6,14 +6,14 @@ import ErrorType from '../lib/errors';
 import { MessageModel } from '../model/message';
 
 class AudioModal {
-  constructor(tag, micIcon, isMobile, onSuccess, onFailure) {
+  constructor(tag, micIcon, asset, isMobile, onSuccess, onFailure) {
     this.tag = tag;
     this.micIcon = micIcon;
     this.isMobile = isMobile;
     this.onSuccess = onSuccess;
     this.onFailure = onFailure;
     this.mediaView = null;
-    Object.assign(this, MediaModalMixin(this));
+    Object.assign(this, MediaModalMixin(this, asset));
   }
 
   inject(showIntro) {

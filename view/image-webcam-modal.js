@@ -6,12 +6,12 @@ import { MessageModel } from '../model/message';
 import ErrorType from '../lib/errors';
 
 class ImageWebcamModal {
-  constructor(tag, onSuccess, onFailure) {
+  constructor(tag, asset, onSuccess, onFailure) {
     this.tag = tag;
     this.onSuccess = onSuccess;
     this.onFailure = onFailure;
     this.mediaView = null;
-    Object.assign(this, MediaModalMixin(this));
+    Object.assign(this, MediaModalMixin(this, asset));
   }
 
   inject() {
