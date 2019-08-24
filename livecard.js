@@ -21,7 +21,6 @@ const Context = {
   onFlashWebcamNotAuthorized: () => { },
   onFlashMicNotInstalled: () => { console.log('No microphone installed'); },
   onFlashMicLevelUpdated: (event) => { },
-  asset: new Asset(),
 };
 
 const ModalType = {
@@ -108,7 +107,7 @@ const showGiftTextInput = (params) => {
     resetModal();
 
   if (Context.modal === null) {
-    Context.modal = new MessageModal(ModalType.TEXT, Context.asset);
+    Context.modal = new MessageModal(ModalType.TEXT, new Asset());
     const onSuccessFromTextInput = (textMessage) => {
       Context.message = textMessage;
       resetModal();
@@ -151,7 +150,7 @@ const startAudioRecording = (params) => {
       params.onFailure(errorCode);
     };
 
-    Context.modal = new AudioModal(ModalType.AUDIO, Context.asset, Context.isMobile, onSuccessFromAudioInput, onFailureFromAudioInput);
+    Context.modal = new AudioModal(ModalType.AUDIO, new Asset(), Context.isMobile, onSuccessFromAudioInput, onFailureFromAudioInput);
     Context.onFlashMicLevelUpdated = Context.modal.onFlashMicLevelUpdated.bind(Context.modal);
     Context.modal.inject(params.showIntro);
   }
@@ -187,12 +186,12 @@ const showImageInput = (params) => {
         params.onSuccess();
       };
 
-      Context.modal = new ImageWebcamModal(ModalType.IMAGE, Context.asset, onSuccessFromCamera, params.onFailure);
+      Context.modal = new ImageWebcamModal(ModalType.IMAGE, new Asset(), onSuccessFromCamera, params.onFailure);
       Context.modal.inject();
       Context.modal.show();
     };
 
-    Context.modal = new ImageModal(ModalType.IMAGE, Context.asset, Context.isMobile, onSuccessFromImageSourceSelection, params.onFailure);
+    Context.modal = new ImageModal(ModalType.IMAGE, new Asset(), Context.isMobile, onSuccessFromImageSourceSelection, params.onFailure);
     Context.modal.inject();
   }
 
@@ -220,7 +219,7 @@ const startVideoRecording = (params) => {
 
     setFlashcamErrorHandling(params.onFailure);
 
-    Context.modal = new VideoModal(ModalType.VIDEO, Context.asset, Context.isMobile, onSuccessFromVideoInput, params.onFailure);
+    Context.modal = new VideoModal(ModalType.VIDEO, new Asset(), Context.isMobile, onSuccessFromVideoInput, params.onFailure);
     Context.modal.inject(params.showIntro);
   }
 
@@ -244,7 +243,7 @@ const showPhoneInput = (params) => {
     resetModal();
 
   if (Context.modal === null) {
-    Context.modal = new PhoneModal(ModalType.CARD, Context.asset);
+    Context.modal = new PhoneModal(ModalType.CARD, new Asset());
     const onBack = () => {
       resetModal();
       params.onBack();
@@ -271,7 +270,7 @@ const showRecordingNotSupported = () => {
     resetModal();
 
   if (Context.modal === null) {
-    Context.modal = new CameraUnsupportedModal(ModalType.UNSUPPORTED, Context.asset);
+    Context.modal = new CameraUnsupportedModal(ModalType.UNSUPPORTED, new Asset());
     Context.modal.inject();
   }
 
@@ -356,7 +355,8 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelector('body').appendChild(livecardBox);
 
   const flashSWFObject = document.createElement('script');
-  flashSWFObject.src = Context.asset.swfObject();
+  const asset = new Asset();
+  flashSWFObject.src = asset.swfObject();
   document.querySelector('head').appendChild(flashSWFObject);
 
   // detect mobile
