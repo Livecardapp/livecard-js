@@ -13,6 +13,8 @@ class Asset {
   iconRecord(ver) { return `${root}/${typeof ver === 'undefined' ? version : ver}/images/video-record.png`; }
   iconStop(ver) { return `${root}/${typeof ver === 'undefined' ? version : ver}/images/video-stop.png`; }
   iconPlay(ver) { return `${root}/${typeof ver === 'undefined' ? version : ver}/images/video-play.png`; }
+  swfExpressInstall(ver) { return `${root}/${typeof ver === 'undefined' ? version : ver}/flash/expressInstall.swf`; }
+  swfLCCapture(ver) { return `${root}/${typeof ver === 'undefined' ? version : ver}/flash/LCCapture.swf`; }
 };
 
 export default Asset;

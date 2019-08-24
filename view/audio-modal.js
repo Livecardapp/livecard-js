@@ -9,6 +9,8 @@ class AudioModal {
   constructor(tag, asset, isMobile, onSuccess, onFailure) {
     this.tag = tag;
     this.micIcon = asset.iconMic();
+    this.swfExpressInstall = asset.swfExpressInstall();
+    this.swfLCCapture = asset.swfLCCapture();
     this.isMobile = isMobile;
     this.onSuccess = onSuccess;
     this.onFailure = onFailure;
@@ -139,7 +141,7 @@ class AudioModal {
         return onFailure(ErrorType.RECORDING_UNAUTHROIZED);
 
       try {
-        this.mediaView = new FlashAudioView('LCCapture');
+        this.mediaView = new FlashAudioView('LCCapture', this.swfExpressInstall, this.swfLCCapture);
         this.mediaView.setView(vp);
       } catch (error) {
         console.log('flash error', error);
@@ -220,9 +222,9 @@ class NativeAudioView {
 }
 
 class FlashAudioView {
-  constructor(cameraId) {
+  constructor(cameraId, swfExpressInstall, swfLCCapture) {
     this.cameraId = cameraId;
-    this.device = new FlashAudio(cameraId);
+    this.device = new FlashAudio(cameraId, swfExpressInstall, swfLCCapture);
     this.recordStarted = false;
     this.recordEnded = false;
   }

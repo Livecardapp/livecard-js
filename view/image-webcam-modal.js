@@ -8,6 +8,8 @@ import ErrorType from '../lib/errors';
 class ImageWebcamModal {
   constructor(tag, asset, onSuccess, onFailure) {
     this.tag = tag;
+    this.swfExpressInstall = asset.swfExpressInstall();
+    this.swfLCCapture = asset.swfLCCapture();
     this.onSuccess = onSuccess;
     this.onFailure = onFailure;
     this.mediaView = null;
@@ -85,7 +87,7 @@ class ImageWebcamModal {
         return onFailure(ErrorType.RECORDING_UNAUTHROIZED);
 
       try {
-        this.mediaView = new FlashCameraView('LCCapture');
+        this.mediaView = new FlashCameraView('LCCapture', this.swfExpressInstall, this.swfLCCapture);
         this.mediaView.setView('image-placeholder');
         console.log('flash image camera initialized');
       } catch (error) {
@@ -138,9 +140,9 @@ class NativeCameraView {
 }
 
 class FlashCameraView {
-  constructor(cameraId) {
+  constructor(cameraId, swfExpressInstall, swfLCCapture) {
     this.cameraId = cameraId;
-    this.device = new FlashImage(cameraId);
+    this.device = new FlashImage(cameraId, swfExpressInstall, swfLCCapture);
     this.imageString = null;
   }
 

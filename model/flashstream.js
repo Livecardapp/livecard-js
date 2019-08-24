@@ -1,22 +1,22 @@
 export class FlashImage {
-  constructor(recorderId) {
-    Object.assign(this, FlashMixin('image', recorderId));
+  constructor(recorderId, swfExpressInstall, swfLCCapture) {
+    Object.assign(this, FlashMixin('image', recorderId, swfExpressInstall, swfLCCapture));
   }
 }
 
 export class FlashAudio {
-  constructor(recorderId) {
-    Object.assign(this, FlashMixin('audio', recorderId));
+  constructor(recorderId, swfExpressInstall, swfLCCapture) {
+    Object.assign(this, FlashMixin('audio', recorderId, swfExpressInstall, swfLCCapture));
   }
 }
 
 export class FlashVideo {
-  constructor(recorderId) {
-    Object.assign(this, FlashMixin('video', recorderId));
+  constructor(recorderId, swfExpressInstall, swfLCCapture) {
+    Object.assign(this, FlashMixin('video', recorderId, swfExpressInstall, swfLCCapture));
   }
 }
 
-const FlashMixin = (type, recorderId) => {
+const FlashMixin = (type, recorderId, swfExpressInstall, swfLCCapture) => {
   const mixin = {};
 
   const flashStreamName = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
@@ -26,14 +26,8 @@ const FlashMixin = (type, recorderId) => {
 
   mixin.streamName = () => { return flashStreamName; };
 
-  // Flash static root path
-  const path = '/livecard-sdk/flash/';
-
   // For version detection, set to min. required Flash Player version, or 0 (or 0.0.0), for no version detection. 
   const swfVersionStr = '16.0.0';
-
-  // To use express install, set to playerProductInstall.swf, otherwise the empty string. 
-  const xiSwfUrlStr = `${path}expressInstall.swf`;
 
   const flashvars = {
     lc_debug: true,
@@ -52,12 +46,12 @@ const FlashMixin = (type, recorderId) => {
   const bgColor = type === 'audio' ? '#ffffff' : '#000000';
   const params = { quality: 'high', bgcolor: bgColor, allowscriptaccess: 'sameDomain', allowfullscreen: 'true' };
   const attributes = { id: recorderId, name: recorderId };
-  const swfUrlStr = `${path}LCCapture.swf?cb=${(new Date()).getTime()}`;
+  const swfUrlStr = `${swfLCCapture}?cb=${(new Date()).getTime()}`;
 
   const size = type === 'audio' ? '100%' : '100%';
 
   mixin.init = (viewId) => {
-    swfobject.embedSWF(swfUrlStr, viewId, size, size, swfVersionStr, xiSwfUrlStr, flashvars, params, attributes);
+    swfobject.embedSWF(swfUrlStr, viewId, size, size, swfVersionStr, swfExpressInstall, flashvars, params, attributes);
     swfobject.createCSS(`#${viewId}`, 'display:block;text-align:left;');
     console.log(`Init Flash ${type}`);
   };
