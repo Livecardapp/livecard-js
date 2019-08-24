@@ -10,7 +10,10 @@ For a sample integration see https://gist.github.com/dpanzer/7bf7dc9b4f6feb7a483
 
 0.3.1
 
-- Added script to npm start to enable swfobject.js in dev mode.
+- Consolidated all static asset reference into Asset class.
+- Can now reference assets from local or CDN.
+- No longer need the user the explicity specify script reference to swfobject.js. 
+  Livecard.js loads that script refence on initialization.
 
 0.3.0
 
