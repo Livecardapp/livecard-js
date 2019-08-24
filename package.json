@@ -8,7 +8,7 @@
   },
   "scripts": {
     "setdev": "node --experimental-modules scripts/setdev.mjs",
-    "start": "parcel dev.html --global LiveCard | node scripts/enable_swfobject.js",
+    "start": "parcel dev.html --global LiveCard",
     "jdoc": "jsdoc livecard.js lib/errors.js",
     "build": "parcel build dev.html --global LiveCard",
     "test": "jest"

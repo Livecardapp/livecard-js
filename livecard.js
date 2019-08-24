@@ -355,6 +355,10 @@ document.addEventListener('DOMContentLoaded', () => {
   livecardBox.id = 'livecard-wrapper';
   document.querySelector('body').appendChild(livecardBox);
 
+  const flashSWFObject = document.createElement('script');
+  flashSWFObject.src = Context.asset.swfObject();
+  document.querySelector('head').appendChild(flashSWFObject);
+
   // detect mobile
   if (
     navigator.userAgent.match(/Android/i) ||
