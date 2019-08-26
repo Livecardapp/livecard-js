@@ -6,11 +6,10 @@ import ErrorType from '../lib/errors';
 import { MessageModel } from '../model/message';
 
 class VideoModal {
-  constructor(tag, asset, isMobile, onSuccess, onFailure) {
+  constructor(tag, asset, onSuccess, onFailure) {
     this.tag = tag;
     this.swfExpressInstall = asset.swfExpressInstall();
     this.swfLCCapture = asset.swfLCCapture();
-    this.isMobile = isMobile;
     this.onSuccess = onSuccess;
     this.onFailure = onFailure;
     this.mediaView = null;
@@ -18,33 +17,12 @@ class VideoModal {
   }
 
   inject(showIntro) {
-    const components = this.isMobile ?
-      `<input type="file" accept="video/mp4,video/x-m4v,video/webm,video/quicktime,video/*" capture="user" id="inputVideo" style="display: none;">` :
-      `<div id="video-placeholder"></div>`;
-
-    dq.insert('#livecard-wrapper', this.template(components, !this.isMobile, 'video'));
+    dq.insert('#livecard-wrapper', this.template('<div id="video-placeholder"></div>', true, 'video'));
     dq.css('#create_video_instructions', 'display', showIntro ? 'block' : 'none');
 
     // close button
     const remove = this.remove.bind(this);
     dq.click('.livecard-modal-close', () => { remove(); });
-
-    if (this.isMobile) {
-      dq.change('#inputVideo', () => {
-        if (document.querySelector('#inputVideo').files.length === 0)
-          return this.onFailure(ErrorType.NO_VIDEO_SELECTED);
-        const message = new MessageModel();
-        const err = message.setContentAsVideoFromFiles(document.querySelector('#inputVideo').files);
-        err === null ? this.onSuccess(message) : this.onFailure(err);
-      });
-
-      const hide = this.hide.bind(this);
-      dq.click('#create_video_card_btn', () => {
-        hide();
-        dq.click('#inputVideo');
-      });
-      return;
-    }
 
     // controls
     dq.click('#btnRecord', () => this.btnRecordClick());

@@ -219,7 +219,7 @@ const startVideoRecording = (params) => {
 
     setFlashcamErrorHandling(params.onFailure);
 
-    Context.modal = new VideoModal(ModalType.VIDEO, new Asset(), Context.isMobile, onSuccessFromVideoInput, params.onFailure);
+    Context.modal = new VideoModal(ModalType.VIDEO, new Asset(), onSuccessFromVideoInput, params.onFailure);
     Context.modal.inject(params.showIntro);
   }
 
@@ -383,5 +383,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
   Context.liveCardId = guid;
 
-  console.log('Done init: ', Context.isMobile, Context.liveCardId);
+  console.log('Done init: ', Context.liveCardId);
 });
