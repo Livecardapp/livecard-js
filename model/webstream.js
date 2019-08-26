@@ -10,11 +10,15 @@ export class WebstreamAudio {
     this.input = null;
     this.analyser = null;
     this.processor = null;
+    this.volumeIndicationDisabled = false;
     const mimeTypes = ['audio/webm', 'audio/webm\;codecs=opus'];
     Object.assign(this, StreamMixin(true, false), RecorderMixin(this, mimeTypes));
   }
 
   startVisuals(callback) {
+    if (this.volumeIndicationDisabled)
+      return false;
+
     if (this.processor === null) {
       this.context = new (window.AudioContext || window.webkitAudioContext)();
       this.analyser = this.context.createAnalyser();
@@ -23,7 +27,21 @@ export class WebstreamAudio {
       const getByteFrequencyData = this.analyser.getByteFrequencyData.bind(this.analyser);
       const binCount = this.analyser.frequencyBinCount;
       const _getAvgVolume = this._getAverageVolume;
-      this.processor = this.context.createScriptProcessor();
+
+      // this.processor = this.context.createScriptProcessor();
+      if (this.context.createJavaScriptNode) {
+        this.processor = this.context.createJavaScriptNode(1024, 1, 1);
+      } else if (this.context.createScriptProcessor) {
+        this.processor = this.context.createScriptProcessor(1024, 1, 1);
+      } else {
+        this.context = null;
+        this.input = null;
+        this.analyser = null;
+        this.processor = null;
+        this.visualsEnabled = false;
+        return false;
+      }
+
       this.processor.onaudioprocess = () => {
         const a = new Uint8Array(binCount);
         getByteFrequencyData(a)
@@ -35,12 +53,16 @@ export class WebstreamAudio {
       this.analyser.maxDecibels = -10;
       this.analyser.smoothingTimeConstant = 0.85;
     }
+
     this.input.connect(this.analyser);
     this.analyser.connect(this.processor);
     this.processor.connect(this.context.destination);
+
+    return true;
   }
 
   stopVisuals() {
+    if (this.volumeIndicationDisabled) return;
     if (this.processor === null) return;
     this.input.disconnect();
     this.analyser.disconnect();

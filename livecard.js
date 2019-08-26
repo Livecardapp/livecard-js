@@ -150,7 +150,7 @@ const startAudioRecording = (params) => {
       params.onFailure(errorCode);
     };
 
-    Context.modal = new AudioModal(ModalType.AUDIO, new Asset(), Context.isMobile, onSuccessFromAudioInput, onFailureFromAudioInput);
+    Context.modal = new AudioModal(ModalType.AUDIO, new Asset(), onSuccessFromAudioInput, onFailureFromAudioInput);
     Context.onFlashMicLevelUpdated = Context.modal.onFlashMicLevelUpdated.bind(Context.modal);
     Context.modal.inject(params.showIntro);
   }
