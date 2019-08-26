@@ -151,11 +151,13 @@ class AudioModal {
 class NativeAudioView {
   constructor(device) {
     this.device = device;
+    this.visualsEnabled = true;
   }
 
   setView(icon, placeholder, loadCallback) {
     const template = `
       <div id="mic-vol"></div>
+      <div id="mic-vol-alt" class="no-show">VOICE RECORDING STARTED</div>
       <img id="icon-microphone" src="${icon}" alt="voice-recorder.png" />
       <audio id="capture" autoplay muted playsinline></audio>
       <audio id="recorded" style="display: none"></audio>`;
@@ -171,6 +173,8 @@ class NativeAudioView {
   start(visualizer) {
     this.device.start();
     this.device.startVisuals(visualizer);
+    if (this.device.visualsAvailable()) return;
+    dq.removeClass('#mic-vol-alt', 'no-show');
   }
 
   stop() {
@@ -179,6 +183,8 @@ class NativeAudioView {
     document.querySelector('#recorded').src = this.device.buffer();
     dq.css('#capture', 'display', 'none');
     dq.css('#recorded', 'display', 'block');
+    if (this.device.visualsAvailable()) return;
+    dq.addClass('#mic-vol-alt', 'no-show');
   }
 
   play() {

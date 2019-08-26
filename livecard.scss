@@ -4,6 +4,10 @@ button:focus {
   outline: 0;
 }
 
+.no-show {
+  display: none;
+}
+
 /* adapted from bootstrap modal css */
 
 .livecard-modal-open {
@@ -588,6 +592,13 @@ $mediaControlHeight: 30px;
       margin-top: -$imgMicSize/2 - $mediaControlHeight;
       margin-left: -$imgMicSize/2;
     }
+    #mic-vol-alt {
+      padding: 5px;
+      background: white;
+      border: 1px solid black;
+      text-align: center;
+      position: absolute;
+    }
   }
 }
 
@@ -598,6 +609,13 @@ $mediaControlHeight: 30px;
       height: $imgMicSize;
       margin-top: -$imgMicSize/2 - $mediaControlHeight;
       margin-left: -$imgMicSize/2;
+    }
+    #mic-vol-alt {
+      padding: 5px;
+      background: white;
+      border: 1px solid black;
+      text-align: center;
+      position: absolute;
     }
   }
 }
@@ -610,16 +628,12 @@ $mediaControlHeight: 30px;
       margin-top: -$imgMicSize/2 - $mediaControlHeight;
       margin-left: -$imgMicSize/2;
     }
-  }
-}
-
-@media (max-width: 768px) and (min-width: 600px) {
-  #video-container {
-    #icon-microphone {
-      width: $imgMicSize * 1.5;
-      height: $imgMicSize * 1.5;
-      margin-top: -$imgMicSize * 0.75 - $mediaControlHeight;
-      margin-left: -$imgMicSize * 0.75;
+    #mic-vol-alt {
+      padding: 5px;
+      background: white;
+      border: 1px solid black;
+      text-align: center;
+      position: absolute;
     }
   }
 }
@@ -631,6 +645,31 @@ $mediaControlHeight: 30px;
       height: $imgMicSize * 1.5;
       margin-top: -$imgMicSize * 0.75 - $mediaControlHeight;
       margin-left: -$imgMicSize * 0.75;
+    }
+    #mic-vol-alt {
+      padding: 5px;
+      background: white;
+      border: 1px solid black;
+      text-align: center;
+      position: absolute;
+    }
+  }
+}
+
+@media (max-width: 768px) and (min-width: 600px) {
+  #video-container {
+    #icon-microphone {
+      width: $imgMicSize * 1.5;
+      height: $imgMicSize * 1.5;
+      margin-top: -$imgMicSize * 0.75 - $mediaControlHeight;
+      margin-left: -$imgMicSize * 0.75;
+    }
+    #mic-vol-alt {
+      padding: 5px;
+      background: white;
+      border: 1px solid black;
+      text-align: center;
+      position: absolute;
     }
   }
 }
@@ -643,6 +682,13 @@ $mediaControlHeight: 30px;
       margin-top: -$imgMicSize * 0.75 - $mediaControlHeight;
       margin-left: -$imgMicSize * 0.75;
     }
+    #mic-vol-alt {
+      padding: 5px;
+      background: white;
+      border: 1px solid black;
+      text-align: center;
+      position: absolute;
+    }
   }
 }
 
@@ -653,6 +699,13 @@ $mediaControlHeight: 30px;
       height: $imgMicSize * 1.5;
       margin-top: -$imgMicSize * 0.75 - $mediaControlHeight;
       margin-left: -$imgMicSize * 0.75;
+    }
+    #mic-vol-alt {
+      padding: 5px;
+      background: white;
+      border: 1px solid black;
+      text-align: center;
+      position: absolute;
     }
   }
 }
@@ -665,6 +718,13 @@ $mediaControlHeight: 30px;
       margin-top: -$imgMicSize - $mediaControlHeight;
       margin-left: -$imgMicSize;
     }
+    #mic-vol-alt {
+      padding: 5px;
+      background: white;
+      border: 1px solid black;
+      text-align: center;
+      position: absolute;
+    }
   }
 }
 
@@ -675,6 +735,13 @@ $mediaControlHeight: 30px;
       height: $imgMicSize * 2;
       margin-top: -$imgMicSize - $mediaControlHeight;
       margin-left: -$imgMicSize;
+    }
+    #mic-vol-alt {
+      padding: 5px;
+      background: white;
+      border: 1px solid black;
+      text-align: center;
+      position: absolute;
     }
   }
 }

@@ -10,14 +10,14 @@ export class WebstreamAudio {
     this.input = null;
     this.analyser = null;
     this.processor = null;
-    this.volumeIndicationDisabled = false;
+    this.visualsUnavailable = false;
     const mimeTypes = ['audio/webm', 'audio/webm\;codecs=opus'];
     Object.assign(this, StreamMixin(true, false), RecorderMixin(this, mimeTypes));
   }
 
   startVisuals(callback) {
-    if (this.volumeIndicationDisabled)
-      return false;
+    if (this.visualsUnavailable) 
+      return;
 
     if (this.processor === null) {
       this.context = new (window.AudioContext || window.webkitAudioContext)();
@@ -28,7 +28,6 @@ export class WebstreamAudio {
       const binCount = this.analyser.frequencyBinCount;
       const _getAvgVolume = this._getAverageVolume;
 
-      // this.processor = this.context.createScriptProcessor();
       if (this.context.createJavaScriptNode) {
         this.processor = this.context.createJavaScriptNode(1024, 1, 1);
       } else if (this.context.createScriptProcessor) {
@@ -38,8 +37,8 @@ export class WebstreamAudio {
         this.input = null;
         this.analyser = null;
         this.processor = null;
-        this.visualsEnabled = false;
-        return false;
+        this.visualsUnavailable = true;
+        return;
       }
 
       this.processor.onaudioprocess = () => {
@@ -57,12 +56,14 @@ export class WebstreamAudio {
     this.input.connect(this.analyser);
     this.analyser.connect(this.processor);
     this.processor.connect(this.context.destination);
+  }
 
-    return true;
+  visualsAvailable() {
+    return !this.visualsUnavailable;
   }
 
   stopVisuals() {
-    if (this.volumeIndicationDisabled) return;
+    if (this.visualsUnavailable) return;
     if (this.processor === null) return;
     this.input.disconnect();
     this.analyser.disconnect();
