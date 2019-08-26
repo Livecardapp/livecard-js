@@ -3,10 +3,9 @@ import ErrorType from '../lib/errors';
 import { MessageModel } from '../model/message';
 
 class ImageModal {
-  constructor(tag, asset, isMobile, onSuccess, onFailure) {
+  constructor(tag, asset, onSuccess, onFailure) {
     this.tag = tag;
     this.dismissIcon = asset.iconDismiss();
-    this.isMobile = isMobile;
     this.onSuccess = onSuccess;
     this.onFailure = onFailure;
   }
@@ -21,8 +20,6 @@ class ImageModal {
       const err = message.setContentAsImageFromFiles(document.querySelector("#inputImage").files);
       err === null ? this.onSuccess(message) : this.onFailure(err);
     });
-
-    if (this.isMobile) return;
 
     const onSuccess = this.onSuccess;
     const remove = this.remove;
@@ -41,17 +38,16 @@ class ImageModal {
   }
 
   show() {
-    this.isMobile ? dq.click('#inputImage') : dq.addClass('#choose_image_modal', 'show');
+    dq.addClass('#choose_image_modal', 'show');
   }
 
   hide() {
-    if (this.isMobile) return;
     dq.removeClass('#choose_image_modal', 'show');
   }
 
   template() {
-    return this.isMobile ? `<input type="file" accept="image/*" id="inputImage" style="display: none;">` :
-      `<div class="livecard-modal fade" id="choose_image_modal" tabindex="-1" role="dialog" aria-labelledby="choose_image_modal_label" aria-hidden="true">
+    return `
+    <div class="livecard-modal fade" id="choose_image_modal" tabindex="-1" role="dialog" aria-labelledby="choose_image_modal_label" aria-hidden="true">
       <div class="livecard-modal-dialog livecard-modal-dialog-centered" role="document">
         <div class="livecard-modal-content">
           <div class="livecard-modal-body" id="chooseImageMessage">

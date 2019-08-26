@@ -11,7 +11,6 @@ import AudioModal from './view/audio-modal';
 import Asset from './model/asset';
 
 const Context = {
-  isMobile: false,
   liveCardId: null,
   recipientPhone: null,
   debug: false,
@@ -191,7 +190,7 @@ const showImageInput = (params) => {
       Context.modal.show();
     };
 
-    Context.modal = new ImageModal(ModalType.IMAGE, new Asset(), Context.isMobile, onSuccessFromImageSourceSelection, params.onFailure);
+    Context.modal = new ImageModal(ModalType.IMAGE, new Asset(), onSuccessFromImageSourceSelection, params.onFailure);
     Context.modal.inject();
   }
 
@@ -358,21 +357,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const asset = new Asset();
   flashSWFObject.src = asset.swfObject();
   document.querySelector('head').appendChild(flashSWFObject);
-
-  // detect mobile
-  if (
-    navigator.userAgent.match(/Android/i) ||
-    navigator.userAgent.match(/webOS/i) ||
-    navigator.userAgent.match(/iPhone/i) ||
-    navigator.userAgent.match(/iPad/i) ||
-    navigator.userAgent.match(/iPod/i) ||
-    navigator.userAgent.match(/BlackBerry/i) ||
-    navigator.userAgent.match(/Windows Phone/i)
-  ) {
-    Context.isMobile = true;
-  } else {
-    Context.isMobile = false;
-  }
 
   // init live card id
   let guid = '';
