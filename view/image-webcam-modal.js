@@ -106,7 +106,6 @@ class NativeCameraView {
   setView(placeholder, loadCallback) {
     const view = `
       <video id="capture" autoplay muted playsinline></video>
-      <video id="recorded" style="display: none"></video>
       <canvas id="imgCanvas" style="display: none;"></canvas>`;
     dq.before(placeholder, view);
     dq.remove(placeholder);
@@ -116,11 +115,12 @@ class NativeCameraView {
   record() {
     const canvas = document.getElementById("imgCanvas");
     const captureElem = document.getElementById("capture");
-    canvas.width = captureElem.clientWidth;
-    canvas.height = captureElem.clientHeight;
+    canvas.width = captureElem.videoWidth;
+    canvas.height = captureElem.videoHeight;
     const canvasContext = canvas.getContext("2d");
     canvasContext.drawImage(captureElem, 0, 0, canvas.width, canvas.height);
     canvas.style.display = "block";
+    // alert(`client: ${captureElem.clientWidth}x${captureElem.clientHeight}, video: ${captureElem.videoWidth}x${captureElem.videoHeight}, canvas: ${canvas.width}x${canvas.height}`);
     dq.css("#capture", 'display', "none");
   }
 
