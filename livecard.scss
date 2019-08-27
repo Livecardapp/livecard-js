@@ -581,6 +581,19 @@ $mediaControlHeight: 30px;
       margin-left: 0;
       border: none;
     }
+
+    #mic-vol-alt {
+      padding: 5px;
+      background: white;
+      border: 1px solid black;
+      text-align: center;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-top: -$mediaControlHeight;
+      z-index: 1001;
+    }
+
   }
 }
 
@@ -593,12 +606,10 @@ $mediaControlHeight: 30px;
       margin-left: -$imgMicSize/2;
     }
     #mic-vol-alt {
-      padding: 5px;
-      background: white;
-      border: 1px solid black;
-      text-align: center;
-      position: absolute;
+      font-size: 9px;
+      margin-left: -75px;
     }
+
   }
 }
 
@@ -611,11 +622,8 @@ $mediaControlHeight: 30px;
       margin-left: -$imgMicSize/2;
     }
     #mic-vol-alt {
-      padding: 5px;
-      background: white;
-      border: 1px solid black;
-      text-align: center;
-      position: absolute;
+      font-size: 9px;
+      margin-left: -75px;
     }
   }
 }
@@ -629,11 +637,8 @@ $mediaControlHeight: 30px;
       margin-left: -$imgMicSize/2;
     }
     #mic-vol-alt {
-      padding: 5px;
-      background: white;
-      border: 1px solid black;
-      text-align: center;
-      position: absolute;
+      font-size: 9px;
+      margin-left: -75px;
     }
   }
 }
@@ -647,11 +652,8 @@ $mediaControlHeight: 30px;
       margin-left: -$imgMicSize * 0.75;
     }
     #mic-vol-alt {
-      padding: 5px;
-      background: white;
-      border: 1px solid black;
-      text-align: center;
-      position: absolute;
+      font-size: 12px;
+      margin-left: -95px;
     }
   }
 }
@@ -665,11 +667,8 @@ $mediaControlHeight: 30px;
       margin-left: -$imgMicSize * 0.75;
     }
     #mic-vol-alt {
-      padding: 5px;
-      background: white;
-      border: 1px solid black;
-      text-align: center;
-      position: absolute;
+      font-size: 12px;
+      margin-left: -95px;
     }
   }
 }
@@ -683,11 +682,8 @@ $mediaControlHeight: 30px;
       margin-left: -$imgMicSize * 0.75;
     }
     #mic-vol-alt {
-      padding: 5px;
-      background: white;
-      border: 1px solid black;
-      text-align: center;
-      position: absolute;
+      font-size: 12px;
+      margin-left: -95px;
     }
   }
 }
@@ -701,11 +697,8 @@ $mediaControlHeight: 30px;
       margin-left: -$imgMicSize * 0.75;
     }
     #mic-vol-alt {
-      padding: 5px;
-      background: white;
-      border: 1px solid black;
-      text-align: center;
-      position: absolute;
+      font-size: 12px;
+      margin-left: -95px;
     }
   }
 }
@@ -719,11 +712,8 @@ $mediaControlHeight: 30px;
       margin-left: -$imgMicSize;
     }
     #mic-vol-alt {
-      padding: 5px;
-      background: white;
-      border: 1px solid black;
-      text-align: center;
-      position: absolute;
+      font-size: 12px;
+      margin-left: -95px;
     }
   }
 }
@@ -737,11 +727,8 @@ $mediaControlHeight: 30px;
       margin-left: -$imgMicSize;
     }
     #mic-vol-alt {
-      padding: 5px;
-      background: white;
-      border: 1px solid black;
-      text-align: center;
-      position: absolute;
+      font-size: 12px;
+      margin-left: -95px;
     }
   }
 }
