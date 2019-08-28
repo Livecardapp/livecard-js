@@ -114,47 +114,51 @@ class NativeCameraView {
   }
 
   record() {
-    const captureElem = document.getElementById("capture");
-    const canvas = document.getElementById("imgCanvas");
-    const uicanvas = document.getElementById("uiCanvas");
+    const captureElem = document.getElementById('capture');
+    const imgCanvas = document.getElementById('imgCanvas');
+    const uiCanvas = document.getElementById('uiCanvas');
 
-    canvas.width = captureElem.videoWidth;
-    canvas.height = captureElem.videoHeight;
-    const ctx = canvas.getContext("2d");
-    ctx.drawImage(captureElem, 0, 0, canvas.width, canvas.height);
+    imgCanvas.width = captureElem.videoWidth;
+    imgCanvas.height = captureElem.videoHeight;
+    const ctx = imgCanvas.getContext('2d');
+    ctx.drawImage(captureElem, 0, 0, imgCanvas.width, imgCanvas.height);
 
-    uicanvas.width = captureElem.videoWidth;
-    uicanvas.height = captureElem.videoHeight;
-    const uictx = uicanvas.getContext("2d");
+    const parent = document.getElementById('video-container');
+    const aspectRatio = captureElem.videoWidth / captureElem.videoHeight;
+
+    uiCanvas.width = parent.offsetWidth;
+    uiCanvas.height = parent.offsetHeight;
+    const uictx = uiCanvas.getContext('2d');
 
     if (captureElem.videoHeight > captureElem.videoWidth) {
-      uictx.drawImage(captureElem, 0, 0, canvas.width, canvas.height);
+      const w = parent.offsetHeight * aspectRatio;
+      uictx.drawImage(captureElem, (parent.offsetWidth - w) / 2, 0, w, parent.offsetHeight);
     } else {
-      uictx.drawImage(captureElem, 0, 0, canvas.width, canvas.height);
+      uictx.drawImage(captureElem, 0, 0, parent.offsetWidth, parent.offsetWidth / aspectRatio);
     }
 
-    uicanvas.style.display = 'block';
+    uiCanvas.style.display = 'block';
 
-    dq.css("#capture", 'display', "none");
+    dq.css('#capture', 'display', 'none');
   }
 
   retake() {
-    const canvas = document.getElementById("imgCanvas");
-    const canvasContext = canvas.getContext("2d");
-    canvasContext.clearRect(0, 0, canvas.width, canvas.height);
-    canvas.style.display = "none";
+    const imgCanvas = document.getElementById('imgCanvas');
+    const canvasContext = imgCanvas.getContext('2d');
+    canvasContext.clearRect(0, 0, imgCanvas.width, imgCanvas.height);
+    imgCanvas.style.display = 'none';
 
-    const uicanvas = document.getElementById("uiCanvas");
-    const uicanvasContext = canvas.getContext("2d");
-    uicanvasContext.clearRect(0, 0, uicanvas.width, uicanvas.height);
-    uicanvas.style.display = "none";
+    const uiCanvas = document.getElementById('uiCanvas');
+    const uictx = uiCanvas.getContext('2d');
+    uictx.clearRect(0, 0, uiCanvas.width, uiCanvas.height);
+    uiCanvas.style.display = 'none';
 
-    dq.css("#capture", 'display', "block");
+    dq.css('#capture', 'display', 'block');
   }
 
   image() {
     this.device.streamStop();
-    return document.getElementById("imgCanvas").toDataURL("image/jpeg");
+    return document.getElementById('imgCanvas').toDataURL('image/jpeg');
   }
 
 }

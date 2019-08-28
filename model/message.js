@@ -1,7 +1,7 @@
 import ErrorType from '../lib/errors';
 
 const MAX_AUDIO_SIZE = 2000000; // 2M blob
-const MAX_IMAGE_SIZE = 500000;  // 0.5M blob
+const MAX_IMAGE_SIZE = 1000000;  // 1M blob
 const MAX_VIDEO_SIZE = 2000000; // 2M blob
 
 export const MessageModelType = {
