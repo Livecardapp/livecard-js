@@ -106,6 +106,7 @@ class NativeCameraView {
   setView(placeholder, loadCallback) {
     const view = `
       <video id="capture" autoplay muted playsinline></video>
+      <canvas id="uiCanvas" style="display: none;"></canvas>
       <canvas id="imgCanvas" style="display: none;"></canvas>`;
     dq.before(placeholder, view);
     dq.remove(placeholder);
@@ -113,14 +114,27 @@ class NativeCameraView {
   }
 
   record() {
-    const canvas = document.getElementById("imgCanvas");
     const captureElem = document.getElementById("capture");
+    const canvas = document.getElementById("imgCanvas");
+    const uicanvas = document.getElementById("uiCanvas");
+
     canvas.width = captureElem.videoWidth;
     canvas.height = captureElem.videoHeight;
-    const canvasContext = canvas.getContext("2d");
-    canvasContext.drawImage(captureElem, 0, 0, canvas.width, canvas.height);
-    canvas.style.display = "block";
-    // alert(`client: ${captureElem.clientWidth}x${captureElem.clientHeight}, video: ${captureElem.videoWidth}x${captureElem.videoHeight}, canvas: ${canvas.width}x${canvas.height}`);
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(captureElem, 0, 0, canvas.width, canvas.height);
+
+    uicanvas.width = captureElem.videoWidth;
+    uicanvas.height = captureElem.videoHeight;
+    const uictx = uicanvas.getContext("2d");
+
+    if (captureElem.videoHeight > captureElem.videoWidth) {
+      uictx.drawImage(captureElem, 0, 0, canvas.width, canvas.height);
+    } else {
+      uictx.drawImage(captureElem, 0, 0, canvas.width, canvas.height);
+    }
+
+    uicanvas.style.display = 'block';
+
     dq.css("#capture", 'display', "none");
   }
 
@@ -129,6 +143,12 @@ class NativeCameraView {
     const canvasContext = canvas.getContext("2d");
     canvasContext.clearRect(0, 0, canvas.width, canvas.height);
     canvas.style.display = "none";
+
+    const uicanvas = document.getElementById("uiCanvas");
+    const uicanvasContext = canvas.getContext("2d");
+    uicanvasContext.clearRect(0, 0, uicanvas.width, uicanvas.height);
+    uicanvas.style.display = "none";
+
     dq.css("#capture", 'display', "block");
   }
 
@@ -154,8 +174,7 @@ class FlashCameraView {
       <a href="http://www.adobe.com/go/getflashplayer">
         <img src='${pageHost}www.adobe.com/images/shared/download_buttons/get_flash_player.gif' alt='Get Adobe Flash player' />
       </a>
-    </div>
-    <canvas id="imgCanvas" style="display: none;"></canvas>`;
+    </div>`;
     dq.before(placeholder, view);
     dq.remove(placeholder);
     this.device.init('flashContent');
