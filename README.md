@@ -8,6 +8,12 @@ For a sample integration see https://gist.github.com/dpanzer/7bf7dc9b4f6feb7a483
 
 # LiveCard SDK Release Notes
 
+0.4.0
+
+- Implemented audio capture for mobile.
+- Implemented image capture for mobile.
+- Implemented video capture for mobile.
+
 0.3.1
 
 - Consolidated all static asset reference into Asset class.
