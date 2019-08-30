@@ -1,89 +1,108 @@
+// ----- //
+// IMAGE //
+// ----- //
+
 export class WebstreamImage {
   constructor() {
     Object.assign(this, StreamMixin(false, true));
   }
 }
 
+// ----- //
+// AUDIO //
+// ----- //
+
 export class WebstreamAudio {
-  constructor() {
-    this.context = null;
-    this.input = null;
-    this.analyser = null;
-    this.processor = null;
-    this.visualsUnavailable = false;
+  constructor(bufferSize) {
     const mimeTypes = ['audio/webm', 'audio/webm\;codecs=opus'];
-    Object.assign(this, StreamMixin(true, false), RecorderMixin(this, mimeTypes));
-  }
-
-  startVisuals(callback) {
-    if (this.visualsUnavailable) 
-      return;
-
-    if (this.processor === null) {
-      this.context = new (window.AudioContext || window.webkitAudioContext)();
-      this.analyser = this.context.createAnalyser();
-      this.input = this.context.createMediaStreamSource(window.stream);
-
-      const getByteFrequencyData = this.analyser.getByteFrequencyData.bind(this.analyser);
-      const binCount = this.analyser.frequencyBinCount;
-      const _getAvgVolume = this._getAverageVolume;
-
-      if (this.context.createJavaScriptNode) {
-        this.processor = this.context.createJavaScriptNode(1024, 1, 1);
-      } else if (this.context.createScriptProcessor) {
-        this.processor = this.context.createScriptProcessor(1024, 1, 1);
-      } else {
-        this.context = null;
-        this.input = null;
-        this.analyser = null;
-        this.processor = null;
-        this.visualsUnavailable = true;
-        return;
-      }
-
-      this.processor.onaudioprocess = () => {
-        const a = new Uint8Array(binCount);
-        getByteFrequencyData(a)
-        callback(_getAvgVolume(a));
-      };
-
-      this.analyser.fftSize = 1024;
-      this.analyser.minDecibels = -90;
-      this.analyser.maxDecibels = -10;
-      this.analyser.smoothingTimeConstant = 0.85;
-    }
-
-    this.input.connect(this.analyser);
-    this.analyser.connect(this.processor);
-    this.processor.connect(this.context.destination);
-  }
-
-  visualsAvailable() {
-    return !this.visualsUnavailable;
-  }
-
-  stopVisuals() {
-    if (this.visualsUnavailable) return;
-    if (this.processor === null) return;
-    this.input.disconnect();
-    this.analyser.disconnect();
-    this.processor.disconnect();
-  }
-
-  _getAverageVolume(array) {
-    const length = array.length;
-    let values = 0;
-    for (let i = 0; i < length; i++) {
-      values += array[i];
-    }
-    return values / length;
+    const bsize = bufferSize || 4096;
+    Object.assign(this, StreamMixin(true, false), AudioContextMixin(this, bsize), AudioContextRecorderMixin(this, bsize), AudioContextVisualizerMixin());
   }
 }
+
+const AudioContextMixin = (o, bufferSize) => {
+  mixin = {};
+  mixin.context = null;
+  mixin.input = null;
+  mixin.analyser = null;
+  mixin.processor = null;
+
+  mixin.setContext = (stream, onAudioProcess) => {
+    if (o.processor === null) {
+      o.context = new (window.AudioContext || window.webkitAudioContext)();
+      o.analyser = o.context.createAnalyser();
+      o.input = o.context.createMediaStreamSource(stream);
+
+      if (o.context.createJavaScriptNode) {
+        o.processor = o.context.createJavaScriptNode(bufferSize, 1, 1);
+      } else if (o.context.createScriptProcessor) {
+        o.processor = o.context.createScriptProcessor(bufferSize, 1, 1);
+      } else {
+        o.context = null;
+        o.input = null;
+        o.analyser = null;
+        o.processor = null;
+        return false;
+      }
+
+      o.processor.onaudioprocess = onAudioProcess;
+      o.analyser.fftSize = 1024;
+      o.analyser.minDecibels = -90;
+      o.analyser.maxDecibels = -10;
+      o.analyser.smoothingTimeConstant = 0.85;
+    }
+
+    o.input.connect(o.analyser);
+    o.analyser.connect(o.processor);
+    o.processor.connect(o.context.destination);
+    return true;
+  };
+
+  mixin.clearContext = () => {
+    if (o.processor === null) return;
+    o.input.disconnect();
+    o.analyser.disconnect();
+    o.processor.disconnect();
+  }
+
+  return mixin;
+};
+
+const AudioContextRecorderMixin = (o, bufferSize) => {
+  mixin = {};
+  mixin.data = [];
+  mixin.dataLength = 0;
+
+  mixin.onSaveData = (event) => {
+    o.data.push(new Float32Array(event.inputBuffer.getChannelData(0)));
+    o.dataLength = o.dataLength + bufferSize;
+  };
+};
+
+const AudioContextVisualizerMixin = () => {
+  const mixin = {};
+
+  mixin.onVisualizeAnalyzerData = (analyser) => {
+    const binCount = analyser.frequencyBinCount;
+    const a = new Uint8Array(binCount);
+    analyser.getByteFrequencyData(a)
+    const length = a.length;
+    let values = 0;
+    for (let i = 0; i < length; i++) { values += a[i]; }
+    return values / length;
+  };
+
+  return mixin;
+};
+
+// ----- //
+// VIDEO //
+// ----- //
 
 export class WebstreamVideo {
   constructor() {
     const mimeTypes = ['video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm'];
-    Object.assign(this, StreamMixin(true, true), RecorderMixin(this, mimeTypes));
+    Object.assign(this, StreamMixin(true, true), MediaRecorderMixin(this, mimeTypes));
   }
 }
 
@@ -121,7 +140,7 @@ const StreamMixin = (hasAudio, hasVideo) => {
   return mixin;
 };
 
-const RecorderMixin = (instance, mimeTypes) => {
+const MediaRecorderMixin = (o, mimeTypes) => {
   const mixin = {};
 
   mixin.blobs = [];
@@ -138,44 +157,120 @@ const RecorderMixin = (instance, mimeTypes) => {
     if (fileType === null)
       throw new Error('Video file format not supported');
 
-    const stream = await instance.initialize();
-    instance.recorder = new MediaRecorder(stream, { mimeType: fileType });
-    instance.recorder.ondataavailable = instance._onData.bind(instance);
+    const stream = await o.initialize();
+    o.recorder = new MediaRecorder(stream, { mimeType: fileType });
+    o.recorder.ondataavailable = o._onData.bind(o);
 
     return stream;
   };
 
   mixin.start = () => {
-    instance.blobs = [];
-    instance.recorder.start(10);
+    o.blobs = [];
+    o.recorder.start(10);
   };
 
   mixin.stop = () => {
-    instance.recorder.stop();
+    o.recorder.stop();
   };
 
   mixin.buffer = () => {
-    const buffer = new Blob(instance.blobs, { type: 'audio/webm' });
+    const buffer = new Blob(o.blobs, { type: 'audio/webm' });
     return window.URL.createObjectURL(buffer);
   };
 
   mixin.data = () => {
-    return instance.blobs;
+    return o.blobs;
   }
 
   mixin.stageDataForUpload = () => {
-    instance.streamStop();
-    return instance.blobs.length > 0;
+    o.streamStop();
+    return o.blobs.length > 0;
   }
 
   mixin.reset = () => {
-    instance.blobs = [];
+    o.blobs = [];
   }
 
   mixin._onData = (event) => {
     if (event.data && event.data.size === 0) return;
-    instance.blobs.push(event.data);
+    o.blobs.push(event.data);
   }
 
   return mixin;
 };
+
+// export class WebstreamAudio {
+//   constructor() {
+//     this.context = null;
+//     this.input = null;
+//     this.analyser = null;
+//     this.processor = null;
+//     this.visualsUnavailable = false;
+//     const mimeTypes = ['audio/webm', 'audio/webm\;codecs=opus'];
+//     Object.assign(this, StreamMixin(true, false), MediaRecorderMixin(this, mimeTypes));
+//   }
+
+//   startVisuals(callback) {
+//     if (this.visualsUnavailable) 
+//       return;
+
+//     if (this.processor === null) {
+//       this.context = new (window.AudioContext || window.webkitAudioContext)();
+//       this.analyser = this.context.createAnalyser();
+//       this.input = this.context.createMediaStreamSource(window.stream);
+
+//       const getByteFrequencyData = this.analyser.getByteFrequencyData.bind(this.analyser);
+//       const binCount = this.analyser.frequencyBinCount;
+//       const _getAvgVolume = this._getAverageVolume;
+
+//       if (this.context.createJavaScriptNode) {
+//         this.processor = this.context.createJavaScriptNode(1024, 1, 1);
+//       } else if (this.context.createScriptProcessor) {
+//         this.processor = this.context.createScriptProcessor(1024, 1, 1);
+//       } else {
+//         this.context = null;
+//         this.input = null;
+//         this.analyser = null;
+//         this.processor = null;
+//         this.visualsUnavailable = true;
+//         return;
+//       }
+
+//       this.processor.onaudioprocess = () => {
+//         const a = new Uint8Array(binCount);
+//         getByteFrequencyData(a)
+//         callback(_getAvgVolume(a));
+//       };
+
+//       this.analyser.fftSize = 1024;
+//       this.analyser.minDecibels = -90;
+//       this.analyser.maxDecibels = -10;
+//       this.analyser.smoothingTimeConstant = 0.85;
+//     }
+
+//     this.input.connect(this.analyser);
+//     this.analyser.connect(this.processor);
+//     this.processor.connect(this.context.destination);
+//   }
+
+//   visualsAvailable() {
+//     return !this.visualsUnavailable;
+//   }
+
+//   stopVisuals() {
+//     if (this.visualsUnavailable) return;
+//     if (this.processor === null) return;
+//     this.input.disconnect();
+//     this.analyser.disconnect();
+//     this.processor.disconnect();
+//   }
+
+//   _getAverageVolume(array) {
+//     const length = array.length;
+//     let values = 0;
+//     for (let i = 0; i < length; i++) {
+//       values += array[i];
+//     }
+//     return values / length;
+//   }
+// }
