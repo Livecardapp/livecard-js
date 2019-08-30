@@ -15,8 +15,8 @@ export class WebstreamImage {
 export class WebstreamAudio {
   constructor(bufferSize) {
     const mimeTypes = ['audio/webm', 'audio/webm\;codecs=opus'];
-    const bsize = bufferSize || 4096;
-    Object.assign(this, StreamMixin(true, false), AudioContextMixin(this, bsize), AudioContextRecorderMixin(this, bsize), AudioContextVisualizerMixin());
+    const s = bufferSize || 4096;
+    Object.assign(this, StreamMixin(true, false), AudioContextMixin(this, s), AudioContextRecorderMixin(this, s), AudioContextVisualizerMixin());
   }
 }
 
@@ -77,6 +77,85 @@ const AudioContextRecorderMixin = (o, bufferSize) => {
     o.data.push(new Float32Array(event.inputBuffer.getChannelData(0)));
     o.dataLength = o.dataLength + bufferSize;
   };
+
+  mixin.toWav = (config, callback) => {
+    const webWorker = o._processInWebWorker(o._makeInlineWebWorker);
+    webWorker.onmessage = function (event) {
+      callback(event.data.buffer, event.data.view);
+      // release memory
+      URL.revokeObjectURL(webWorker.workerURL);
+    };
+    webWorker.postMessage(config);
+  }
+
+  mixin._processInWebWorker = (inlineWorker) => {
+    const w = `;this.onmessage = function (e) {${inlineWorker.name} (e.data);}`;
+    var workerURL = URL.createObjectURL(new Blob([inlineWorker.toString(), w], { type: 'application/javascript' }));
+    const worker = new Worker(workerURL);
+    worker.workerURL = workerURL;
+    return worker;
+  }
+
+  mixin._makeInlineWebWorker = () => {
+    const inlineWebWorker = (config, cb) => {
+      var data = config.data.slice(0);
+      var sampleRate = config.sampleRate;
+      data = joinBuffers(data, config.recordingLength);
+
+      function joinBuffers(channelBuffer, count) {
+        var result = new Float64Array(count);
+        var offset = 0;
+        var lng = channelBuffer.length;
+
+        for (var i = 0; i < lng; i++) {
+          var buffer = channelBuffer[i];
+          result.set(buffer, offset);
+          offset += buffer.length;
+        }
+
+        return result;
+      }
+
+      function writeUTFBytes(view, offset, string) {
+        var lng = string.length;
+        for (var i = 0; i < lng; i++) {
+          view.setUint8(offset + i, string.charCodeAt(i));
+        }
+      }
+
+      var dataLength = data.length;
+
+      // create wav file
+      var buffer = new ArrayBuffer(44 + dataLength * 2);
+      var view = new DataView(buffer);
+
+      writeUTFBytes(view, 0, 'RIFF'); // RIFF chunk descriptor/identifier
+      view.setUint32(4, 44 + dataLength * 2, true); // RIFF chunk length
+      writeUTFBytes(view, 8, 'WAVE'); // RIFF type
+      writeUTFBytes(view, 12, 'fmt '); // format chunk identifier, FMT sub-chunk
+      view.setUint32(16, 16, true); // format chunk length
+      view.setUint16(20, 1, true); // sample format (raw)
+      view.setUint16(22, 1, true); // mono (1 channel)
+      view.setUint32(24, sampleRate, true); // sample rate
+      view.setUint32(28, sampleRate * 2, true); // byte rate (sample rate * block align)
+      view.setUint16(32, 2, true); // block align (channel count * bytes per sample)
+      view.setUint16(34, 16, true); // bits per sample
+      writeUTFBytes(view, 36, 'data'); // data sub-chunk identifier
+      view.setUint32(40, dataLength * 2, true); // data chunk length
+
+      // write the PCM samples
+      var index = 44;
+      for (var i = 0; i < dataLength; i++) {
+        view.setInt16(index, data[i] * 0x7FFF, true);
+        index += 2;
+      }
+
+      if (cb) return cb({ buffer: buffer, view: view });
+      postMessage({ buffer: buffer, view: view });
+    }
+
+    return inlineWebWorker;
+  };
 };
 
 const AudioContextVisualizerMixin = () => {
@@ -85,7 +164,7 @@ const AudioContextVisualizerMixin = () => {
   mixin.onVisualizeAnalyzerData = (analyser) => {
     const binCount = analyser.frequencyBinCount;
     const a = new Uint8Array(binCount);
-    analyser.getByteFrequencyData(a)
+    analyser.getByteFrequencyData(a);
     const length = a.length;
     let values = 0;
     for (let i = 0; i < length; i++) { values += a[i]; }
@@ -105,40 +184,6 @@ export class WebstreamVideo {
     Object.assign(this, StreamMixin(true, true), MediaRecorderMixin(this, mimeTypes));
   }
 }
-
-const StreamMixin = (hasAudio, hasVideo) => {
-  const mixin = {};
-
-  mixin.initialize = async () => {
-    if (typeof navigator.mediaDevices === 'undefined' || navigator.mediaDevices === null)
-      return Promise.reject();
-
-    const constraints = {
-      audio: hasAudio,
-      video: hasVideo ? { width: { ideal: 1920, min: 1280 }, height: { ideal: 1080, min: 720 } } : false,
-    };
-
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia(constraints);
-      window.stream = stream;
-      return Promise.resolve(stream);
-    } catch (error) {
-      return Promise.reject(error);
-    }
-  };
-
-  mixin.streamStop = () => {
-    window.stream.getTracks().forEach(function (curTrack) { curTrack.stop(); });
-  };
-
-  mixin.remove = () => {
-    if (typeof window.stream === 'undefined' || window.stream === null) return;
-    window.stream.getTracks().forEach(function (curTrack) { curTrack.stop(); });
-    window.stream = null;
-  };
-
-  return mixin;
-};
 
 const MediaRecorderMixin = (o, mimeTypes) => {
   const mixin = {};
@@ -195,6 +240,44 @@ const MediaRecorderMixin = (o, mimeTypes) => {
     if (event.data && event.data.size === 0) return;
     o.blobs.push(event.data);
   }
+
+  return mixin;
+};
+
+// ------------ //
+// MEDIA STREAM //
+// ------------ //
+
+const StreamMixin = (hasAudio, hasVideo) => {
+  const mixin = {};
+
+  mixin.initialize = async () => {
+    if (typeof navigator.mediaDevices === 'undefined' || navigator.mediaDevices === null)
+      return Promise.reject();
+
+    const constraints = {
+      audio: hasAudio,
+      video: hasVideo ? { width: { ideal: 1920, min: 1280 }, height: { ideal: 1080, min: 720 } } : false,
+    };
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      window.stream = stream;
+      return Promise.resolve(stream);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
+
+  mixin.streamStop = () => {
+    window.stream.getTracks().forEach(function (curTrack) { curTrack.stop(); });
+  };
+
+  mixin.remove = () => {
+    if (typeof window.stream === 'undefined' || window.stream === null) return;
+    window.stream.getTracks().forEach(function (curTrack) { curTrack.stop(); });
+    window.stream = null;
+  };
 
   return mixin;
 };
