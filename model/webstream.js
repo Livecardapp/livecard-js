@@ -16,17 +16,16 @@ export class WebstreamAudio {
   constructor() {
     const mimeTypes = ['audio/webm', 'audio/webm\;codecs=opus'];
     const s = 4096;
-    Object.assign(this, StreamMixin(true, false), AudioContextMixin(this, s), AudioContextRecorderMixin(this, s), AudioContextVisualizerMixin());
+    Object.assign(this, StreamMixin(true, false), AudioContextMixin(this, s), AudioContextRecorderMixin(this, s), AudioContextVisualizerMixin(this));
   }
 
   start(visualizer) {
     const onSaveData = this.onSaveData.bind(this);
     const onVisualizeAnalyzerData = this.onVisualizeAnalyzerData.bind(this);
-    const analyser = this.analyser;
 
     const onAudioProcess = (event) => {
       onSaveData(event);
-      const volumePercentage = onVisualizeAnalyzerData(analyser);
+      const volumePercentage = onVisualizeAnalyzerData();
       visualizer(volumePercentage);
     };
 
@@ -86,13 +85,13 @@ const AudioContextMixin = (o, bufferSize) => {
   return mixin;
 };
 
-const AudioContextVisualizerMixin = () => {
+const AudioContextVisualizerMixin = (o) => {
   const mixin = {};
 
-  mixin.onVisualizeAnalyzerData = (analyser) => {
-    const binCount = analyser.frequencyBinCount;
+  mixin.onVisualizeAnalyzerData = () => {
+    const binCount = o.analyser.frequencyBinCount;
     const a = new Uint8Array(binCount);
-    analyser.getByteFrequencyData(a);
+    o.analyser.getByteFrequencyData(a);
     const length = a.length;
     let values = 0;
     for (let i = 0; i < length; i++) { values += a[i]; }
@@ -104,32 +103,33 @@ const AudioContextVisualizerMixin = () => {
 
 const AudioContextRecorderMixin = (o, bufferSize) => {
   const mixin = {};
-  mixin.data = [];
+  mixin.blobs = [];
   mixin.dataLength = 0;
 
   mixin.buffer = () => {
-    const buffer = new Blob(o.data, { type: 'audio/webm' });
+    const buffer = new Blob(o.blobs, { type: 'audio/webm' });
     return window.URL.createObjectURL(buffer);
   };
 
   mixin.data = () => {
-    return o.data;
+    return o.blobs;
   }
 
   mixin.stageDataForUpload = () => {
     o.streamStop();
-    return o.data.length > 0;
+    return o.blobs.length > 0;
   }
 
   mixin.reset = () => {
-    o.data = [];
+    o.blobs = [];
   }
 
   mixin.onSaveData = (event) => {
-    o.data.push(new Float32Array(event.inputBuffer.getChannelData(0)));
+    o.blobs.push(new Float32Array(event.inputBuffer.getChannelData(0)));
     o.dataLength = o.dataLength + bufferSize;
   };
 
+  return mixin;
 };
 
 // ----- //
