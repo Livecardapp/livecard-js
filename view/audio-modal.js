@@ -102,7 +102,7 @@ class AudioModal {
     try {
       this.showSpinner();
       const mic = new WebstreamAudio();
-      const stream = await mic.init();
+      const stream = await mic.initialize();
 
       if (typeof stream === 'undefined' || stream === null)
         throw new Error('Native video mic cannot be initialized');
@@ -170,21 +170,32 @@ class NativeAudioView {
     return true;
   }
 
+  // start(visualizer) {
+  //   this.device.start();
+  //   this.device.startVisuals(visualizer);
+  //   if (this.device.visualsAvailable()) return;
+  //   dq.removeClass('#mic-vol-alt', 'no-show');
+  // }
   start(visualizer) {
-    this.device.start();
-    this.device.startVisuals(visualizer);
-    if (this.device.visualsAvailable()) return;
-    dq.removeClass('#mic-vol-alt', 'no-show');
+    this.device.start(visualizer);
   }
 
+  // stop() {
+  //   this.device.stop();
+  //   this.device.stopVisuals();
+  //   document.querySelector('#recorded').src = this.device.buffer();
+  //   dq.css('#capture', 'display', 'none');
+  //   dq.css('#recorded', 'display', 'block');
+  //   if (this.device.visualsAvailable()) return;
+  //   dq.addClass('#mic-vol-alt', 'no-show');
+  // }
   stop() {
     this.device.stop();
-    this.device.stopVisuals();
     document.querySelector('#recorded').src = this.device.buffer();
     dq.css('#capture', 'display', 'none');
     dq.css('#recorded', 'display', 'block');
-    if (this.device.visualsAvailable()) return;
-    dq.addClass('#mic-vol-alt', 'no-show');
+    // if (this.device.visualsAvailable()) return;
+    // dq.addClass('#mic-vol-alt', 'no-show');
   }
 
   play() {
