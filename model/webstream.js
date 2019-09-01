@@ -104,7 +104,6 @@ const AudioContextVisualizerMixin = (o) => {
 const AudioContextRecorderMixin = (o, bufferSize) => {
   const mixin = {};
   mixin.blobs = [];
-  mixin.dataLength = 0;
 
   mixin.buffer = () => {
     const buffer = new Blob(o.blobs, { type: 'audio/webm' });
@@ -126,7 +125,7 @@ const AudioContextRecorderMixin = (o, bufferSize) => {
 
   mixin.onSaveData = (event) => {
     o.blobs.push(new Float32Array(event.inputBuffer.getChannelData(0)));
-    o.dataLength = o.dataLength + bufferSize;
+    console.log(`Added to data: ${o.blobs.length * bufferSize}`);
   };
 
   return mixin;
