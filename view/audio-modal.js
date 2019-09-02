@@ -50,7 +50,7 @@ class AudioModal {
 
   btnRecordClick() {
     if (this.mediaView.isNative())
-      this.mediaView.start(this._visualizeAudioData.bind(this))
+      this.mediaView.start()
     else {
       this.mediaView.start();
       this.mediaView.setIcon(this.micIcon);
@@ -101,7 +101,7 @@ class AudioModal {
 
     try {
       this.showSpinner();
-      const mic = new WebstreamAudio();
+      const mic = new WebstreamAudio(this._visualizeAudioData.bind(this));
       const stream = await mic.initialize();
 
       if (typeof stream === 'undefined' || stream === null)
@@ -199,7 +199,8 @@ class NativeAudioView {
   }
 
   play() {
-    document.getElementById('recorded').play();
+    //document.getElementById('recorded').play();
+    this.device.play();
   }
 
   retake() {
