@@ -14,10 +14,20 @@ export class WebstreamImage {
 
 export class WebstreamAudio {
   constructor(visualizer) {
-    const mimeTypes = ['audio/webm', 'audio/webm\;codecs=opus'];
-    const s = 4096;
-    Object.assign(this, StreamMixin(true, false), AudioContextMixin(this, s), AudioContextRecorderMixin(this, s), AudioContextVisualizerMixin(this));
     this.visualizer = visualizer;
+    this.mimeType = null;
+    const s = 4096;
+    Object.assign(
+      this,
+      StreamMixin(true, false),
+      AudioContextMixin(this, s),
+      AudioContextRecorderMixin(this, s),
+      AudioContextVisualizerMixin(this)
+    );
+  }
+
+  setMime(mimeType) {
+    this.mimeType = mimeType;
   }
 
   start() {
