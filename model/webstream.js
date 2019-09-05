@@ -44,12 +44,11 @@ export class WebstreamAudio {
   constructor(visualizer) {
     this.visualizer = visualizer;
     this.mimeType = null;
-    const s = 4096;
     Object.assign(
       this,
       StreamMixin(true, false),
-      AudioConnectMixin(this, s),
-      AudioDataMixin(this, s),
+      AudioConnectMixin(this, 4096),
+      AudioDataMixin(this),
       AudioVolumeMixin(this)
     );
   }
@@ -59,15 +58,15 @@ export class WebstreamAudio {
   }
 
   record() {
-    const saveData = captureStream ? this.saveData.bind(this) : null;
-    const onVolumeData = this.onVolumeData.bind(this);
+    const saveData = this.saveData.bind(this);
+    const volumeData = this.volumeData.bind(this);
     const visualizer = this.visualizer;
     const onAudioProcess = (event) => {
       saveData(event);
-      visualizer(onVolumeData());
+      visualizer(volumeData());
     };
     this.clearData();
-    this.connect(source, onAudioProcess);
+    this.connect(window.stream, onAudioProcess);
   }
 
   stop() {
@@ -155,6 +154,7 @@ const AudioDataMixin = (o) => {
 
   mixin.saveData = (event) => {
     o.blobs.push(new Float32Array(event.inputBuffer.getChannelData(0)));
+    console.log(`blob length: ${o.blobs.length}`);
   };
 
   mixin.data = () => {
@@ -162,10 +162,12 @@ const AudioDataMixin = (o) => {
   }
 
   mixin.dataURL = () => {
+    console.log('dataURL');
     return window.URL.createObjectURL(new Blob(o.blobs, { type: o.mimeType }));
   };
 
   mixin.clearData = () => {
+    console.log('clearData');
     o.blobs = [];
   }
 
@@ -175,7 +177,7 @@ const AudioDataMixin = (o) => {
 const AudioVolumeMixin = (o) => {
   const mixin = {};
 
-  mixin.onVolumeData = () => {
+  mixin.volumeData = () => {
     const binCount = o.analyser.frequencyBinCount;
     const a = new Uint8Array(binCount);
     o.analyser.getByteFrequencyData(a);
@@ -267,79 +269,3 @@ const MediaRecorderMixin = (o, mimeTypes) => {
 
   return mixin;
 };
-
-// export class WebstreamAudio {
-//   constructor() {
-//     this.context = null;
-//     this.input = null;
-//     this.analyser = null;
-//     this.processor = null;
-//     this.visualsUnavailable = false;
-//     const mimeTypes = ['audio/webm', 'audio/webm\;codecs=opus'];
-//     Object.assign(this, StreamMixin(true, false), MediaRecorderMixin(this, mimeTypes));
-//   }
-
-//   startVisuals(callback) {
-//     if (this.visualsUnavailable) 
-//       return;
-
-//     if (this.processor === null) {
-//       this.context = new (window.AudioContext || window.webkitAudioContext)();
-//       this.analyser = this.context.createAnalyser();
-//       this.input = this.context.createMediaStreamSource(window.stream);
-
-//       const getByteFrequencyData = this.analyser.getByteFrequencyData.bind(this.analyser);
-//       const binCount = this.analyser.frequencyBinCount;
-//       const _getAvgVolume = this._getAverageVolume;
-
-//       if (this.context.createJavaScriptNode) {
-//         this.processor = this.context.createJavaScriptNode(1024, 1, 1);
-//       } else if (this.context.createScriptProcessor) {
-//         this.processor = this.context.createScriptProcessor(1024, 1, 1);
-//       } else {
-//         this.context = null;
-//         this.input = null;
-//         this.analyser = null;
-//         this.processor = null;
-//         this.visualsUnavailable = true;
-//         return;
-//       }
-
-//       this.processor.onaudioprocess = () => {
-//         const a = new Uint8Array(binCount);
-//         getByteFrequencyData(a)
-//         callback(_getAvgVolume(a));
-//       };
-
-//       this.analyser.fftSize = 1024;
-//       this.analyser.minDecibels = -90;
-//       this.analyser.maxDecibels = -10;
-//       this.analyser.smoothingTimeConstant = 0.85;
-//     }
-
-//     this.input.connect(this.analyser);
-//     this.analyser.connect(this.processor);
-//     this.processor.connect(this.context.destination);
-//   }
-
-//   visualsAvailable() {
-//     return !this.visualsUnavailable;
-//   }
-
-//   stopVisuals() {
-//     if (this.visualsUnavailable) return;
-//     if (this.processor === null) return;
-//     this.input.disconnect();
-//     this.analyser.disconnect();
-//     this.processor.disconnect();
-//   }
-
-//   _getAverageVolume(array) {
-//     const length = array.length;
-//     let values = 0;
-//     for (let i = 0; i < length; i++) {
-//       values += array[i];
-//     }
-//     return values / length;
-//   }
-// }

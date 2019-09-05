@@ -177,7 +177,7 @@ class NativeAudioView {
   //   dq.removeClass('#mic-vol-alt', 'no-show');
   // }
   start(visualizer) {
-    this.device.start(visualizer);
+    this.device.record(visualizer);
   }
 
   // stop() {
@@ -191,7 +191,7 @@ class NativeAudioView {
   // }
   stop() {
     this.device.stop();
-    document.querySelector('#recorded').src = this.device.buffer();
+    document.querySelector('#recorded').src = this.device.dataURL();
     dq.css('#capture', 'display', 'none');
     dq.css('#recorded', 'display', 'block');
     // if (this.device.visualsAvailable()) return;
@@ -204,7 +204,7 @@ class NativeAudioView {
   }
 
   retake() {
-    this.device.reset();
+    this.device.clearData();
     dq.css('#recorded', 'display', 'none');
     dq.css('#capture', 'display', 'block');
   }
