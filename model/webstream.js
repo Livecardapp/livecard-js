@@ -47,9 +47,10 @@ export class WebstreamAudio {
     Object.assign(
       this,
       StreamMixin(true, false),
-      AudioConnectMixin(this, 4096),
+      AudioConnectMixin(this),
       AudioDataMixin(this),
-      AudioVolumeMixin(this)
+      AudioVolumeMixin(this),
+      AudioWavMixin(this),
     );
   }
 
@@ -73,22 +74,20 @@ export class WebstreamAudio {
     this.disconnect();
   }
 
-  play() {
-    // todo: 
-    // - convert data to file format that can be used for both playback and upload
-    // - set blob to window url
-    // - set audio player source to blob
-    // - load source
+  getPlaybackURL() {
+    const dataview = this.encodeAudio(this.data());
+    const audioBlob = new Blob([dataview], { type: 'audio/wav' });
+    return window.URL.createObjectURL(audioBlob);
   }
 
-  stageData() {
+  getUploadData() {
     this.stopStream();
-    return this.data().length > 0;
+    return this.data().length > 0 ? this.data() : null;
   }
 
 }
 
-const AudioConnectMixin = (o, bufferSize) => {
+const AudioConnectMixin = (o) => {
   const mixin = {};
 
   mixin.context = null;
@@ -109,9 +108,9 @@ const AudioConnectMixin = (o, bufferSize) => {
 
     if (o.processor === null) {
       if (o.context.createJavaScriptNode) {
-        o.processor = o.context.createJavaScriptNode(bufferSize, 1, 1);
+        o.processor = o.context.createJavaScriptNode(4096, 1, 1);
       } else {
-        o.processor = o.context.createScriptProcessor(bufferSize, 1, 1);
+        o.processor = o.context.createScriptProcessor(4096, 1, 1);
       }
     }
 
@@ -151,24 +150,22 @@ const AudioConnectMixin = (o, bufferSize) => {
 const AudioDataMixin = (o) => {
   const mixin = {};
   mixin.blobs = [];
+  mixin.blobsLength = 0;
 
   mixin.saveData = (event) => {
-    o.blobs.push(new Float32Array(event.inputBuffer.getChannelData(0)));
-    console.log(`blob length: ${o.blobs.length}`);
+    const channelData = event.inputBuffer.getChannelData(0);
+    o.blobs.push(channelData);
+    o.blobsLength += channelData.length;
+    console.log(`blob length: ${o.blobsLength}`);
   };
 
   mixin.data = () => {
     return o.blobs;
   }
 
-  mixin.dataURL = () => {
-    console.log('dataURL');
-    return window.URL.createObjectURL(new Blob(o.blobs, { type: o.mimeType }));
-  };
-
   mixin.clearData = () => {
-    console.log('clearData');
     o.blobs = [];
+    o.blobsLength = 0;
   }
 
   return mixin;
@@ -186,6 +183,59 @@ const AudioVolumeMixin = (o) => {
     for (let i = 0; i < length; i++) { values += a[i]; }
     return values / length;
   };
+
+  return mixin;
+};
+
+const AudioWavMixin = (o) => {
+  const mixin = {};
+
+  const writeUTFBytes = (view, offset, string) => {
+    const lng = string.length;
+    for (let i = 0; i < lng; i++) {
+      view.setUint8(offset + i, string.charCodeAt(i));
+    }
+  };
+
+  const floatTo16BitPCM = (output, offset, input) => {
+    for (var i = 0; i < input.length; i++ , offset += 2) {
+      var s = Math.max(-1, Math.min(1, input[i]));
+      output.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+    }
+  };
+
+  mixin.encodeAudio = (data, numChannels = 0, sampleRate = 4096) => {
+    var buffer = new ArrayBuffer(44 + data.length * 2);
+    var view = new DataView(buffer);
+    /* RIFF identifier */
+    writeUTFBytes(view, 0, 'RIFF');
+    /* RIFF chunk length */
+    view.setUint32(4, 36 + data.length * 2, true);
+    /* RIFF type */
+    writeUTFBytes(view, 8, 'WAVE');
+    /* format chunk identifier */
+    writeUTFBytes(view, 12, 'fmt ');
+    /* format chunk length */
+    view.setUint32(16, 16, true);
+    /* sample format (raw) */
+    view.setUint16(20, 1, true);
+    /* channel count */
+    view.setUint16(22, numChannels, true);
+    /* sample rate */
+    view.setUint32(24, sampleRate, true);
+    /* byte rate (sample rate * block align) */
+    view.setUint32(28, sampleRate * 4, true);
+    /* block align (channel count * bytes per sample) */
+    view.setUint16(32, numChannels * 2, true);
+    /* bits per sample */
+    view.setUint16(34, 16, true);
+    /* data chunk identifier */
+    writeUTFBytes(view, 36, 'data');
+    /* data chunk length */
+    view.setUint32(40, data.length * 2, true);
+    floatTo16BitPCM(view, 44, data);
+    return view;
+  }
 
   return mixin;
 };

@@ -160,7 +160,7 @@ class NativeAudioView {
       <div id="mic-vol-alt" class="no-show">VOICE RECORDING STARTED</div>
       <img id="icon-microphone" src="${icon}" alt="voice-recorder.png" />
       <audio id="capture" autoplay muted playsinline></audio>
-      <audio id="recorded" style="display: none"></audio>`;
+      <audio id="recorded" style="display: none"><source id="recorded-source" src="" /></audio>`;
     dq.before(placeholder, template);
     dq.remove(placeholder);
     dq.on('#capture', 'loadedmetadata', loadCallback);
@@ -178,6 +178,7 @@ class NativeAudioView {
   // }
   start(visualizer) {
     this.device.record(visualizer);
+    dq.removeClass('#mic-vol-alt', 'no-show');
   }
 
   // stop() {
@@ -191,16 +192,20 @@ class NativeAudioView {
   // }
   stop() {
     this.device.stop();
-    document.querySelector('#recorded').src = this.device.dataURL();
     dq.css('#capture', 'display', 'none');
     dq.css('#recorded', 'display', 'block');
-    // if (this.device.visualsAvailable()) return;
-    // dq.addClass('#mic-vol-alt', 'no-show');
+    dq.addClass('#mic-vol-alt', 'no-show');
+    const url = this.device.getPlaybackURL();
+    console.log(`data url: ${url}`);
+    // document.querySelector('#recorded').src = url;
+    const audioSource = document.getElementById('recorded-source');
+    audioSource.src = url;
+    document.getElementById('recorded').load();
+    console.log(document.getElementById('recorded'));
   }
 
   play() {
-    //document.getElementById('recorded').play();
-    this.device.play();
+    document.getElementById('recorded').play();
   }
 
   retake() {
@@ -212,8 +217,7 @@ class NativeAudioView {
   data() {
     dq.css('#video-container', 'display', 'none');
     document.getElementById('recorded').pause();
-    if (!this.device.stageDataForUpload()) return null;
-    return this.device.data();
+    return this.device.getUploadData();
   }
 }
 
