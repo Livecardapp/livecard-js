@@ -194,8 +194,6 @@ class NativeAudioView {
     document.querySelector('#recorded').src = this.device.dataURL();
     dq.css('#capture', 'display', 'none');
     dq.css('#recorded', 'display', 'block');
-    // if (this.device.visualsAvailable()) return;
-    // dq.addClass('#mic-vol-alt', 'no-show');
   }
 
   play() {

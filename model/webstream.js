@@ -1,41 +1,3 @@
-// ------------ //
-// MEDIA STREAM //
-// ------------ //
-
-const StreamMixin = (hasAudio, hasVideo) => {
-  const mixin = {};
-
-  mixin.initialize = async () => {
-    if (typeof navigator.mediaDevices === 'undefined' || navigator.mediaDevices === null)
-      return Promise.reject();
-
-    const constraints = {
-      audio: hasAudio,
-      video: hasVideo ? { width: { ideal: 1920, min: 1280 }, height: { ideal: 1080, min: 720 } } : false,
-    };
-
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia(constraints);
-      window.stream = stream;
-      return Promise.resolve(stream);
-    } catch (error) {
-      return Promise.reject(error);
-    }
-  };
-
-  mixin.streamStop = () => {
-    window.stream.getTracks().forEach(function (curTrack) { curTrack.stop(); });
-  };
-
-  mixin.remove = () => {
-    if (typeof window.stream === 'undefined' || window.stream === null) return;
-    window.stream.getTracks().forEach(function (curTrack) { curTrack.stop(); });
-    window.stream = null;
-  };
-
-  return mixin;
-};
-
 // ----- //
 // AUDIO //
 // ----- //
@@ -47,9 +9,8 @@ export class WebstreamAudio {
     Object.assign(
       this,
       StreamMixin(true, false),
-      AudioConnectMixin(this, 4096),
+      AudioConnectMixin(this),
       AudioDataMixin(this),
-      AudioVolumeMixin(this)
     );
   }
 
@@ -88,7 +49,8 @@ export class WebstreamAudio {
 
 }
 
-const AudioConnectMixin = (o, bufferSize) => {
+const AudioConnectMixin = (o) => {
+  const bufferSize = 4096;
   const mixin = {};
 
   mixin.context = null;
@@ -143,7 +105,17 @@ const AudioConnectMixin = (o, bufferSize) => {
     o.analyser = null;
     o.processor = null;
     o.context = null;
-  }
+  };
+
+  mixin.volumeData = () => {
+    const binCount = o.analyser.frequencyBinCount;
+    const a = new Uint8Array(binCount);
+    o.analyser.getByteFrequencyData(a);
+    const length = a.length;
+    let values = 0;
+    for (let i = 0; i < length; i++) { values += a[i]; }
+    return values / length;
+  };
 
   return mixin;
 };
@@ -170,22 +142,6 @@ const AudioDataMixin = (o) => {
     console.log('clearData');
     o.blobs = [];
   }
-
-  return mixin;
-};
-
-const AudioVolumeMixin = (o) => {
-  const mixin = {};
-
-  mixin.volumeData = () => {
-    const binCount = o.analyser.frequencyBinCount;
-    const a = new Uint8Array(binCount);
-    o.analyser.getByteFrequencyData(a);
-    const length = a.length;
-    let values = 0;
-    for (let i = 0; i < length; i++) { values += a[i]; }
-    return values / length;
-  };
 
   return mixin;
 };
@@ -266,6 +222,44 @@ const MediaRecorderMixin = (o, mimeTypes) => {
     if (event.data && event.data.size === 0) return;
     o.blobs.push(event.data);
   }
+
+  return mixin;
+};
+
+// ------------ //
+// MEDIA STREAM //
+// ------------ //
+
+const StreamMixin = (hasAudio, hasVideo) => {
+  const mixin = {};
+
+  mixin.initialize = async () => {
+    if (typeof navigator.mediaDevices === 'undefined' || navigator.mediaDevices === null)
+      return Promise.reject();
+
+    const constraints = {
+      audio: hasAudio,
+      video: hasVideo ? { width: { ideal: 1920, min: 1280 }, height: { ideal: 1080, min: 720 } } : false,
+    };
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      window.stream = stream;
+      return Promise.resolve(stream);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
+
+  mixin.streamStop = () => {
+    window.stream.getTracks().forEach(function (curTrack) { curTrack.stop(); });
+  };
+
+  mixin.remove = () => {
+    if (typeof window.stream === 'undefined' || window.stream === null) return;
+    window.stream.getTracks().forEach(function (curTrack) { curTrack.stop(); });
+    window.stream = null;
+  };
 
   return mixin;
 };
